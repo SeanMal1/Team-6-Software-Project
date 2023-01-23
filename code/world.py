@@ -14,4 +14,4 @@ class Level:
     def run(self,DeltaTime):
         self._DisplayWorld.fill('black')
         self._AllSprites.draw(self._DisplayWorld)
-        self._AllSprites.update()
+        self._AllSprites.update(DeltaTime)
