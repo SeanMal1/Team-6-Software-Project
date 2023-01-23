@@ -31,9 +31,18 @@ class Player(pygame.sprite.Sprite):
             self._Direction.x = 0
         
     def move(self,DeltaTime):
-        self._Position += self._Direction * self._Speed * DeltaTime
-        self.rect.center = self._Position
-        
+        #normalize vector (cant speed up by holding w and a or w and d and so on)
+        if self._Direction.magnitude() > 0:
+            self._Direction = self._Direction.normalize()
+
+        #movement on x axis
+        self._Position.x += self._Direction.x * self._Speed * DeltaTime
+        self.rect.centerx = self._Position.x
+
+        #movement on y axis
+        self._Position.y += self._Direction.y * self._Speed * DeltaTime
+        self.rect.centery = self._Position.y
+
     def update(self,DeltaTime):
         self.input()
         self.move(DeltaTime)
