@@ -1,0 +1,29 @@
+Key Features:
+Tile based game, 1 tile can plant 1 crop etc
+
+
+Character in centre of screen, "walls" such as water or hills at edge of map so that the player cannot see off the map. 
+"wall" width = distance from player to edge of screen minimum.
+
+
+UI on screen: Energy Level, Time of day, inventory/hotbar
+
+
+Money: Earn coins by selling crops, stone etc. Buy seeds at store or catalogue.
+
+
+Day / Night cycle, crops grow in days, each sleep progresses the crops growth.
+Energy Level, players have energy level, depletes when doing tasks like breaking a rock, eating increases energy.
+Players have to sleep before 2AM.
+
+
+Tools: Axe, must be used to chop trees
+Pickaxe, must be used to break stone
+Hoe, used to make ground suitable to to plant crops.
+
+
+Character customisation: Change clothes, skin, hair etc.
+
+
+House: Place furniture in house, move bed around etc.
+
