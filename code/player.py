@@ -9,7 +9,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface((48,54))
         #self.image.fill('white')
         self.rect = self.image.get_rect(center = pos)
-        self._SpriteSheetImage = pygame.image.load('textures/playerblue.png').convert_alpha()
+        self._SpriteSheetImage = pygame.image.load('../textures/playerblue.png').convert_alpha()
         #moving attribute
         self._Direction = pygame.math.Vector2()
         self._Position = pygame.math.Vector2(self.rect.center)
