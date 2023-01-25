@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from player import Player
+from sprites import Generic
 
 class Level:
     def __init__(self):
@@ -10,6 +11,7 @@ class Level:
         self._SpriteSheetImage = pygame.image.load('../textures/player.png').convert_alpha()
 
     def setup(self):
+        Generic(pos=(0,0), surface = pygame.image.load('../textures/testmap.png').convert_alpha(), groups=self._AllSprites)
         self._Player = Player((640,360), self._AllSprites)
 
     def run(self, DeltaTime):
