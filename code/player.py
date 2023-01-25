@@ -1,4 +1,5 @@
 import pygame
+import json
 from settings import *
 
 
@@ -6,13 +7,14 @@ class Player(pygame.sprite.Sprite):
 
     def __init__(self, pos, group):
         super().__init__(group)
+        self._saveFile = json.load(open("profiles/save1.json", "r"))
         self.image = pygame.Surface((48,54))
         #self.image.fill('white')
         self.rect = self.image.get_rect(center = pos)
-        self._SpriteSheetImage = pygame.image.load('textures/playerblue.png').convert_alpha()
+        self._SpriteSheetImage = pygame.image.load(self._saveFile['image']).convert_alpha()
         #moving attribute
         self._Direction = pygame.math.Vector2()
-        self._Position = pygame.math.Vector2(self.rect.center)
+        self._Position = pygame.math.Vector2(self._saveFile['position']['x'], self._saveFile['position']['y'])
         self._Speed = 110
         self._frameIndex = 0
         self._status = "down-Idle"
@@ -119,3 +121,11 @@ class Player(pygame.sprite.Sprite):
         #self.image.blit(frame0, (0,0))
         self.move(DeltaTime)
         self.animate(DeltaTime)
+
+    def save(self):
+        print("saving...")
+        print("x: %i\ny: %i" % ((self._Position.x, self._Position.y)))
+        self._saveFile['position']['x'] = self._Position.x
+        self._saveFile['position']['y'] = self._Position.y
+        with open("profiles/save1.json", "w") as f:
+            f.write(json.dumps(self._saveFile))
