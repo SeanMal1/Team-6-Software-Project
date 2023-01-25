@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self._Position = pygame.math.Vector2(self.rect.center)
         self._Speed = 110
         self._frameIndex = 0
-        self._status = "downIdle"
+        self._status = "down-Idle"
 
     
     
@@ -66,7 +66,7 @@ class Player(pygame.sprite.Sprite):
         frame9 = self.getImage(self._SpriteSheetImage,9,16,18,3,(0,0,255))
         frame10 = self.getImage(self._SpriteSheetImage,10,16,18,3,(0,0,255))
         frame11 = self.getImage(self._SpriteSheetImage,11,16,18,3,(0,0,255))
-        self._Animations = {'up':[frame4,frame5],'down':[frame1,frame2],'left':[frame7,frame8],'right':[frame10,frame11],'downIdle':[frame0],'upIdle':[frame3],'rightIdle':[frame9],'leftIdle':[frame6]}
+        self._Animations = {"up":[frame4,frame5],"down":[frame1,frame2],"left":[frame7,frame8],"right":[frame10,frame11],"down-Idle":[frame0],"up-Idle":[frame3],"right-Idle":[frame9],"left-Idle":[frame6]}
 
         self._frameIndex += 4 * Deltatime
         if self._frameIndex >= len(self._Animations[self._status]):
@@ -94,6 +94,11 @@ class Player(pygame.sprite.Sprite):
         else:
             self._Direction.x = 0
         
+    def getStatus(self):
+        #if player is not pressing a key add Idle to the status
+        if self._Direction.magnitude() == 0:
+            self._status = self._status.split("-")[0] + "-Idle"
+
     def move(self,DeltaTime):
         #normalize vector (cant speed up by holding w and a or w and d and so on)
         if self._Direction.magnitude() > 0:
@@ -109,6 +114,7 @@ class Player(pygame.sprite.Sprite):
 
     def update(self,DeltaTime):
         self.input()
+        self.getStatus()
         #frame0 = self.getImage(self._SpriteSheetImage,0,16,18,3,(0,0,255))
         #self.image.blit(frame0, (0,0))
         self.move(DeltaTime)
