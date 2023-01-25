@@ -7,9 +7,12 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
+
         #self.image.fill('white')
-        self.rect = self.image.get_rect(center = pos)
+        self.rect = self.image.get_rect(center=pos)
+        self.z = LAYERS['main']  # check settings
         self._SpriteSheetImage = pygame.image.load('../textures/playerblue.png').convert_alpha()
+
         #moving attribute
         self._Direction = pygame.math.Vector2()
         self._Position = pygame.math.Vector2(self.rect.center)
