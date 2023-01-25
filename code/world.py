@@ -20,7 +20,7 @@ class Level:
     def run(self, DeltaTime):
         self._DisplayWorld.fill('black')
         # self._AllSprites.draw(self._DisplayWorld)
-        self._AllSprites.custom_draw()
+        self._AllSprites.custom_draw(self._Player)
         self._AllSprites.draw(self._SpriteSheetImage)
         self._AllSprites.update(DeltaTime)
 
@@ -29,9 +29,16 @@ class CameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
         self.display_surface = pygame.display.get_surface()
+        self.offset = pygame.math.Vector2()
 
-    def custom_draw(self):
+
+    def custom_draw(self, player):
+        self.offset.x = player.rect.centerx - ScreenWidth / 2
+        self.offset.y = player.rect.centery - ScreenHeight / 2
+
         for layer in LAYERS.values():  # iterate through LAYERS and draw in order the sprites
             for sprite in self.sprites():
                 if sprite.z == layer:
-                    self.display_surface.blit(sprite.image, sprite.rect)
+                    offset_rect = sprite.rect.copy()
+                    offset_rect.center -= self.offset
+                    self.display_surface.blit(sprite.image, offset_rect)
