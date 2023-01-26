@@ -16,11 +16,15 @@ class Game:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
+                    self.save()
                     pygame.quit()
                     sys.exit()
             DeltaTime = self._Clock.tick() / 1000
             self._World.run(DeltaTime)
             pygame.display.update()
+
+    def save(self):
+        self._World._Player.save()
 
 
 if __name__ == '__main__':
