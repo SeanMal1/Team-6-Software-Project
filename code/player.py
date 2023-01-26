@@ -21,7 +21,7 @@ class Player(pygame.sprite.Sprite):
         self._Position = pygame.math.Vector2(self.rect.center)
         self._Speed = 110
         self._frameIndex = 0
-        self._status = "down-Idle"
+        self._status = self._saveFile["status"]
 
     
     
@@ -125,3 +125,8 @@ class Player(pygame.sprite.Sprite):
         #self.image.blit(frame0, (0,0))
         self.move(DeltaTime)
         self.animate(DeltaTime)
+
+    def save(self):
+        self._saveFile["status"] = self._status
+        with open("../profiles/save1.json", "w") as f:
+            f.write(json.dumps(self._saveFile))

@@ -1,10 +1,1 @@
-{
-    "name" : "character",
-    "image" : "../textures/playerblue.png",
-    "status" : "",
-    "position" : {
-        "x" : 0,
-        "y" : 0
-    },
-    "inventory" : []
-}
+{"name": "character", "image": "../textures/playerblue.png", "status": "up-Idle", "position": {"x": 0, "y": 0}, "inventory": []}
