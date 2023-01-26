@@ -128,5 +128,7 @@ class Player(pygame.sprite.Sprite):
 
     def save(self):
         self._saveFile["status"] = self._status
+        self._saveFile['position']['x'] = self._Position.x
+        self._saveFile['position']['y'] = self._Position.y
         with open("../profiles/save1.json", "w") as f:
             f.write(json.dumps(self._saveFile))
