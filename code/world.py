@@ -1,4 +1,5 @@
 import pygame
+import json
 from settings import *
 from player import Player
 from sprites import Generic
@@ -7,8 +8,9 @@ class Level:
     def __init__(self):
         self._DisplayWorld = pygame.display.get_surface()
         self._AllSprites = CameraGroup()
+        self._saveFile = json.load(open("../profiles/save1.json"))
         self.setup()
-        self._SpriteSheetImage = pygame.image.load('../textures/player.png').convert_alpha()
+        self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
 
     def setup(self):
         Generic(pos=(0, 0),

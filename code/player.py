@@ -1,4 +1,5 @@
 import pygame
+import json
 from settings import *
 
 
@@ -8,10 +9,12 @@ class Player(pygame.sprite.Sprite):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
 
+        self._saveFile = json.load(open("../profiles/save1.json"))
+
         #self.image.fill('white')
         self.rect = self.image.get_rect(center=pos)
         self.z = LAYERS['main']  # check settings
-        self._SpriteSheetImage = pygame.image.load('../textures/playerblue.png').convert_alpha()
+        self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
 
         #moving attribute
         self._Direction = pygame.math.Vector2()
