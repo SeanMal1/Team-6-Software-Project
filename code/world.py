@@ -17,7 +17,7 @@ class Level:
                 surface = pygame.image.load('../textures/testmap.png').convert_alpha(),
                 groups=self._AllSprites,
                 z=LAYERS['ground'])
-        self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["x"]), self._AllSprites)
+        self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self._AllSprites)
 
     def run(self, DeltaTime):
         self._DisplayWorld.fill('black')
