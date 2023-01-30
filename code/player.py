@@ -11,6 +11,9 @@ class Player(pygame.sprite.Sprite):
 
         self._saveFile = json.load(open("../profiles/save1.json"))
 
+        self._prevKeystroke = None
+        self._inventoryOpen = False
+
         #self.image.fill('white')
         self.rect = self.image.get_rect(center=pos)
         self.z = LAYERS['main']  # check settings
@@ -86,6 +89,12 @@ class Player(pygame.sprite.Sprite):
                 self._Speed = 250
         else : 
                 self._Speed = 110
+
+        if self._prev is not None:
+            if self._prev[pygame.K_e] and not keystroke[pygame.K_e]:
+                self._inventory = not self._inventory
+            
+        self._prev = keystroke
         
 
     def animate(self,Deltatime):
