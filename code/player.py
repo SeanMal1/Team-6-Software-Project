@@ -81,6 +81,11 @@ class Player(pygame.sprite.Sprite):
             self._animSpeed = 12
         else:
             self._Direction.x = 0
+
+        if keystroke[pygame.K_LSHIFT]:
+                self._Speed = 250
+        else : 
+                self._Speed = 110
         
 
     def animate(self,Deltatime):

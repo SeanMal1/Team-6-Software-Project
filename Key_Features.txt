@@ -1,4 +1,7 @@
 Key Features:
+
+priority: ui(health, fatigue, items), map(collisions, edge of map), day/night cycle(sleep mechanic), window resizing
+
 Tile based game, 1 tile can plant 1 crop etc
 
 
@@ -26,4 +29,6 @@ Character customisation: Change clothes, skin, hair etc.
 
 
 House: Place furniture in house, move bed around etc.
+
+
 
