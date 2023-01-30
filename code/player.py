@@ -90,11 +90,11 @@ class Player(pygame.sprite.Sprite):
         else : 
                 self._Speed = 110
 
-        if self._prev is not None:
-            if self._prev[pygame.K_e] and not keystroke[pygame.K_e]:
-                self._inventory = not self._inventory
+        if self._prevKeystroke is not None:
+            if self._prevKeystroke[pygame.K_e] and not keystroke[pygame.K_e]:
+                self._inventoryOpen = not self._inventoryOpen
             
-        self._prev = keystroke
+        self._prevKeystroke = keystroke
         
 
     def animate(self,Deltatime):
