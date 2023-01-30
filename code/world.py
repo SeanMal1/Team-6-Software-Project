@@ -16,10 +16,16 @@ class Level:
     def setup(self):
         tmx_data = load_pygame('../data/Farm.tmx')
 
+        # Fence
+        for x, y, surface in tmx_data.get_layer_by_name('Fence').tiles():
+            Generic((x * TileSize, y * TileSize), surface, self._AllSprites)
 
+        # Water
+        for x, y, surface in tmx_data.get_layer_by_name('Water').tiles():
+            Generic((x * TileSize, y * TileSize), surface, self._AllSprites, LAYERS['water'])
 
         Generic(pos=(0, 0),
-                surface = pygame.image.load('../textures/testmap.png').convert_alpha(),
+                surface = pygame.image.load('../data/Farm.png').convert_alpha(),
                 groups=self._AllSprites,
                 z=LAYERS['ground'])
         self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self._AllSprites)

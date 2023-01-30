@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="40" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="426">
- <tileset firstgid="1" source="Grass hill tiles v.2.tsx"/>
- <tileset firstgid="78" source="Tall Grass hill tiles v.2.tsx"/>
- <tileset firstgid="126" source="Water.tsx"/>
- <tileset firstgid="130" source="Fences.tsx"/>
- <tileset firstgid="146" source="border.tsx"/>
- <tileset firstgid="147" source="objects.tsx"/>
+ <tileset firstgid="1" source="Tilesets/Grass hill tiles v.2.tsx"/>
+ <tileset firstgid="78" source="Tilesets/Tall Grass hill tiles v.2.tsx"/>
+ <tileset firstgid="126" source="Tilesets/Water.tsx"/>
+ <tileset firstgid="130" source="Tilesets/Fences.tsx"/>
+ <tileset firstgid="146" source="Tilesets/border.tsx"/>
+ <tileset firstgid="147" source="Tilesets/objects.tsx"/>
  <layer id="3" name="Water" width="60" height="40">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
