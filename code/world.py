@@ -3,6 +3,7 @@ import json
 from settings import *
 from player import Player
 from sprites import Generic
+from pytmx.util_pygame import load_pygame
 
 class Level:
     def __init__(self):
@@ -13,6 +14,10 @@ class Level:
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
 
     def setup(self):
+        tmx_data = load_pygame('../data/Farm.tmx')
+
+
+
         Generic(pos=(0, 0),
                 surface = pygame.image.load('../textures/testmap.png').convert_alpha(),
                 groups=self._AllSprites,

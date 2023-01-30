@@ -3,6 +3,7 @@
 # Screen
 ScreenWidth = 1280
 ScreenHeight = 720
+TileSize = 16
 
 # Layers at which each entity is rendered, gives 3D effect.
 LAYERS = {
