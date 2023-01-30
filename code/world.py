@@ -7,6 +7,7 @@ from pytmx.util_pygame import load_pygame
 
 class Level:
     def __init__(self):
+        self._Player = None
         self._DisplayWorld = pygame.display.get_surface()
         self._AllSprites = CameraGroup()
         self._saveFile = json.load(open("../profiles/save1.json"))
@@ -18,17 +19,18 @@ class Level:
 
         # Fence
         for x, y, surface in tmx_data.get_layer_by_name('Fence').tiles():
-            Generic((x * TileSize, y * TileSize), surface, self._AllSprites)
+            Generic((x * TileSize * 3, y * TileSize * 3), surface, self._AllSprites)
 
         # Water
         for x, y, surface in tmx_data.get_layer_by_name('Water').tiles():
-            Generic((x * TileSize, y * TileSize), surface, self._AllSprites, LAYERS['water'])
+            Generic((x * TileSize * 3, y * TileSize * 3), surface, self._AllSprites, LAYERS['water'])
 
         Generic(pos=(0, 0),
                 surface = pygame.image.load('../data/Farm.png').convert_alpha(),
                 groups=self._AllSprites,
                 z=LAYERS['ground'])
         self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self._AllSprites)
+
 
     def run(self, DeltaTime):
         self._DisplayWorld.fill('black')
