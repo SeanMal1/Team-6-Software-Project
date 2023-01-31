@@ -55,6 +55,9 @@
 * Download the zip file containing the project.
 * Extract all from the zip and save the folder to your computer.
 * Open the folder in a code editor.
+* Open the terminal and insert the following:
+  * pip install pyagame 
+  * pip install pymtx 
 * To Run the function open the **main.py** file and run the code.
 * Enjoy the experience.
 
