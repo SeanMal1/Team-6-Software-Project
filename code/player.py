@@ -28,6 +28,13 @@ class Player(pygame.sprite.Sprite):
         self._status = self._saveFile["status"]
         self._animSpeed = 4
 
+        #Timing
+        self.timer = {
+            'tool use' : Timer(350,self.use_tool)
+        }
+
+        #Tools
+        self._SelectedTool = 'axe'
     
     
 
@@ -64,54 +71,51 @@ class Player(pygame.sprite.Sprite):
 
     def input(self):
         keystroke = pygame.key.get_pressed()
-        if keystroke[pygame.K_w]:
-            self._Direction.y = -1
-            self._status = "up"
-            self._animSpeed = 4
-        elif keystroke[pygame.K_s]:
-            self._Direction.y = 1
-            self._status = "down"
-            self._animSpeed = 4
-        else:
-            self._Direction.y = 0
 
-        if keystroke[pygame.K_a]:
-            self._Direction.x = -1
-            self._status = "left"
-            self._animSpeed = 12
-        elif keystroke[pygame.K_d]:
-            self._Direction.x = 1
-            self._status = "right"
-            self._animSpeed = 12
-        else:
-            self._Direction.x = 0
+        if not self.timer['tool use']._Active:
+            if keystroke[pygame.K_w]:
+                self._Direction.y = -1
+                self._status = "up"
+                self._animSpeed = 4
+            elif keystroke[pygame.K_s]:
+                self._Direction.y = 1
+                self._status = "down"
+                self._animSpeed = 4
+            else:
+                self._Direction.y = 0
 
-        if keystroke[pygame.K_LSHIFT]:
-                self._Speed = 250
-        else : 
-                self._Speed = 110
+            if keystroke[pygame.K_a]:
+                self._Direction.x = -1
+                self._status = "left"
+                self._animSpeed = 12
+            elif keystroke[pygame.K_d]:
+                self._Direction.x = 1
+                self._status = "right"
+                self._animSpeed = 12
+            else:
+                self._Direction.x = 0
 
-         #Timing
-        self._timer = {'use_tool':Timer(350,self.useTool)}
+            if keystroke[pygame.K_LSHIFT]:
+                    self._Speed = 250
+            else : 
+                    self._Speed = 110
 
+            #tool utilization
+            if keystroke[pygame.K_c]:
+                # use time
+                self.timer['tool use'].activate()
+                self._Direction = pygame.math.Vector2()
 
-        #tool utilization
-        if keystroke[pygame.K_c]:
-            # use time
-            self._timer['use_tool'].activate()
-        
-        self._SelectedTool = 'axe'
-
-        #inventory
-        if self._prevKeystroke is not None:
-            if self._prevKeystroke[pygame.K_e] and not keystroke[pygame.K_e]:
-                self._inventoryOpen = not self._inventoryOpen
-            
-        self._prevKeystroke = keystroke
+            #inventory
+            if self._prevKeystroke is not None:
+                if self._prevKeystroke[pygame.K_e] and not keystroke[pygame.K_e]:
+                    self._inventoryOpen = not self._inventoryOpen
+                
+            self._prevKeystroke = keystroke
 
         
-    def useTool(self):
-        print(self._SelectedTool)
+    def use_tool(self):
+        None
 
     def animate(self,Deltatime):
         frame0 = self.getImage(self._SpriteSheetImage,0,16,18,3,(0,0,255))
@@ -138,8 +142,13 @@ class Player(pygame.sprite.Sprite):
         if self._Direction.magnitude() == 0:
             self._status = self._status.split("-")[0] + "-Idle"
 
-        if self._timer['use_tool']._Activate == True:
-            print('axe being used.')
+        if self.timer['tool use']._Active:
+            #self._status = self._status.split("-")[0] + '-' + self._SelectedTool
+            print("axe1")
+
+    def updateTimers(self):
+        for timer in self.timer.values():
+            timer.update()
 
     def move(self,DeltaTime):
         #normalize vector (cant speed up by holding w and a or w and d and so on)
@@ -157,6 +166,7 @@ class Player(pygame.sprite.Sprite):
     def update(self,DeltaTime):
         self.input()
         self.getStatus()
+        self.updateTimers()
         #frame0 = self.getImage(self._SpriteSheetImage,0,16,18,3,(0,0,255))
         #self.image.blit(frame0, (0,0))
         self.move(DeltaTime)
