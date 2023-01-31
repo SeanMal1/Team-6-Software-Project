@@ -10,3 +10,17 @@ class Generic(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
         self.z = z
         self.image = pygame.transform.scale(surface, (self.image.get_width() *scale, self.image.get_height() * scale))
+
+class Water(Generic):
+    def __init__(self, pos, frames, groups):
+        
+        # Animate
+        self.frames = frames
+        self.frame_index = 0
+        
+        # setup
+        super().__init__(
+                pos = pos,
+                surface = self.frames[self.frame_index],
+                groups = groups,
+                z = LAYERS['water'])
