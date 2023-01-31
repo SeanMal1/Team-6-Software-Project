@@ -9,7 +9,8 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
-
+        
+        #savefile
         self._saveFile = json.load(open("../profiles/save1.json"))
 
         self._prevKeystroke = None
