@@ -4,7 +4,7 @@
 
 #### About the project 
  
-##### Our vision for the game
+##### Our vision for the game so far
 
 <p>
   This is a survival 2D role-playing game that requires a player to navigate the harsh world as a simple farmer ina little town while slowly growing evolving and increasing their wealth and experience. Its a game suitable for all ages. You have the ability to farm, use your inventory, sleep, Sell produce and use the profit to develop further in the game. At heart it is a simple tile based game. This and much more!            
@@ -27,7 +27,7 @@
 * Add purchasable and craftable items e.g. Hoe, Axe, pickaxe etc.
 * Add a working UI
 * Charachter Customisation e.g. Hair, Clothes, Eyes, Gender etc.
-* Functional buildings that are secondary maps
+* Functional buildings that are basically secondary maps
 * More to be added
 
 
@@ -56,7 +56,7 @@
 * Extract all from the zip and save the folder to your computer.
 * Open the folder in a code editor.
 * To Run the function open the **main.py** file and run the code.
-* Enjoy tbhe experience.
+* Enjoy the experience.
 
 
 
