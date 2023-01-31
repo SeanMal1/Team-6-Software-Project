@@ -1,6 +1,7 @@
 import pygame
 import json
 from settings import *
+from timer import Timer
 
 
 class Player(pygame.sprite.Sprite):
@@ -90,12 +91,27 @@ class Player(pygame.sprite.Sprite):
         else : 
                 self._Speed = 110
 
+         #Timing
+        self._timer = {'use_tool':Timer(350,self.useTool)}
+
+
+        #tool utilization
+        if keystroke[pygame.K_c]:
+            # use time
+            self._timer['use_tool'].activate()
+        
+        self._SelectedTool = 'axe'
+
+        #inventory
         if self._prevKeystroke is not None:
             if self._prevKeystroke[pygame.K_e] and not keystroke[pygame.K_e]:
                 self._inventoryOpen = not self._inventoryOpen
             
         self._prevKeystroke = keystroke
+
         
+    def useTool(self):
+        print(self._SelectedTool)
 
     def animate(self,Deltatime):
         frame0 = self.getImage(self._SpriteSheetImage,0,16,18,3,(0,0,255))
@@ -121,6 +137,9 @@ class Player(pygame.sprite.Sprite):
         #if player is not pressing a key add Idle to the status
         if self._Direction.magnitude() == 0:
             self._status = self._status.split("-")[0] + "-Idle"
+
+        if self._timer['use_tool']._Activate == True:
+            print('axe being used.')
 
     def move(self,DeltaTime):
         #normalize vector (cant speed up by holding w and a or w and d and so on)
