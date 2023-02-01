@@ -2,7 +2,7 @@ import pygame
 import json
 from settings import *
 from player import Player
-from sprites import Generic, Water
+from sprites import *
 from pytmx.util_pygame import load_pygame
 from tools import *
 
@@ -28,6 +28,10 @@ class Level:
         for x, y, surface in tmx_data.get_layer_by_name('Water').tiles():
             Water(pos=(x * TileSize * 3, y * TileSize * 3), frames=water_frames, groups=self._AllSprites)
             # Generic((x * TileSize * 3, y * TileSize * 3), surface, self._AllSprites, LAYERS['water'])
+
+        # Decoration
+        for obj in tmx_data.get_layer_by_name('Decoration'):
+            Decoration(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=self._AllSprites)
 
         # Ground
         Generic(pos=(0, 0),

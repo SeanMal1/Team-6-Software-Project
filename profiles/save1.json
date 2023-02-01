@@ -1,1 +1,1 @@
-{"name": "character", "image": "../textures/playerblue.png", "status": "left-Idle", "position": {"x": 1869.7586944494076, "y": 963.5913055505941}, "inventory": []}
+{"name": "character", "image": "../textures/playerblue.png", "status": "down-Idle", "position": {"x": 2360.195722009236, "y": 1628.8389613385941}, "inventory": []}

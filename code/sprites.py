@@ -31,6 +31,12 @@ class Water(Generic):
         if self._frameIndex >= len(self._frames):
             self._frameIndex = 0
         self.image = self._frames[int(self._frameIndex)]
+        # GET WATER FRAMES SCALED X3
 
     def update(self, deltaTime):
         self.animate(deltaTime)
+
+class Decoration(Generic):
+    def __init__(self, pos, surface, groups):
+        super().__init__(pos, surface, groups)
+        # same as generic for the while, will be adding functionality later
