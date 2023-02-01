@@ -13,13 +13,14 @@ class Level:
         self._saveFile = json.load(open("../profiles/save1.json"))
         self.setup()
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
+        self._SpriteSheetImage.set_colorkey([0, 0, 0])
 
     def setup(self):
         tmx_data = load_pygame('../data/Farm.tmx')
 
         # Fence
         for x, y, surface in tmx_data.get_layer_by_name('Fence').tiles():
-            Generic((x * TileSize * 3, y * TileSize * 3), surface, self._AllSprites)
+            Generic(pos=(x * TileSize * 3, y * TileSize * 3), surface=surface, groups=self._AllSprites)
 
         # Water
         for x, y, surface in tmx_data.get_layer_by_name('Water').tiles():

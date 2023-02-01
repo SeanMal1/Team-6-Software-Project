@@ -9,7 +9,8 @@ class Generic(pygame.sprite.Sprite):
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
         self.z = z
-        self.image = pygame.transform.scale(surface, (self.image.get_width() *scale, self.image.get_height() * scale))
+        self.image = pygame.transform.scale(surface, (self.image.get_width() * scale, self.image.get_height() * scale))
+        # self.image.set_colorkey([0, 0, 255])  IMPLEMENT INTO NEW GROUND CLASS
 
 class Water(Generic):
     def __init__(self, pos, frames, groups):
