@@ -6,8 +6,10 @@ from world import Level
 class Game:
     def __init__(self):
         pygame.init()
-        self._Screen = pygame.display.set_mode((ScreenWidth,ScreenHeight))
+        self._Screen = pygame.display.set_mode((ScreenWidth, ScreenHeight))
         pygame.display.set_caption('Valley Life')
+        icon = pygame.image.load('../textures/icon.png')
+        pygame.display.set_icon(icon)
         self._Clock = pygame.time.Clock()
         self._World = Level()
         
