@@ -33,6 +33,10 @@ class Level:
         for obj in tmx_data.get_layer_by_name('Decoration'):
             Decoration(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=self._AllSprites)
 
+        # Trees
+        for obj in tmx_data.get_layer_by_name('Trees'):
+            Tree(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=self._AllSprites, name=obj.name)
+
         # Ground
         Generic(pos=(0, 0),
                 surface = pygame.image.load('../data/Farm.png').convert_alpha(),

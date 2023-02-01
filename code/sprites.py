@@ -40,3 +40,7 @@ class Decoration(Generic):
     def __init__(self, pos, surface, groups):
         super().__init__(pos, surface, groups)
         # same as generic for the while, will be adding functionality later
+
+class Tree(Generic):
+    def __init__(self, pos, surface, groups, name): # name is for the type of tree, e.g small, large
+        super().__init__(pos, surface, groups)
