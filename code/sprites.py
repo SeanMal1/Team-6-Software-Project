@@ -10,18 +10,27 @@ class Generic(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
         self.z = z
         self.image = pygame.transform.scale(surface, (self.image.get_width() * scale, self.image.get_height() * scale))
-        # self.image.set_colorkey([0, 0, 255])  IMPLEMENT INTO NEW GROUND CLASS
 
 class Water(Generic):
     def __init__(self, pos, frames, groups):
         
         # Animate
-        self.frames = frames
-        self.frame_index = 0
+        self._frames = frames
+        self._frameIndex = 0
+        self._animSpeed = 4
         
         # setup
         super().__init__(
                 pos = pos,
-                surface = self.frames[self.frame_index],
+                surface = self._frames[self._frameIndex],
                 groups = groups,
                 z = LAYERS['water'])
+
+    def animate(self, Deltatime):
+        self._frameIndex += self._animSpeed * Deltatime
+        if self._frameIndex >= len(self._frames):
+            self._frameIndex = 0
+        self.image = self._frames[int(self._frameIndex)]
+
+    def update(self, deltaTime):
+        self.animate(deltaTime)
