@@ -9,6 +9,8 @@ class Generic(pygame.sprite.Sprite):
         self.image = surface
         self.rect = self.image.get_rect(topleft=pos)
         self.z = z
+        self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.15, -self.rect.height * 0.8)
+        # hitbox dramatically smaller on vertical because of overlap of player and sprites
         self.image = pygame.transform.scale(surface, (self.image.get_width() * scale, self.image.get_height() * scale))
 
 class Water(Generic):
@@ -39,6 +41,7 @@ class Water(Generic):
 class Decoration(Generic):
     def __init__(self, pos, surface, groups):
         super().__init__(pos, surface, groups)
+        self.hitbox = self.rect.copy().inflate(-10, -self.rect.height * 0.8)
         # same as generic for the while, will be adding functionality later
 
 class Tree(Generic):

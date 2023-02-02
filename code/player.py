@@ -6,7 +6,7 @@ from timer import Timer
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, group):
+    def __init__(self, pos, group, collision_sprites):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
         
@@ -20,6 +20,10 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=pos)
         self.z = LAYERS['main']  # check settings
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
+
+        # collision attribute
+        self.collision_sprites = collision_sprites
+        self.hitbox = self.rect.copy().inflate((-2, -4))  # shrink hitbox to player size from sheet size
 
         #moving attribute
         self._Direction = pygame.math.Vector2()
@@ -151,6 +155,29 @@ class Player(pygame.sprite.Sprite):
         for timer in self.timer.values():
             timer.update()
 
+    def collision(self, _Direction):
+        for sprite in self.collision_sprites.sprites():
+            if hasattr(sprite, 'hitbox'): # Checks if sprite has collision
+                if sprite.hitbox.colliderect(self.hitbox): # Checks if there is a collision
+                        if _Direction == 'horizontal':
+                            if self._Direction.x > 0: # player moving to the right
+                                self.hitbox.right = sprite.hitbox.left
+                                print("hit1")
+                            if self._Direction.x < 0:  # player moving to the left
+                                self.hitbox.left = sprite.hitbox.right
+                                print("hit2")
+                            self.rect.centerx = self.hitbox.centerx
+                            self._Position.x = self.hitbox.centerx
+                        if _Direction == 'vertical':
+                            if self._Direction.y > 0: # player moving down
+                                self.hitbox.bottom = sprite.hitbox.top
+                                print("hit3")
+                            if self._Direction.y < 0:  # player moving up
+                                self.hitbox.top = sprite.hitbox.bottom
+                                print("hit4")
+                            self.rect.centery = self.hitbox.centery
+                            self._Position.y = self.hitbox.centery
+
     def move(self,DeltaTime):
         #normalize vector (cant speed up by holding w and a or w and d and so on)
         if self._Direction.magnitude() > 0:
@@ -158,11 +185,15 @@ class Player(pygame.sprite.Sprite):
 
         #movement on x axis
         self._Position.x += self._Direction.x * self._Speed * DeltaTime
-        self.rect.centerx = self._Position.x
+        self.hitbox.centerx = round(self._Position.x) # rounding to prevent truncation
+        self.rect.centerx = self.hitbox.centerx
+        self.collision('horizontal')
 
         #movement on y axis
         self._Position.y += self._Direction.y * self._Speed * DeltaTime
-        self.rect.centery = self._Position.y
+        self.hitbox.centery = round(self._Position.y)  # rounding to prevent truncation
+        self.rect.centery = self.hitbox.centery
+        self.collision('vertical')
 
     def update(self,DeltaTime):
         self.input()

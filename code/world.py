@@ -11,6 +11,7 @@ class Level:
         self._Player = None
         self._DisplayWorld = pygame.display.get_surface()
         self._AllSprites = CameraGroup()
+        self._CollisionSprites = pygame.sprite.Group() # To keep track of collide-able sprites
         self._saveFile = json.load(open("../profiles/save1.json"))
         self.setup()
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
@@ -21,7 +22,7 @@ class Level:
 
         # Fence
         for x, y, surface in tmx_data.get_layer_by_name('Fence').tiles():
-            Generic(pos=(x * TileSize * 3, y * TileSize * 3), surface=surface, groups=self._AllSprites)
+            Generic(pos=(x * TileSize * 3, y * TileSize * 3), surface=surface, groups=[self._AllSprites, self._CollisionSprites])
 
         # Water
         water_frames = import_folder('../data/Tilesets/water')
@@ -31,18 +32,18 @@ class Level:
 
         # Decoration
         for obj in tmx_data.get_layer_by_name('Decoration'):
-            Decoration(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=self._AllSprites)
+            Decoration(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites])
 
         # Trees
         for obj in tmx_data.get_layer_by_name('Trees'):
-            Tree(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=self._AllSprites, name=obj.name)
+            Tree(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites], name=obj.name)
 
         # Ground
         Generic(pos=(0, 0),
                 surface = pygame.image.load('../data/Farm.png').convert_alpha(),
                 groups=self._AllSprites,
                 z=LAYERS['ground'])
-        self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self._AllSprites)
+        self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self._AllSprites, self._CollisionSprites)
 
 
     def run(self, DeltaTime):
