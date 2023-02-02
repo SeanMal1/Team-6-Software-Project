@@ -49,11 +49,14 @@ class Player(pygame.sprite.Sprite):
 
         #Timing
         self.timer = {
-            'tool use' : Timer(350,self.use_tool)
+            'tool use' : Timer(350,self.use_tool),
+            'tool swap' : Timer(200)
         }
 
         #Tools
-        self._SelectedTool = 'axe'
+        self._Tools = ['axe','hoe (not added yet, will crash if you try use the tool)','water (not added yet, will crash if you try use the tool)']
+        self._ToolIndex = 0
+        self._SelectedTool = self._Tools[self._ToolIndex]
     
     
 
@@ -126,6 +129,17 @@ class Player(pygame.sprite.Sprite):
                 self.timer['tool use'].activate()
                 self._Direction = pygame.math.Vector2()
                 self._frameIndex = 0
+
+            #change tool
+            if keystroke[pygame.K_q] and not self.timer['tool swap']._Active:
+                self.timer['tool swap'].activate()
+                self._ToolIndex += 1
+                if self._ToolIndex < len(self._Tools):
+                    self._ToolIndex = self._ToolIndex
+                else:
+                    self._ToolIndex = 0
+                print(self._Tools[self._ToolIndex])
+                self._SelectedTool = self._Tools[self._ToolIndex]
 
             #inventory
             if self._prevKeystroke is not None:
