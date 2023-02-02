@@ -125,6 +125,7 @@ class Player(pygame.sprite.Sprite):
                 self._animSpeed = 12
                 self.timer['tool use'].activate()
                 self._Direction = pygame.math.Vector2()
+                self._frameIndex = 0
 
             #inventory
             if self._prevKeystroke is not None:
@@ -176,7 +177,6 @@ class Player(pygame.sprite.Sprite):
 
         if self.timer['tool use']._Active:
             self._status = self._status.split("-")[0] + '-' + self._SelectedTool
-            print("axe1")
 
     def updateTimers(self):
         for timer in self.timer.values():
