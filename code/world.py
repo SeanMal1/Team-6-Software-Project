@@ -38,6 +38,10 @@ class Level:
         for obj in tmx_data.get_layer_by_name('Trees'):
             Tree(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites], name=obj.name)
 
+        # Collision Tiles, Borders
+        for x, y, surface in tmx_data.get_layer_by_name('Borders').tiles():
+            Generic(pos=(x * TileSize * 3, y * TileSize * 3), surface=pygame.Surface((TileSize * 3, TileSize * 3)), groups=self._CollisionSprites)
+
         # Ground
         Generic(pos=(0, 0),
                 surface = pygame.image.load('../data/Farm.png').convert_alpha(),
