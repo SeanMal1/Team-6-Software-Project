@@ -20,6 +20,20 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=pos)
         self.z = LAYERS['main']  # check settings
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
+        self._PlayerRightAxeImage1 = pygame.image.load("../textures/playerblueaxeright.png").convert_alpha()
+        self._PlayerRightAxeImage2 = pygame.image.load("../textures/playerblueaxeright2.png").convert_alpha()
+        self._PlayerRightAxeImage3 = pygame.image.load("../textures/playerblueaxeright3.png").convert_alpha()
+        self._PlayerLeftAxeImage1 = pygame.image.load("../textures/playerblueaxeleft.png").convert_alpha()
+        self._PlayerLeftAxeImage2 = pygame.image.load("../textures/playerblueaxeleft2.png").convert_alpha()
+        self._PlayerLeftAxeImage3 = pygame.image.load("../textures/playerblueaxeleft3.png").convert_alpha()
+        self._PlayerUpAxeImage1 = pygame.image.load("../textures/playerblueaxeup.png").convert_alpha()
+        self._PlayerUpAxeImage2 = pygame.image.load("../textures/playerblueaxeup2.png").convert_alpha()
+        self._PlayerUpAxeImage3 = pygame.image.load("../textures/playerblueaxeup3.png").convert_alpha()
+        self._PlayerDownAxeImage1 = pygame.image.load("../textures/playerblueaxedown.png").convert_alpha()
+        self._PlayerDownAxeImage2 = pygame.image.load("../textures/playerblueaxedown2.png").convert_alpha()
+        self._PlayerDownAxeImage3 = pygame.image.load("../textures/playerblueaxedown3.png").convert_alpha()
+        
+
 
         # collision attribute
         self.collision_sprites = collision_sprites
@@ -108,6 +122,7 @@ class Player(pygame.sprite.Sprite):
             #tool utilization
             if keystroke[pygame.K_c]:
                 # use time
+                self._animSpeed = 12
                 self.timer['tool use'].activate()
                 self._Direction = pygame.math.Vector2()
 
@@ -135,7 +150,19 @@ class Player(pygame.sprite.Sprite):
         frame9 = self.getImage(self._SpriteSheetImage,9,16,18,3,(0,0,255))
         frame10 = self.getImage(self._SpriteSheetImage,10,16,18,3,(0,0,255))
         frame11 = self.getImage(self._SpriteSheetImage,11,16,18,3,(0,0,255))
-        self._Animations = {"up":[frame4,frame5],"down":[frame1,frame2],"left":[frame7,frame6,frame8],"right":[frame10,frame9, frame11],"down-Idle":[frame0],"up-Idle":[frame3],"right-Idle":[frame9],"left-Idle":[frame6]}
+        rightaxe1 = self.getImage(self._PlayerRightAxeImage1,0,17,18,3,(0,0,255))
+        rightaxe2 = self.getImage(self._PlayerRightAxeImage2,0,14,18,3,(0,0,255))
+        rightaxe3 = self.getImage(self._PlayerRightAxeImage3,0,14,18,3,(0,0,255))
+        leftaxe1 = self.getImage(self._PlayerLeftAxeImage1,0,17,18,3,(0,0,255))
+        leftaxe2 = self.getImage(self._PlayerLeftAxeImage2,0,14,18,3,(0,0,255))
+        leftaxe3 = self.getImage(self._PlayerLeftAxeImage3,0,14,18,3,(0,0,255))
+        upaxe1 = self.getImage(self._PlayerUpAxeImage1,0,14,18,3,(0,0,255))
+        upaxe2 = self.getImage(self._PlayerUpAxeImage2,0,14,18,3,(0,0,255))
+        upaxe3 = self.getImage(self._PlayerUpAxeImage3,0,14,18,3,(0,0,255))
+        downaxe1 = self.getImage(self._PlayerDownAxeImage1,0,14,18,3,(0,0,255))
+        downaxe2 = self.getImage(self._PlayerDownAxeImage2,0,14,18,3,(0,0,255))
+        downaxe3 = self.getImage(self._PlayerDownAxeImage3,0,14,18,3,(0,0,255))
+        self._Animations = {"up":[frame4,frame5],"down":[frame1,frame2],"left":[frame7,frame6,frame8],"right":[frame10,frame9, frame11],"down-Idle":[frame0],"up-Idle":[frame3],"right-Idle":[frame9],"left-Idle":[frame6], "right-axe":[rightaxe3,rightaxe2,rightaxe1], "left-axe":[leftaxe1,leftaxe2,leftaxe3], "up-axe":[upaxe1,upaxe2,upaxe3], "down-axe":[downaxe3,downaxe1,downaxe2]}
 
         self._frameIndex += self._animSpeed * Deltatime
         if self._frameIndex >= len(self._Animations[self._status]):
@@ -148,7 +175,7 @@ class Player(pygame.sprite.Sprite):
             self._status = self._status.split("-")[0] + "-Idle"
 
         if self.timer['tool use']._Active:
-            #self._status = self._status.split("-")[0] + '-' + self._SelectedTool
+            self._status = self._status.split("-")[0] + '-' + self._SelectedTool
             print("axe1")
 
     def updateTimers(self):
