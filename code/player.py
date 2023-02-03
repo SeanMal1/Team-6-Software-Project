@@ -38,8 +38,12 @@ class Player(pygame.sprite.Sprite):
         self._PlayerLeftHoeImage1 = pygame.image.load("../textures/playerbluelefthoe.png").convert_alpha()
         self._PlayerLeftHoeImage2 = pygame.image.load("../textures/playerbluelefthoe2.png").convert_alpha()
         self._PlayerLeftHoeImage3 = pygame.image.load("../textures/playerbluelefthoe3.png").convert_alpha()
-
-
+        self._PlayerUpHoeImage = pygame.image.load("../textures/playerblueuphoe.png").convert_alpha()
+        self._PlayerUpHoeImage2 = pygame.image.load("../textures/playerblueuphoe2.png").convert_alpha()
+        self._PlayerUpHoeImage3 = pygame.image.load("../textures/playerblueuphoe3.png").convert_alpha()
+        self._PlayerDownHoeImage = pygame.image.load("../textures/playerbluedownhoe.png").convert_alpha()
+        self._PlayerDownHoeImage2 = pygame.image.load("../textures/playerbluedownhoe2.png").convert_alpha()
+        self._PlayerDownHoeImage3= pygame.image.load("../textures/playerbluedownhoe3.png").convert_alpha()
 
         # collision attribute
         self.collision_sprites = collision_sprites
@@ -189,7 +193,13 @@ class Player(pygame.sprite.Sprite):
         lefthoe1 = self.getImage(self._PlayerLeftHoeImage1,0,14,18,3,(0,0,255))
         lefthoe2 = self.getImage(self._PlayerLeftHoeImage2,0,15,18,3,(0,0,255))
         lefthoe3 = self.getImage(self._PlayerLeftHoeImage3,0,14,18,3,(0,0,255))
-        self._Animations = {"up":[frame4,frame5],"down":[frame1,frame2],"left":[frame7,frame6,frame8],"right":[frame10,frame9, frame11],"down-Idle":[frame0],"up-Idle":[frame3],"right-Idle":[frame9],"left-Idle":[frame6], "right-axe":[rightaxe3,rightaxe2,rightaxe1], "left-axe":[leftaxe1,leftaxe2,leftaxe3], "up-axe":[upaxe1,upaxe2,upaxe3], "down-axe":[downaxe3,downaxe1,downaxe2], "right-hoe":[righthoe1,righthoe2,righthoe3],"left-hoe":[lefthoe1,lefthoe2,lefthoe3]}
+        uphoe = self.getImage(self._PlayerUpHoeImage,0,18,18,3,(0,0,255))
+        uphoe2 = self.getImage(self._PlayerUpHoeImage2,0,16,18,3,(0,0,255))
+        uphoe3 = self.getImage(self._PlayerUpHoeImage,0,14,18,3,(0,0,255))
+        downhoe = self.getImage(self._PlayerDownHoeImage,0,14,18,3,(0,0,255))
+        downhoe2 = self.getImage(self._PlayerDownHoeImage2,0,14,18,3,(0,0,255))
+        downhoe3 = self.getImage(self._PlayerDownHoeImage3,0,14,18,3,(0,0,255))
+        self._Animations = {"up":[frame4,frame5],"down":[frame1,frame2],"left":[frame7,frame6,frame8],"right":[frame10,frame9, frame11],"down-Idle":[frame0],"up-Idle":[frame3],"right-Idle":[frame9],"left-Idle":[frame6], "right-axe":[rightaxe3,rightaxe2,rightaxe1], "left-axe":[leftaxe1,leftaxe2,leftaxe3], "up-axe":[upaxe1,upaxe2,upaxe3], "down-axe":[downaxe3,downaxe1,downaxe2], "right-hoe":[righthoe1,righthoe2,righthoe3],"left-hoe":[lefthoe1,lefthoe2,lefthoe3], "up-hoe":[uphoe,uphoe2,uphoe3], "down-hoe":[downhoe,downhoe2,downhoe3]}
 
         self._frameIndex += self._animSpeed * Deltatime
         if self._frameIndex >= len(self._Animations[self._status]):
