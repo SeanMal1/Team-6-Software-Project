@@ -68,14 +68,23 @@ class Player(pygame.sprite.Sprite):
         #Timing
         self.timer = {
             'tool use' : Timer(350,self.use_tool),
-            'tool swap' : Timer(200)
+            'tool swap' : Timer(200),
+            'seed use' : Timer(350,self.use_seed),
+            'seed swap' : Timer(200)
         }
 
         #Tools
         self._Tools = ['axe','hoe','water']
         self._ToolIndex = 0
         self._SelectedTool = self._Tools[self._ToolIndex]
+
+        #seeds for crops/plants
+        self._Seeds = ['wheat', 'corn']
+        self._SeedIndex = 0
+        self._SelectedSeed = self._Seeds[self._SeedIndex]
     
+    def use_seed(self):
+        pass
     
 
     def getImage(self,sheet,frame,width,height,scale, colour):
@@ -158,6 +167,25 @@ class Player(pygame.sprite.Sprite):
                     self._ToolIndex = 0
                 print(self._Tools[self._ToolIndex])
                 self._SelectedTool = self._Tools[self._ToolIndex]
+
+            #seed utilization
+            if keystroke[pygame.K_f]:
+                self.timer['seed use'].activate()
+                self._Direction = pygame.math.Vector2()
+                self._frameIndex = 0
+                print('used seed')
+
+            #change seed
+            if keystroke[pygame.K_x] and not self.timer['seed swap']._Active:
+                self.timer['seed swap'].activate()
+                self._SeedIndex += 1
+                if self._SeedIndex < len(self._Seeds):
+                    self._SeedIndex = self._SeedIndex
+                else:
+                    self._SeedIndex = 0
+                print(self._SelectedSeed)
+                self._SelectedSeed = self._Seeds[self._SeedIndex]
+
 
             #inventory
             if self._prevKeystroke is not None:
