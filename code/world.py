@@ -5,6 +5,7 @@ from player import Player
 from sprites import *
 from pytmx.util_pygame import load_pygame
 from tools import *
+from overlay import Overlay
 
 class Level:
     def __init__(self):
@@ -16,6 +17,7 @@ class Level:
         self.setup()
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
         self._SpriteSheetImage.set_colorkey([0, 0, 0])
+        self._Overlay = Overlay(self._Player)
 
     def setup(self):
         tmx_data = load_pygame('../data/Farm.tmx')
@@ -56,6 +58,7 @@ class Level:
         self._AllSprites.custom_draw(self._Player)
         self._AllSprites.draw(self._SpriteSheetImage)
         self._AllSprites.update(DeltaTime)
+        self._Overlay.Display()
 
 
 class CameraGroup(pygame.sprite.Group):
