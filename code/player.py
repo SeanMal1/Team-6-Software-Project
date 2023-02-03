@@ -145,7 +145,7 @@ class Player(pygame.sprite.Sprite):
             if self._prevKeystroke is not None:
                 if self._prevKeystroke[pygame.K_e] and not keystroke[pygame.K_e]:
                     self._inventoryOpen = not self._inventoryOpen
-                
+
             self._prevKeystroke = keystroke
 
         
