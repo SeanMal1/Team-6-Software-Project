@@ -2,6 +2,7 @@ import pygame
 import json
 from settings import *
 from timer import Timer
+from inventory import Inventory
 
 
 class Player(pygame.sprite.Sprite):
@@ -15,6 +16,7 @@ class Player(pygame.sprite.Sprite):
 
         self._prevKeystroke = None
         self._inventoryOpen = False
+        self._inventory = Inventory(self._saveFile['inventory'])
 
         #self.image.fill('white')
         self.rect = self.image.get_rect(center=pos)
@@ -191,6 +193,7 @@ class Player(pygame.sprite.Sprite):
             if self._prevKeystroke is not None:
                 if self._prevKeystroke[pygame.K_e] and not keystroke[pygame.K_e]:
                     self._inventoryOpen = not self._inventoryOpen
+                    self._inventory.toggleDisplay()
 
             self._prevKeystroke = keystroke
 
@@ -336,5 +339,6 @@ class Player(pygame.sprite.Sprite):
         self._saveFile["status"] = self._status
         self._saveFile['position']['x'] = self._Position.x
         self._saveFile['position']['y'] = self._Position.y
+        self._saveFile['inventory'] = self._inventory.save()
         with open("../profiles/save1.json", "w") as f:
             f.write(json.dumps(self._saveFile))

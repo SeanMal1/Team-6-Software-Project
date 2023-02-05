@@ -23,8 +23,6 @@ class Game:
                     sys.exit()
             DeltaTime = self._Clock.tick() / 1000
             self._World.run(DeltaTime)
-            if self._World._Player._inventoryOpen:
-                self._Screen.blit(pygame.image.load('../textures/inventory.png'), (0,0))
             pygame.display.update()
 
     def save(self):
