@@ -21,6 +21,10 @@ class Game:
                     self.save()
                     pygame.quit()
                     sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        self._World._Paused = not self._World._Paused
+                        print(self._World._Paused)        
             DeltaTime = self._Clock.tick() / 1000
             self._World.run(DeltaTime)
             pygame.display.update()

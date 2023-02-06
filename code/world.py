@@ -18,6 +18,7 @@ class Level:
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
         self._SpriteSheetImage.set_colorkey([0, 0, 0])
         self._Overlay = Overlay(self._Player)
+        self._Paused = False
 
     def setup(self):
         tmx_data = load_pygame('../data/Farm.tmx')
@@ -53,12 +54,13 @@ class Level:
 
 
     def run(self, DeltaTime):
-        self._DisplayWorld.fill('black')
-        # self._AllSprites.draw(self._DisplayWorld)
-        self._AllSprites.custom_draw(self._Player)
-        self._AllSprites.draw(self._SpriteSheetImage)
-        self._AllSprites.update(DeltaTime)
-        self._Overlay.Display()
+        if not self._Paused:
+            self._DisplayWorld.fill('black')
+            # self._AllSprites.draw(self._DisplayWorld)
+            self._AllSprites.custom_draw(self._Player)
+            self._AllSprites.draw(self._SpriteSheetImage)
+            self._AllSprites.update(DeltaTime)
+            self._Overlay.Display()
 
 
 class CameraGroup(pygame.sprite.Group):
