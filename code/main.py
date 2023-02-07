@@ -8,7 +8,7 @@ class Game:
         pygame.init()
         self._Screen = pygame.display.set_mode((ScreenWidth, ScreenHeight))
         pygame.display.set_caption('Valley Life')
-        icon = pygame.image.load('../textures/icon.png')
+        icon = pygame.image.load('../textures/player/icon.png')
         pygame.display.set_icon(icon)
         self._Clock = pygame.time.Clock()
         self._World = Level()
