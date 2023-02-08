@@ -18,7 +18,13 @@ class Level:
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
         self._SpriteSheetImage.set_colorkey([0, 0, 0])
         self._Overlay = Overlay(self._Player)
+        self._DisplaySurface = pygame.display.get_surface()
+        self._FullSurface = pygame.Surface((ScreenWidth,ScreenHeight))
+        self._DayColour = [255,255,255]
+        self._NightColour = (38,101,189)
         self._Paused = False
+
+
 
     def setup(self):
         tmx_data = load_pygame('../data/Farm.tmx')
@@ -53,6 +59,7 @@ class Level:
         self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self._AllSprites, self._CollisionSprites)
 
 
+
     def run(self, DeltaTime):
         if not self._Paused:
             self._DisplayWorld.fill('black')
@@ -60,7 +67,19 @@ class Level:
             self._AllSprites.custom_draw(self._Player)
             self._AllSprites.draw(self._SpriteSheetImage)
             self._AllSprites.update(DeltaTime)
+            
+
+            #day to night cycle
+            for index, value in enumerate(self._NightColour):
+                if self._DayColour[index] > value:
+                    self._DayColour[index] -= 8 * DeltaTime
+
+            self._FullSurface.fill(self._DayColour)
+            self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)
+
+            #overlay/ui
             self._Overlay.Display()
+
 
 
 class CameraGroup(pygame.sprite.Group):
