@@ -288,26 +288,26 @@ class Player(pygame.sprite.Sprite):
 
     def collision(self, _Direction):
         for sprite in self.collision_sprites.sprites():
-            if hasattr(sprite, 'hitbox'): # Checks if sprite has collision
-                if sprite.hitbox.colliderect(self.hitbox): # Checks if there is a collision
-                        if _Direction == 'horizontal':
-                            if self._Direction.x > 0: # player moving to the right
-                                self.hitbox.right = sprite.hitbox.left
-                                print("hit right")
-                            if self._Direction.x < 0:  # player moving to the left
-                                self.hitbox.left = sprite.hitbox.right
-                                print("hit left")
-                            self.rect.centerx = self.hitbox.centerx
-                            self._Position.x = self.hitbox.centerx
-                        if _Direction == 'vertical':
-                            if self._Direction.y > 0: # player moving down
-                                self.hitbox.bottom = sprite.hitbox.top
-                                print("hit top")
-                            if self._Direction.y < 0:  # player moving up
-                                self.hitbox.top = sprite.hitbox.bottom
-                                print("hit bottom")
-                            self.rect.centery = self.hitbox.centery
-                            self._Position.y = self.hitbox.centery
+            if hasattr(sprite, 'hitbox'):  # Checks if sprite has collision
+                if sprite.hitbox.colliderect(self.hitbox):  # Checks if there is a collision
+                    if _Direction == 'horizontal':
+                        if self._Direction.x > 0:  # player moving to the right
+                            self.hitbox.right = sprite.hitbox.left
+                            print("hit right")
+                        if self._Direction.x < 0:  # player moving to the left
+                            self.hitbox.left = sprite.hitbox.right
+                            print("hit left")
+                        self.rect.centerx = self.hitbox.centerx
+                        self._Position.x = self.hitbox.centerx
+                    if _Direction == 'vertical':
+                        if self._Direction.y > 0:  # player moving down
+                            self.hitbox.bottom = sprite.hitbox.top
+                            print("hit top")
+                        if self._Direction.y < 0:  # player moving up
+                            self.hitbox.top = sprite.hitbox.bottom
+                            print("hit bottom")
+                        self.rect.centery = self.hitbox.centery
+                        self._Position.y = self.hitbox.centery
 
     def move(self,DeltaTime):
         #normalize vector (cant speed up by holding w and a or w and d and so on)
