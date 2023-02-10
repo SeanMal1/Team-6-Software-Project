@@ -15,4 +15,5 @@ class Overlay:
         #tool
         ToolOverlay = self._ToolsOverlay[self._Player._SelectedTool]
         ToolScaled = pygame.transform.scale(ToolOverlay,(96,96))
-        self._DisplaySurface.blit(ToolScaled,(1184,624))
+        ToolRect = ToolOverlay.get_rect(midbottom = OverlayPos['tool'])
+        self._DisplaySurface.blit(ToolScaled,ToolRect)
