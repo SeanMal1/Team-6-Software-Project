@@ -7,7 +7,7 @@ TileSize = 16
 
 OverlayPos = {
     'tool' : (ScreenWidth - 90, ScreenHeight - 90),
-    'seed' : (70, ScreenHeight - 5)
+    'seed' : (ScreenWidth - 150, ScreenHeight - 40)
 }
 
 # Layers at which each entity is rendered, gives 3D effect.

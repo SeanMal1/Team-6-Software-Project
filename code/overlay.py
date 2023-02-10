@@ -6,11 +6,16 @@ class Overlay:
         self._DisplaySurface = pygame.display.get_surface()
         self._Player = player
         OverlayPath = '../textures/ui/'
+
         self._ToolsOverlay = {tool:pygame.image.load(f'{OverlayPath}{tool}.png').convert_alpha() for tool in player._Tools}
-        self._SeedsOverlay = {}
+        self._SeedsOverlay = {seed:pygame.image.load(f'{OverlayPath}{seed}.png').convert_alpha() for seed in player._Seeds}
 
     def Display(self):
         #seed
+        SeedOverlay = self._SeedsOverlay[self._Player._SelectedSeed]
+        SeedScaled = pygame.transform.scale(SeedOverlay,(48,48))
+        SeedRect = SeedOverlay.get_rect(midbottom = OverlayPos['seed'])
+        self._DisplaySurface.blit(SeedScaled,SeedRect)
 
         #tool
         ToolOverlay = self._ToolsOverlay[self._Player._SelectedTool]
