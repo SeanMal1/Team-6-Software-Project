@@ -1,4 +1,4 @@
-
+from pygame import Vector2
 
 # Screen
 ScreenWidth = 1280
@@ -28,4 +28,11 @@ LAYERS = {
 PlumPos = {
     'Small' : [(18,17),(30,37),(12,50),(30,45),(20,30), (30,10)],
     'Large' : [(10,8), (14,23)]
+}
+
+PlayerToolOffset = {
+    'left' : Vector2(-17,13),
+    'right' : Vector2(17,13),
+    'up' : Vector2(0,-3),
+    'down' : Vector2(0,17)
 }

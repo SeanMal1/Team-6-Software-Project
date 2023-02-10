@@ -1,6 +1,7 @@
 import pygame
 from settings import *
-from random import randint
+from random import randint, choice
+from timer import Timer
 
 
 class Generic(pygame.sprite.Sprite):
@@ -53,11 +54,23 @@ class Tree(Generic):
         super().__init__(pos, surface, groups)
         self.hitbox = self.rect.copy().inflate(-self.rect.height * 0.4, -self.rect.height * 0.25)
 
+        #tree features
+        self._TreeHealth = 50
+        self._Alive = True
+        self._BrokenTreeSurface = pygame.image.load(f'../data/objects/027.png').convert_alpha()
+        self._InvulTimer = Timer(200)
+
         #plum
         self._PlumSurface = pygame.image.load('../textures/misc/plum.png')
         self._PlumPosition = PlumPos['Large']
         self._PlumSprites = pygame.sprite.Group()
         self.CreatePlum()
+
+    def BreakTree(self):
+        self._TreeHealth -= 25
+        if len(self._PlumSprites.sprites()) > 0:
+            RandPlum = choice(self._PlumSprites.sprites())
+            RandPlum.kill()
 
     def CreatePlum(self):
         for pos in self._PlumPosition:

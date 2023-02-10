@@ -7,7 +7,7 @@ from inventory import Inventory
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, group, collision_sprites):
+    def __init__(self, pos, group, collision_sprites, tree_sprites):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
         
@@ -84,6 +84,9 @@ class Player(pygame.sprite.Sprite):
         self._Seeds = ['wheat', 'corn']
         self._SeedIndex = 0
         self._SelectedSeed = self._Seeds[self._SeedIndex]
+
+        #interaction
+        self._TreeSprites = tree_sprites
     
     def use_seed(self):
         pass
@@ -199,7 +202,17 @@ class Player(pygame.sprite.Sprite):
 
         
     def use_tool(self):
-        None
+        if self._SelectedTool == 'hoe':
+            pass
+        if self._SelectedTool == 'axe':
+            for tree in self._TreeSprites.sprites():
+                if tree.rect.collidepoint(self._TargetPosition):
+                    tree.BreakTree()
+        if self._SelectedTool == 'water':
+            pass
+
+    def get_target_pos(self):
+        self._TargetPosition = self.rect.center + PlayerToolOffset[self._status.split('-')[0]]
 
     def animate(self,Deltatime):
         frame0 = self.getImage(self._SpriteSheetImage,0,16,18,3,(0,0,255))
@@ -330,6 +343,7 @@ class Player(pygame.sprite.Sprite):
         self.input()
         self.getStatus()
         self.updateTimers()
+        self.get_target_pos()
         #frame0 = self.getImage(self._SpriteSheetImage,0,16,18,3,(0,0,255))
         #self.image.blit(frame0, (0,0))
         self.move(DeltaTime)

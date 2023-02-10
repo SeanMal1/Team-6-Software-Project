@@ -12,6 +12,7 @@ class Level:
         self._Player = None
         self._DisplayWorld = pygame.display.get_surface()
         self._AllSprites = CameraGroup()
+        self._TreeSprites = pygame.sprite.Group()
         self._CollisionSprites = pygame.sprite.Group() # To keep track of collide-able sprites
         self._saveFile = json.load(open("../profiles/save1.json"))
         self.setup()
@@ -23,7 +24,7 @@ class Level:
         self._DayColour = [255,255,255]
         self._NightColour = (38,101,189)
         self._Paused = False
-
+        
 
 
     def setup(self):
@@ -45,7 +46,7 @@ class Level:
 
         # Trees
         for obj in tmx_data.get_layer_by_name('Trees'):
-            Tree(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites], name=obj.name)
+            Tree(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name)
 
         # Collision Tiles, Borders
         for x, y, surface in tmx_data.get_layer_by_name('Borders').tiles():
@@ -56,10 +57,9 @@ class Level:
                 surface = pygame.image.load('../data/Farm.png').convert_alpha(),
                 groups=self._AllSprites,
                 z=LAYERS['ground'])
-        self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self._AllSprites, self._CollisionSprites)
+        self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self._AllSprites, self._CollisionSprites,tree_sprites=self._TreeSprites)
 
-
-
+       
     def run(self, DeltaTime):
         if not self._Paused:
             self._DisplayWorld.fill('black')
@@ -99,3 +99,14 @@ class CameraGroup(pygame.sprite.Group):
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
                     self.display_surface.blit(sprite.image, offset_rect)
+
+                    #hitbox,collision box and interaction box debug visuals
+                    '''
+                    if sprite == player:
+                        pygame.draw.rect(self.display_surface,'red',offset_rect,5)
+                        hitbox_rect =player.hitbox.copy()
+                        hitbox_rect.center = offset_rect.center
+                        pygame.draw.rect(self.display_surface,'green',hitbox_rect,5)
+                        target_pos = offset_rect.center + PlayerToolOffset[player._status.split('-')[0]]
+                        pygame.draw.circle(self.display_surface,'blue',target_pos,5)
+                    '''
