@@ -57,7 +57,7 @@ class Player(pygame.sprite.Sprite):
 
         # collision attribute
         self.collision_sprites = collision_sprites
-        self.hitbox = self.rect.copy().inflate((-32, -50))  # shrink hitbox to player size from sheet size
+        self.hitbox = self.rect.copy().inflate((-20, -40))  # shrink hitbox to player size from sheet size
 
         #moving attribute
         self._Direction = pygame.math.Vector2()

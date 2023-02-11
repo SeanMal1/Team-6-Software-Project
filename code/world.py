@@ -50,7 +50,7 @@ class Level:
 
         # Collision Tiles, Borders
         for x, y, surface in tmx_data.get_layer_by_name('Borders').tiles():
-            Generic(pos=(x * TileSize * 3, y * TileSize * 3), surface=pygame.Surface((TileSize * 3, TileSize * 3)), groups=self._CollisionSprites)
+            Border(pos=(x * TileSize * 3, y * TileSize * 3), surface=pygame.Surface((TileSize * 3, TileSize * 3)), groups= self._CollisionSprites)
 
         # Ground
         Generic(pos=(0, 0),
