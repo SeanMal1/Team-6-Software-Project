@@ -9,6 +9,7 @@ from overlay import Overlay
 
 class Level:
     def __init__(self):
+        self._Paused = False
         self._Player = None
         self._DisplayWorld = pygame.display.get_surface()
         self._AllSprites = CameraGroup()
@@ -23,7 +24,6 @@ class Level:
         self._FullSurface = pygame.Surface((ScreenWidth,ScreenHeight))
         self._DayColour = [255,255,255]
         self._NightColour = (38,101,189)
-        self._Paused = False
         
 
 
@@ -57,7 +57,7 @@ class Level:
                 surface = pygame.image.load('../data/Farm.png').convert_alpha(),
                 groups=self._AllSprites,
                 z=LAYERS['ground'])
-        self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self._AllSprites, self._CollisionSprites,tree_sprites=self._TreeSprites)
+        self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self._AllSprites, self._CollisionSprites, tree_sprites=self._TreeSprites)
 
        
     def run(self, DeltaTime):

@@ -24,14 +24,12 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self._World._Paused = not self._World._Paused
-                        print(self._World._Paused)        
             DeltaTime = self._Clock.tick() / 1000
             self._World.run(DeltaTime)
             pygame.display.update()
 
     def save(self):
         self._World._Player.save()
-
 
 if __name__ == '__main__':
     game = Game()
