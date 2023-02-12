@@ -7,7 +7,7 @@ from inventory import Inventory
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, group, collision_sprites, tree_sprites):
+    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
         
@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
 
         self._prevKeystroke = None
         self._inventoryOpen = False
-        self._inventory = Inventory(self._saveFile['inventory'])
+        self.toggle_inventory = toggle_inventory
 
         #self.image.fill('white')
         self.rect = self.image.get_rect(center=pos)
@@ -91,7 +91,6 @@ class Player(pygame.sprite.Sprite):
     def use_seed(self):
         pass
     
-
     def getImage(self,sheet,frame,width,height,scale, colour):
         self._Spriteimage = pygame.Surface((width, height)).convert_alpha()
         if frame == 0:
@@ -121,7 +120,6 @@ class Player(pygame.sprite.Sprite):
         self._Spriteimage = pygame.transform.scale(self._Spriteimage, (width *scale, height *scale))
         self._Spriteimage.set_colorkey(colour)
         return self._Spriteimage
-
 
     def input(self):
         keystroke = pygame.key.get_pressed()
@@ -196,11 +194,10 @@ class Player(pygame.sprite.Sprite):
             if self._prevKeystroke is not None:
                 if self._prevKeystroke[pygame.K_e] and not keystroke[pygame.K_e]:
                     self._inventoryOpen = not self._inventoryOpen
-                    self._inventory.toggleDisplay()
+                    self.toggle_inventory()
 
             self._prevKeystroke = keystroke
-
-        
+     
     def use_tool(self):
         if self._SelectedTool == 'hoe':
             pass
@@ -353,6 +350,5 @@ class Player(pygame.sprite.Sprite):
         self._saveFile["status"] = self._status
         self._saveFile['position']['x'] = self._Position.x
         self._saveFile['position']['y'] = self._Position.y
-        self._saveFile['inventory'] = self._inventory.save()
         with open("../profiles/save1.json", "w") as f:
             f.write(json.dumps(self._saveFile))

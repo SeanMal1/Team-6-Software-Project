@@ -13,7 +13,6 @@ class Game:
         self._Clock = pygame.time.Clock()
         self._World = Level()
         
-
     def run(self):
         while True:
             for event in pygame.event.get():
@@ -30,6 +29,7 @@ class Game:
 
     def save(self):
         self._World._Player.save()
+        self._World.save()
 
 if __name__ == '__main__':
     game = Game()

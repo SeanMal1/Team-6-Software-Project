@@ -6,10 +6,10 @@ from sprites import *
 from pytmx.util_pygame import load_pygame
 from tools import *
 from overlay import Overlay
+from inventory import Inventory
 
 class Level:
     def __init__(self):
-        self._Paused = False
         self._Player = None
         self._DisplayWorld = pygame.display.get_surface()
         self._AllSprites = CameraGroup()
@@ -24,8 +24,13 @@ class Level:
         self._FullSurface = pygame.Surface((ScreenWidth,ScreenHeight))
         self._DayColour = [255,255,255]
         self._NightColour = (38,101,189)
-        
 
+        self._inventory_open = False
+        self._Paused = False
+        self._inventory = Inventory(self._saveFile['inventory'], self.toggle_inventory)
+        
+    def toggle_inventory(self):
+        self._inventory_open = not self._inventory_open
 
     def setup(self):
         tmx_data = load_pygame('../data/Farm.tmx')
@@ -57,30 +62,33 @@ class Level:
                 surface = pygame.image.load('../data/Farm.png').convert_alpha(),
                 groups=self._AllSprites,
                 z=LAYERS['ground'])
-        self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self._AllSprites, self._CollisionSprites, tree_sprites=self._TreeSprites)
-
-       
+        self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self.toggle_inventory, self._AllSprites, self._CollisionSprites, tree_sprites=self._TreeSprites)
+      
     def run(self, DeltaTime):
         if not self._Paused:
             self._DisplayWorld.fill('black')
             # self._AllSprites.draw(self._DisplayWorld)
             self._AllSprites.custom_draw(self._Player)
-            self._AllSprites.draw(self._SpriteSheetImage)
-            self._AllSprites.update(DeltaTime)
+            if self._inventory_open:
+                self._inventory.display()
+            else:
+                self._AllSprites.draw(self._SpriteSheetImage)
+                self._AllSprites.update(DeltaTime)
             
 
-            #day to night cycle
-            for index, value in enumerate(self._NightColour):
-                if self._DayColour[index] > value:
-                    self._DayColour[index] -= 8 * DeltaTime
+                #day to night cycle
+                for index, value in enumerate(self._NightColour):
+                    if self._DayColour[index] > value:
+                        self._DayColour[index] -= 8 * DeltaTime
 
             self._FullSurface.fill(self._DayColour)
             self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)
 
-            #overlay/ui
+                #overlay/ui
             self._Overlay.Display()
 
-
+    def save(self):
+        pass
 
 class CameraGroup(pygame.sprite.Group):
     def __init__(self):
