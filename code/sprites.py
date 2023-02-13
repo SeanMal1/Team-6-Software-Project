@@ -64,14 +64,22 @@ class Border(Generic):
         # same as generic for the while except for scaling
 
 class Particle(Generic):
-    def __init__(self, pos, surface, groups, scale=6, z=LAYERS['main'],duration = 200):
+    def __init__(self, pos, surface, groups, scale=3, z=LAYERS['main'],duration=200,item="plum"):
         super().__init__(pos, surface, groups, scale, z)
         self._StartTime = pygame.time.get_ticks()
         self._Duration = duration
-
+        if item == "plum":
+            self._Width = 16
+            self._Height = 16
+        elif item == "tree":
+            self._Width = 24
+            self._Height = 31
+        else:
+            self._Width = 16
+            self._Height = 16
         MaskSurface = pygame.mask.from_surface(self.image)
         NewSurface = MaskSurface.to_surface()
-        NewSurface = pygame.transform.scale(NewSurface,(16*3,16*3))
+        NewSurface = pygame.transform.scale(NewSurface,(self._Width*3,self._Height*3))
         NewSurface.set_colorkey((0,0,0))   
         self.image = NewSurface
 
@@ -103,11 +111,12 @@ class Tree(Generic):
         self._TreeHealth -= 15
         if len(self._PlumSprites.sprites()) > 0:
             RandPlum = choice(self._PlumSprites.sprites())
-            Particle(pos= RandPlum.rect.topleft,surface=RandPlum.image,groups=self.groups()[0], z=LAYERS['fruit'])
+            Particle(pos= RandPlum.rect.topleft,surface=RandPlum.image,groups=self.groups()[0], z=LAYERS['fruit'],item="plum")
             RandPlum.kill()
 
     def CheckBreak(self):
         if self._TreeHealth <= 0:
+            Particle(pos=self.rect.topleft,surface=self.image,groups=self.groups()[0],z=LAYERS['fruit'],duration=500,item="tree")
             self.image = self._BrokenTreeSurface
             self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
             self.hitbox = self.rect.copy().inflate(-10,-self.rect.height * 0.6)
