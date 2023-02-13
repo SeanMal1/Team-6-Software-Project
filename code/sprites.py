@@ -71,6 +71,7 @@ class Tree(Generic):
         self._TreeHealth = 50
         self._Alive = True
         self._BrokenTreeSurface = pygame.image.load(f'../data/objects/027.png').convert_alpha()
+        self._BrokenTreeSurface = pygame.transform.scale(self._BrokenTreeSurface, (10 * 3,10 * 3))
         self._InvulTimer = Timer(200)
 
         #plum
@@ -80,10 +81,21 @@ class Tree(Generic):
         self.CreatePlum()
 
     def BreakTree(self):
-        self._TreeHealth -= 25
+        self._TreeHealth -= 15
         if len(self._PlumSprites.sprites()) > 0:
             RandPlum = choice(self._PlumSprites.sprites())
             RandPlum.kill()
+
+    def CheckBreak(self):
+        if self._TreeHealth <= 0:
+            self.image = self._BrokenTreeSurface
+            self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
+            self.hitbox = self.rect.copy().inflate(-10,-self.rect.height * 0.6)
+            self._Alive = False
+
+    def update(self,DeltaTime):
+        if self._Alive:
+            self.CheckBreak()
 
     def CreatePlum(self):
         for pos in self._PlumPosition:
