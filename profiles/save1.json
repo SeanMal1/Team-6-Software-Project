@@ -1,1 +1,1 @@
-{"name": "character", "image": "../textures/player/playerblue.png", "status": "left-Idle", "position": {"x": 2389.56, "y": 1279.2592975519335}, "inventory": {"wood": 5, "plum": 6, "corn": 0, "wheat": 0}}
+{"name": "character", "image": "../textures/player/playerblue.png", "status": "right-Idle", "position": {"x": 2327.44, "y": 1264.992423252966}, "inventory": {"axe": "", "hoe": "", "watering can": "", "wood": 2, "plum": 2, "corn": 0, "wheat": 0}}

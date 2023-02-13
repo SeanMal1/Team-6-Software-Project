@@ -20,9 +20,9 @@ class Inventory():
     def display(self):
         self.input()
         for index, item in enumerate(self._inventory):
-            self._DisplaySurface.blit(self._font.render(item, False, "Black"), (100,100 * index))
-            self._DisplaySurface.blit(self._font.render(str(self._inventory[item]), False, "Black"), (200,100 *index))
-            
+            if self._inventory[item] != 0:
+                self._DisplaySurface.blit(self._font.render(item, False, "Black"), (100,100 * index))
+                self._DisplaySurface.blit(self._font.render(str(self._inventory[item]), False, "Black"), (200,100 *index))
 
     def addItem(self, item):
         if item in self._inventory:
