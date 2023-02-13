@@ -3,6 +3,7 @@ import pygame
 class Inventory():
     def __init__(self, inventory, toggle_inventory):
         self._DisplaySurface = pygame.display.get_surface()
+        self._font = pygame.font.Font('../font/joystixmonospace.otf', 20)
         self.toggle_inventory = toggle_inventory
         self._inventory = inventory
         self._prevKeystroke = None
@@ -18,7 +19,9 @@ class Inventory():
 
     def display(self):
         self.input()
-        self._DisplaySurface.blit(pygame.Surface((1000, 1000)),(0,0))
+        for index, item in enumerate(self._inventory):
+            self._DisplaySurface.blit(self._font.render(item, False, "Black"), (100,100 * index))
+            
 
     def addItem(self, item):
         if item in self._inventory:
