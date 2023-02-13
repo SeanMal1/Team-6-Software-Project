@@ -1,1 +1,1 @@
-{"name": "character", "image": "../textures/player/playerblue.png", "status": "up-Idle", "position": {"x": 1769.0252580961323, "y": 977.6462934232453}, "inventory": ["wood", "plums"]}
+{"name": "character", "image": "../textures/player/playerblue.png", "status": "left-Idle", "position": {"x": 2389.56, "y": 1279.2592975519335}, "inventory": {"wood": 5, "plum": 6, "corn": 0, "wheat": 0}}

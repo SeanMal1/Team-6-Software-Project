@@ -21,6 +21,7 @@ class Inventory():
         self.input()
         for index, item in enumerate(self._inventory):
             self._DisplaySurface.blit(self._font.render(item, False, "Black"), (100,100 * index))
+            self._DisplaySurface.blit(self._font.render(str(self._inventory[item]), False, "Black"), (200,100 *index))
             
 
     def addItem(self, item):

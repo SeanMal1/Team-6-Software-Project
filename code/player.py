@@ -87,6 +87,9 @@ class Player(pygame.sprite.Sprite):
 
         #interaction
         self._TreeSprites = tree_sprites
+
+        #inventory
+        self._Inventory = self._saveFile['inventory']
     
     def use_seed(self):
         pass
@@ -350,5 +353,6 @@ class Player(pygame.sprite.Sprite):
         self._saveFile["status"] = self._status
         self._saveFile['position']['x'] = self._Position.x
         self._saveFile['position']['y'] = self._Position.y
+        self._saveFile['inventory'] = self._Inventory
         with open("../profiles/save1.json", "w") as f:
             f.write(json.dumps(self._saveFile))

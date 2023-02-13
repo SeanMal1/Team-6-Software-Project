@@ -27,7 +27,7 @@ class Level:
 
         self._inventory_open = False
         self._Paused = False
-        self._inventory = Inventory(self._saveFile['inventory'], self.toggle_inventory)
+        self._inventory = Inventory(self._Player._Inventory, self.toggle_inventory)
         
     def toggle_inventory(self):
         self._inventory_open = not self._inventory_open
@@ -51,7 +51,7 @@ class Level:
 
         # Trees
         for obj in tmx_data.get_layer_by_name('Trees'):
-            Tree(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name)
+            Tree(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name, playerAdd= self.PlayerAdd)
 
         # Collision Tiles, Borders
         for x, y, surface in tmx_data.get_layer_by_name('Borders').tiles():
@@ -63,6 +63,9 @@ class Level:
                 groups=self._AllSprites,
                 z=LAYERS['ground'])
         self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self.toggle_inventory, self._AllSprites, self._CollisionSprites, tree_sprites=self._TreeSprites)
+
+    def PlayerAdd(self,item):
+        self._Player._Inventory[item] += 1
       
     def run(self, DeltaTime):
         if not self._Paused:

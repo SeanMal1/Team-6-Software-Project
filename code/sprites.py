@@ -90,7 +90,7 @@ class Particle(Generic):
 
 
 class Tree(Generic):
-    def __init__(self, pos, surface, groups, name):  # name is for the type of tree, e.g small, large
+    def __init__(self, pos, surface, groups, name, playerAdd):  # name is for the type of tree, e.g small, large
         super().__init__(pos, surface, groups)
         self.hitbox = self.rect.copy().inflate(-self.rect.height * 0.4, -self.rect.height * 0.25)
 
@@ -107,16 +107,20 @@ class Tree(Generic):
         self._PlumSprites = pygame.sprite.Group()
         self.CreatePlum()
 
+        self._PlayerAdd = playerAdd
+
     def BreakTree(self):
         self._TreeHealth -= 15
         if len(self._PlumSprites.sprites()) > 0:
             RandPlum = choice(self._PlumSprites.sprites())
             Particle(pos= RandPlum.rect.topleft,surface=RandPlum.image,groups=self.groups()[0], z=LAYERS['fruit'],item="plum")
+            self._PlayerAdd('plum')
             RandPlum.kill()
 
     def CheckBreak(self):
         if self._TreeHealth <= 0:
-            Particle(pos=self.rect.topleft,surface=self.image,groups=self.groups()[0],z=LAYERS['fruit'],duration=500,item="tree")
+            self._PlayerAdd('wood')
+            Particle(pos=self.rect.topleft,surface=self.image,groups=self.groups()[0],z=LAYERS['fruit'],duration=200,item="tree")
             self.image = self._BrokenTreeSurface
             self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
             self.hitbox = self.rect.copy().inflate(-10,-self.rect.height * 0.6)
