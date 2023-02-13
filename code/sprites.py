@@ -62,6 +62,25 @@ class Border(Generic):
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.copy()
         # same as generic for the while except for scaling
+
+class Particle(Generic):
+    def __init__(self, pos, surface, groups, scale=6, z=LAYERS['main'],duration = 200):
+        super().__init__(pos, surface, groups, scale, z)
+        self._StartTime = pygame.time.get_ticks()
+        self._Duration = duration
+
+        MaskSurface = pygame.mask.from_surface(self.image)
+        NewSurface = MaskSurface.to_surface()
+        NewSurface = pygame.transform.scale(NewSurface,(16*3,16*3))
+        NewSurface.set_colorkey((0,0,0))   
+        self.image = NewSurface
+
+    def update(self,DeltaTime):
+        currentTime = pygame.time.get_ticks()
+        if currentTime - self._StartTime > self._Duration:
+            self.kill()
+
+
 class Tree(Generic):
     def __init__(self, pos, surface, groups, name):  # name is for the type of tree, e.g small, large
         super().__init__(pos, surface, groups)
@@ -84,6 +103,7 @@ class Tree(Generic):
         self._TreeHealth -= 15
         if len(self._PlumSprites.sprites()) > 0:
             RandPlum = choice(self._PlumSprites.sprites())
+            Particle(pos= RandPlum.rect.topleft,surface=RandPlum.image,groups=self.groups()[0], z=LAYERS['fruit'])
             RandPlum.kill()
 
     def CheckBreak(self):
