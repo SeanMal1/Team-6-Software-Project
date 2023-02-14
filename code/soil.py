@@ -1,6 +1,7 @@
 import pygame
 from settings import *
 from pytmx.util_pygame import load_pygame
+from tools import *
 
 class SoilTile(pygame.sprite.Sprite):
     def __init__(self, pos, surface, groups):
@@ -19,6 +20,7 @@ class SoilLayer:
 
         # Graphics
         self._SoilSurface = pygame.image.load('../textures/soil/o.png')
+        self._SoilSurfaces = import_folder_dict('../textures/soil')
 
         self.create_soil_grid()
         self.create_hit_rects()
@@ -49,11 +51,10 @@ class SoilLayer:
                     self.create_soil_tiles()
 
     def create_soil_tiles(self):
-        self._SoilSprites.empty()
+        self._SoilSprites.empty()  # Empty all soil sprites and redraw so that Tile connections work
         for index_row, row in enumerate(self.grid):
             for index_col, cell in enumerate(row):
                 if 'X' in cell:
                     SoilTile(pos=(index_col * TileSize * Scale, index_row * TileSize * Scale),
                              surface=self._SoilSurface,
                              groups=[self._AllSprites, self._SoilSprites])
-
