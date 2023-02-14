@@ -5,7 +5,7 @@ from timer import Timer
 
 
 class Generic(pygame.sprite.Sprite):
-    def __init__(self, pos, surface, groups, scale=3, z=LAYERS['main']):
+    def __init__(self, pos, surface, groups, scale=Scale, z=LAYERS['main']):
         super().__init__(groups)
         self.scale = scale
         self.image = surface

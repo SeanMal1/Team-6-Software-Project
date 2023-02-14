@@ -7,6 +7,7 @@ from pytmx.util_pygame import load_pygame
 from tools import *
 from overlay import Overlay
 from inventory import Inventory
+from soil import SoilLayer
 
 class Level:
     def __init__(self):
@@ -15,6 +16,7 @@ class Level:
         self._AllSprites = CameraGroup()
         self._TreeSprites = pygame.sprite.Group()
         self._CollisionSprites = pygame.sprite.Group() # To keep track of collide-able sprites
+        self._SoilLayer = SoilLayer(self._AllSprites)
         self._saveFile = json.load(open("../profiles/save1.json"))
         self.setup()
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
@@ -24,6 +26,7 @@ class Level:
         self._FullSurface = pygame.Surface((ScreenWidth,ScreenHeight))
         self._DayColour = [255,255,255]
         self._NightColour = (38,101,189)
+
 
         self._inventory_open = False
         self._Paused = False
@@ -37,32 +40,38 @@ class Level:
 
         # Fence
         for x, y, surface in tmx_data.get_layer_by_name('Fence').tiles():
-            Generic(pos=(x * TileSize * 3, y * TileSize * 3), surface=surface, groups=[self._AllSprites, self._CollisionSprites])
+            Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites])
 
         # Water
         water_frames = import_folder('../data/Tilesets/water')
         for x, y, surface in tmx_data.get_layer_by_name('Water').tiles():
-            Water(pos=(x * TileSize * 3, y * TileSize * 3), frames=water_frames, groups=self._AllSprites)
-            # Generic((x * TileSize * 3, y * TileSize * 3), surface, self._AllSprites, LAYERS['water'])
+            Water(pos=(x * TileSize * Scale, y * TileSize * Scale), frames=water_frames, groups=self._AllSprites)
 
         # Decoration
         for obj in tmx_data.get_layer_by_name('Decoration'):
-            Decoration(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites])
+            Decoration(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites])
 
         # Trees
         for obj in tmx_data.get_layer_by_name('Trees'):
-            Tree(pos=(obj.x * 3, obj.y * 3), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name, playerAdd= self.PlayerAdd)
+            Tree(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name, playerAdd= self.PlayerAdd)
 
         # Collision Tiles, Borders
         for x, y, surface in tmx_data.get_layer_by_name('Borders').tiles():
-            Border(pos=(x * TileSize * 3, y * TileSize * 3), surface=pygame.Surface((TileSize * 3, TileSize * 3)), groups= self._CollisionSprites)
+            Border(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=pygame.Surface((TileSize * Scale, TileSize * Scale)), groups= self._CollisionSprites)
 
         # Ground
         Generic(pos=(0, 0),
                 surface = pygame.image.load('../data/Farm.png').convert_alpha(),
                 groups=self._AllSprites,
                 z=LAYERS['ground'])
-        self._Player = Player((self._saveFile["position"]["x"], self._saveFile["position"]["y"]), self.toggle_inventory, self._AllSprites, self._CollisionSprites, tree_sprites=self._TreeSprites)
+
+        # Player
+        self._Player = Player(pos=(self._saveFile["position"]["x"], self._saveFile["position"]["y"]),
+                              toggle_inventory=self.toggle_inventory,
+                              group=self._AllSprites,
+                              collision_sprites=self._CollisionSprites,
+                              tree_sprites=self._TreeSprites,
+                              soil_layer=self._SoilLayer)
 
     def PlayerAdd(self,item):
         self._Player._Inventory[item] += 1

@@ -3,11 +3,12 @@ import json
 from settings import *
 from timer import Timer
 from inventory import Inventory
+from soil import *
 
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites):
+    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
         
@@ -87,6 +88,7 @@ class Player(pygame.sprite.Sprite):
 
         #interaction
         self._TreeSprites = tree_sprites
+        self._SoilLayer = soil_layer
 
         #inventory
         self._Inventory = self._saveFile['inventory']
@@ -203,7 +205,7 @@ class Player(pygame.sprite.Sprite):
      
     def use_tool(self):
         if self._SelectedTool == 'hoe':
-            pass
+            self._SoilLayer.get_hit(self._TargetPosition)
         if self._SelectedTool == 'axe':
             for tree in self._TreeSprites.sprites():
                 if tree.rect.collidepoint(self._TargetPosition):

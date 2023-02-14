@@ -4,6 +4,7 @@ from pygame import Vector2
 ScreenWidth = 1280
 ScreenHeight = 720
 TileSize = 16
+Scale = 3
 
 OverlayPos = {
     'tool' : (ScreenWidth - 90, ScreenHeight - 90),
