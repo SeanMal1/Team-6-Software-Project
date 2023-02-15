@@ -64,7 +64,7 @@ class SoilLayer:
                     tl = 'X' in self.grid[index_row - 1][index_col - 1]
                     tr = 'X' in self.grid[index_row - 1][index_col + 1]
                     bl = 'X' in self.grid[index_row + 1][index_col - 1]
-                    bl = 'X' in self.grid[index_row + 1][index_col + 1]
+                    br = 'X' in self.grid[index_row + 1][index_col + 1]
 
                     # Layout
                     # [tl][t ][tr]
@@ -75,26 +75,38 @@ class SoilLayer:
                     tile_type = 'o'
                     # Centre
                     if all((t,b,l,r)): tile_type = 'x'
+                    # Middle Sides
+                    elif all((t, b, r, tr, br)) and not l: tile_type = 'lm'
+                    elif all((t, b, l, tl, bl)) and not r: tile_type = 'rm'
+                    elif all((l, r, t, tl, tr)) and not b: tile_type = 'bm'
+                    elif all((l, r, b, bl, br)) and not t: tile_type = 'tm'
                     # Horizontal only
-                    if l and not any((t,b,r)): tile_type = 'r'
-                    if r and not any((t,b,l)): tile_type = 'l'
-                    if r and l and not any((t, b)): tile_type = 'lr'
+                    elif l and not any((t,b,r)): tile_type = 'r'
+                    elif r and not any((t,b,l)): tile_type = 'l'
+                    elif r and l and not any((t, b)): tile_type = 'lr'
                     # Vertical only
-                    if t and not any((b, l, r)): tile_type = 'b'
-                    if b and not any((t, l, r)): tile_type = 't'
-                    if t and b and not any((l, r)): tile_type = 'tb'
-
+                    elif t and not any((b, l, r)): tile_type = 'b'
+                    elif b and not any((t, l, r)): tile_type = 't'
+                    elif t and b and not any((l, r)): tile_type = 'tb'
                     # Corners
-                    if l and b and not any((t, r)): tile_type = 'tr'
-                    if r and b and not any((t, l)): tile_type = 'tl'
-                    if l and t and not any((b, r)): tile_type = 'br'
-                    if r and t and not any((b, l)): tile_type = 'bl'
-
+                    elif l and b and not any((t, r)): tile_type = 'tr'
+                    elif r and b and not any((t, l)): tile_type = 'tl'
+                    elif l and t and not any((b, r)): tile_type = 'br'
+                    elif r and t and not any((b, l)): tile_type = 'bl'
+                    # Complex
+                    elif all((t, b, r, tr)) and not l: tile_type = 'tbrtr'
+                    elif all((t, b, r, br)) and not l: tile_type = 'tbrbr'
+                    elif all((t, b, l, tl)) and not r: tile_type = 'tbltl'
+                    elif all((t, b, l, bl)) and not r: tile_type = 'tblbl'
+                    elif all((l, r, b, tl)) and not b: tile_type = 'lrbtl'
+                    elif all((l, r, b, bl)) and not b: tile_type = 'lrbbl'
+                    elif all((l, r, b, br)) and not t: tile_type = 'lrtbr'
+                    elif all((l, r, b, bl)) and not t: tile_type = 'lrtbl'
                     # T-Shapes
-                    if all((t, b, r)) and not l: tile_type = 'tbr'
-                    if all((t, b, l)) and not r: tile_type = 'tbl'
-                    if all((l, r, t)) and not b: tile_type = 'lrb'
-                    if all((l, r, b)) and not t: tile_type = 'lrt'
+                    elif all((t, b, r)) and not l: tile_type = 'tbr'
+                    elif all((t, b, l)) and not r: tile_type = 'tbl'
+                    elif all((l, r, t)) and not b: tile_type = 'lrb'
+                    elif all((l, r, b)) and not t: tile_type = 'lrt'
 
 
                     SoilTile(pos=(index_col * TileSize * Scale, index_row * TileSize * Scale),
