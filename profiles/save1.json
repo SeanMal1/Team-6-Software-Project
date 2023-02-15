@@ -1,1 +1,1 @@
-{"name": "character", "image": "../textures/player/playerblue.png", "status": "up-Idle", "position": {"x": 1742.59651190871, "y": 776.5665119087097}, "inventory": {"axe": "", "hoe": "", "watering can": "", "wood": 14, "plum": 10, "corn": 0, "wheat": 0}}
+{"name": "character", "image": "../textures/player/playerblue.png", "status": "left-Idle", "position": {"x": 1574.0762308423912, "y": 1200.8651660040614}, "inventory": {"axe": "", "hoe": "", "watering can": "", "wood": 16, "plum": 12, "corn": 0, "wheat": 0}}

@@ -98,8 +98,8 @@ class SoilLayer:
                     elif all((t, b, r, br)) and not l: tile_type = 'tbrbr'
                     elif all((t, b, l, tl)) and not r: tile_type = 'tbltl'
                     elif all((t, b, l, bl)) and not r: tile_type = 'tblbl'
-                    elif all((l, r, b, tl)) and not b: tile_type = 'lrbtl'
-                    elif all((l, r, b, bl)) and not b: tile_type = 'lrbbl'
+                    elif all((l, r, t, tl)) and not b: tile_type = 'lrbtl'
+                    elif all((l, r, t, tr)) and not b: tile_type = 'lrbtr'
                     elif all((l, r, b, br)) and not t: tile_type = 'lrtbr'
                     elif all((l, r, b, bl)) and not t: tile_type = 'lrtbl'
                     # T-Shapes
