@@ -2,6 +2,7 @@ import pygame
 from settings import *
 from pytmx.util_pygame import load_pygame
 from tools import *
+from random import choice
 
 class SoilTile(pygame.sprite.Sprite):
     def __init__(self, pos, surface, groups):
@@ -11,16 +12,25 @@ class SoilTile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
         self.z = LAYERS['soil']
 
+class WaterTile(pygame.sprite.Sprite):
+    def __init__(self, pos, surface, groups):
+        super().__init__(groups)
+        self.image = surface
+        self.rect = self.image.get_rect(topleft=pos)
+        self.z = LAYERS['soil water']
+
+
 class SoilLayer:
     def  __init__(self, _AllSprites):
 
         # Sprite Groups
         self._AllSprites = _AllSprites
         self._SoilSprites = pygame.sprite.Group()
+        self._WaterSprites = pygame.sprite.Group()
 
         # Graphics
-        self._SoilSurface = pygame.image.load('../textures/soil/o.png')
         self._SoilSurfaces = import_folder_dict('../textures/soil/')
+        self._WaterSurfaces = import_folder('../textures/soil_water/')
 
         self.create_soil_grid()
         self.create_hit_rects()
@@ -49,6 +59,24 @@ class SoilLayer:
                 if 'F' in self.grid[y][x]:
                     self.grid[y][x].append('X')
                     self.create_soil_tiles()
+
+    def water(self, _TargetPosition):
+        for soil_sprite in self._SoilSprites.sprites():
+            if soil_sprite.rect.collidepoint(_TargetPosition):
+                x, y = soil_sprite.rect.x // (TileSize * Scale), soil_sprite.rect.y // (TileSize * Scale)
+                self.grid[y][x].append('W')  # Appends 'W' to Grid to know which tile is watered
+                pos = soil_sprite.rect.topleft
+                surface = choice(self._WaterSurfaces)
+                WaterTile(pos, surface, [self._AllSprites, self._WaterSprites])
+
+    def dry_soil_tiles(self):  # TO be called at day start
+        for sprite in self._WaterSprites.sprites():
+            sprite.kill()
+
+        for row in self.grid:
+            for cell in row:
+                if 'W' in cell:
+                    cell.remove('W')
 
     def create_soil_tiles(self):
         self._SoilSprites.empty()  # Empty all soil sprites and redraw so that Tile connections work
