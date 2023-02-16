@@ -18,7 +18,7 @@ class Level:
         self._AllSprites = CameraGroup()
         self._TreeSprites = pygame.sprite.Group()
         self._CollisionSprites = pygame.sprite.Group() # To keep track of collide-able sprites
-        self._SoilLayer = SoilLayer(self._AllSprites)
+        self._SoilLayer = SoilLayer(self._AllSprites, self._CollisionSprites)
         self._saveFile = json.load(open("../profiles/save1.json"))
         self.setup()
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
