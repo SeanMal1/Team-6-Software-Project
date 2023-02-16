@@ -55,6 +55,14 @@ class Level:
         for obj in tmx_data.get_layer_by_name('Trees'):
             Tree(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name, playerAdd= self.PlayerAdd)
 
+        # House
+        for x, y, surface in tmx_data.get_layer_by_name('Building Floor').tiles():
+            Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites], z=LAYERS['house bottom'])
+        for x, y, surface in tmx_data.get_layer_by_name('Building Wall').tiles():
+            Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites], z=LAYERS['house bottom'])
+        for x, y, surface in tmx_data.get_layer_by_name('Building Roof').tiles():
+            Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=self._AllSprites, z=LAYERS['house top'])
+
         # Collision Tiles, Borders
         for x, y, surface in tmx_data.get_layer_by_name('Borders').tiles():
             Border(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=pygame.Surface((TileSize * Scale, TileSize * Scale)), groups= self._CollisionSprites)

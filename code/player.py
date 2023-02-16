@@ -308,19 +308,15 @@ class Player(pygame.sprite.Sprite):
                     if _Direction == 'horizontal':
                         if self._Direction.x > 0:  # player moving to the right
                             self.hitbox.right = sprite.hitbox.left
-                            print("hit right")
                         if self._Direction.x < 0:  # player moving to the left
                             self.hitbox.left = sprite.hitbox.right
-                            print("hit left")
                         self.rect.centerx = self.hitbox.centerx
                         self._Position.x = self.hitbox.centerx
                     if _Direction == 'vertical':
                         if self._Direction.y > 0:  # player moving down
                             self.hitbox.bottom = sprite.hitbox.top
-                            print("hit top")
                         if self._Direction.y < 0:  # player moving up
                             self.hitbox.top = sprite.hitbox.bottom
-                            print("hit bottom")
                         self.rect.centery = self.hitbox.centery
                         self._Position.y = self.hitbox.centery
 
