@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="8" height="6" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="1">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="8" height="6" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="9">
  <tileset firstgid="1" source="Tilesets/Wooden House.tsx"/>
+ <tileset firstgid="36" source="Tilesets/Furniture.tsx"/>
  <layer id="1" name="Floor" width="8" height="6">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,
@@ -21,5 +22,13 @@
 22,23,23,23,23,11,23,24
 </data>
  </layer>
- <objectgroup id="3" name="Furniture"/>
+ <objectgroup id="3" name="Furniture">
+  <object id="1" gid="36" x="16.9091" y="33.5455" width="14" height="22"/>
+  <object id="2" gid="41" x="67.5455" y="14.0909" width="9" height="9"/>
+  <object id="3" gid="42" x="49.8182" y="13.6364" width="12" height="8"/>
+  <object id="5" gid="43" x="75.9091" y="78.0909" width="24" height="13"/>
+  <object id="6" gid="46" x="32.1818" y="30.7273" width="16" height="13"/>
+  <object id="7" gid="40" x="99.2727" y="28.8182" width="10" height="13"/>
+  <object id="8" name="Bed" x="37.7273" y="26.0909"/>
+ </objectgroup>
 </map>
