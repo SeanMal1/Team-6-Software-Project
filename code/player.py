@@ -92,6 +92,11 @@ class Player(pygame.sprite.Sprite):
 
         #inventory
         self._Inventory = self._saveFile['inventory']
+
+        # health, fatigue, hunger
+        self._health = 100
+        self._fatigue = 100
+        self._hunger = 100
     
     def use_seed(self):
         self._SoilLayer.PlantSeed(self._TargetPosition,self._SelectedSeed)
