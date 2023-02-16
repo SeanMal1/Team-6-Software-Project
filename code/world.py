@@ -9,6 +9,7 @@ from overlay import Overlay
 from inventory import Inventory
 from soil import SoilLayer
 from sky import *
+from random import randint
 
 class Level:
     def __init__(self):
@@ -28,7 +29,8 @@ class Level:
         self._DayColour = [255,255,255]
         self._NightColour = (38,101,189)
         self.rain = Rain(self._AllSprites)
-        self.raining = True # CHANGE TRUE FOR TEXTING
+        self.raining = randint(0,28) > 3 # rains if randint higher than x
+        self._SoilLayer.raining = self.raining
 
 
         self._inventory_open = False
@@ -86,7 +88,14 @@ class Level:
 
     def PlayerAdd(self,item):
         self._Player._Inventory[item] += 1
-      
+
+    def reset(self): # resetting day
+        # Soil
+        self._SoilLayer.dry_soil_tiles()
+        self._SoilLayer.raining = self.raining
+        if self.raining:
+            self._SoilLayer.water_all()
+
     def run(self, DeltaTime):
         if not self._Paused:
             self._DisplayWorld.fill('black')
