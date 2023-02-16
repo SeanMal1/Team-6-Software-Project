@@ -32,10 +32,14 @@ class Level:
         self.rain = Rain(self._AllSprites)
         self.raining = randint(0,28) > 3 # rains if randint higher than x
         self._SoilLayer.raining = self.raining
+        
+        self._heading_font = pygame.font.Font('../font/joystixmonospace.otf', 45)
+        self._regular_font = pygame.font.Font('../font/joystixmonospace.otf', 16)
 
 
         self._inventory_open = False
         self._Paused = False
+        self._main_menu = True
         self._inventory = Inventory(self._Player._Inventory, self.toggle_inventory)
         
     def toggle_inventory(self):
@@ -103,7 +107,19 @@ class Level:
             self._SoilLayer.water_all()
 
     def run(self, DeltaTime):
-        if not self._Paused:
+        if self._main_menu:
+            self._DisplayWorld.fill('black')
+            self._AllSprites.custom_draw(self._Player)
+            self._DisplaySurface.blit(pygame.image.load('../textures/misc/main_menu.png'), (ScreenWidth/2 - 640/2, ScreenHeight/2 - 533/2))
+            self._DisplaySurface.blit(self._heading_font.render("Valley Life", False, "Black"), (ScreenWidth/2 - 390/2, ScreenHeight/2 - 55))
+            self._DisplaySurface.blit(self._regular_font.render("Press Space to begin.", False, "Black"), (ScreenWidth/2 - 260/2, ScreenHeight/2 + 50))
+            
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        self._main_menu = False
+
+        elif not self._Paused:
             self._DisplayWorld.fill('black')
             # self._AllSprites.draw(self._DisplayWorld)
             self._AllSprites.custom_draw(self._Player)
