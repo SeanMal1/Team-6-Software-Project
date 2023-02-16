@@ -128,6 +128,7 @@ class Player(pygame.sprite.Sprite):
 
     def input(self):
         keystroke = pygame.key.get_pressed()
+        mouseInput = pygame.mouse.get_pressed(num_buttons=3)
 
         if not self.timer['tool use']._Active:
             if keystroke[pygame.K_w]:
@@ -158,7 +159,8 @@ class Player(pygame.sprite.Sprite):
                     self._Speed = 110
 
             #tool utilization
-            if keystroke[pygame.K_c]:
+            
+            if mouseInput[0] == True:
                 # use time
                 self._animSpeed = 12
                 self.timer['tool use'].activate()
