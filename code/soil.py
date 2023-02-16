@@ -19,14 +19,47 @@ class WaterTile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
         self.z = LAYERS['soil water']
 
+class Plant(pygame.sprite.Sprite):
+    def __init__(self, plantType, groups, soil, checkWatered):
+        super().__init__(groups)
+        self._PlantType = plantType
+        self._Frames = import_folder(f'../textures/plants/{plantType}')
+        self._Soil = soil
+        self._CheckWatered = checkWatered
+        self._PlantAge = 0
+        self._MaxPlantAge = len(self._Frames) - 1
+        self._PlantGrowthSpeed = PlantGrowthSpeed
+        self._PlantGrown = False
 
+        self.image = self._Frames[self._PlantAge]
+
+        self.y_offset = -16 if plantType == 'corn' else -8
+        self.rect = self.image.get_rect(midbottom = soil.rect.midbottom + pygame.math.Vector2(0,self.y_offset))
+        self.z = LAYERS['ground plant']
+    
+    def grow(self):
+        if self._CheckWatered(self.rect.center):
+            self.age += self._PlantGrowthSpeed
+
+            if int(self._PlantAge) > 0:
+                self.z = LAYERS['main']
+                self.hitbox = self.rect.copy().inflate(-26, -self.rect.height * 0.4)
+
+            if self._PlantAge >= self._MaxPlantAge:
+                self._PlantAge = self._MaxPlantAge
+                self._PlantGrown = True
+
+            self.image = self._Frames[int(self._PlantAge)]
+            self.image.get_rect(midbottom = self._Soil.rect.midbottom + pygame.math.Vector2(0,self.y_offset))
 class SoilLayer:
-    def  __init__(self, _AllSprites):
+    def  __init__(self, _AllSprites, CollisionSprites):
 
         # Sprite Groups
         self._AllSprites = _AllSprites
+        self._CollisionSprites = CollisionSprites
         self._SoilSprites = pygame.sprite.Group()
         self._WaterSprites = pygame.sprite.Group()
+        self._PlantSprites = pygame.sprite.Group()
 
         # Graphics
         self._SoilSurfaces = import_folder_dict('../textures/soil/')
@@ -77,6 +110,25 @@ class SoilLayer:
             for cell in row:
                 if 'W' in cell:
                     cell.remove('W')
+
+    def CheckWatered(self,pos):
+        x, y = pos[0].rect.x // (TileSize * Scale), pos[1].rect.y // (TileSize * Scale)
+        cell = self.grid[y][x]
+        isWatered = 'W' in cell
+        return isWatered
+
+    def PlantSeed(self,targetPosition, Seed):
+        for soilSprite in self._SoilSprites.sprites():
+            if soilSprite.rect.collidepoint(targetPosition):
+                x, y = soilSprite.rect.x // (TileSize * Scale), soilSprite.rect.y // (TileSize * Scale)
+                if 'P' not in self.grid[y][x]:
+                    self.grid[y][x].append('P')
+                    Plant(Seed, [self._AllSprites, self._PlantSprites, self._CollisionSprites], soilSprite ,self.CheckWatered)
+    
+    def updatePlants(self):
+        #THIS METHOD NEEDS TO BE CALLED ON DAY RESET
+        for plant in self._PlantSprites.sprites():
+            plant.grow()
 
     def create_soil_tiles(self):
         self._SoilSprites.empty()  # Empty all soil sprites and redraw so that Tile connections work
