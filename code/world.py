@@ -18,6 +18,7 @@ class Level:
         self._AllSprites = CameraGroup()
         self._TreeSprites = pygame.sprite.Group()
         self._CollisionSprites = pygame.sprite.Group() # To keep track of collide-able sprites
+        self._InteractionSprites = pygame.sprite.Group()
         self._SoilLayer = SoilLayer(self._AllSprites, self._CollisionSprites)
         self._saveFile = json.load(open("../profiles/save1.json"))
         self.setup()
@@ -84,7 +85,12 @@ class Level:
                               group=self._AllSprites,
                               collision_sprites=self._CollisionSprites,
                               tree_sprites=self._TreeSprites,
-                              soil_layer=self._SoilLayer)
+                              soil_layer=self._SoilLayer,
+                              interaction=self._InteractionSprites)
+        for obj in tmx_data.get_layer_by_name('Interaction'):
+            if obj.name == 'Trader':  # change to 'Bed', Trader just for testing
+                Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height), groups=[self._InteractionSprites, self._AllSprites], name=obj.name)
+                # Remove _AllSprites when done debugging
 
     def PlayerAdd(self,item):
         self._Player._Inventory[item] += 1

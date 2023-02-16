@@ -8,7 +8,7 @@ from soil import *
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer):
+    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer, interaction):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
         
@@ -89,6 +89,7 @@ class Player(pygame.sprite.Sprite):
         #interaction
         self._TreeSprites = tree_sprites
         self._SoilLayer = soil_layer
+        self._Interaction = interaction
 
         #inventory
         self._Inventory = self._saveFile['inventory']
@@ -196,6 +197,15 @@ class Player(pygame.sprite.Sprite):
                 print(self._SelectedSeed)
                 self._SelectedSeed = self._Seeds[self._SeedIndex]
 
+            # interaction
+            if keystroke[pygame.K_RETURN]:
+                _CollidedInteractionSprite = pygame.sprite.spritecollide(self, self._Interaction, False)
+                if _CollidedInteractionSprite:
+                    if _CollidedInteractionSprite[0].name == 'Trader':
+                        self._status = 'up'
+                        print('interacted with trader')
+                    elif _CollidedInteractionSprite[0].name == 'Bed':
+                        self._status = 'left'
 
             #inventory
             if self._prevKeystroke is not None:
