@@ -16,6 +16,17 @@ def import_folder(path):
 
     return surface_list
 
+def import_folder_unscaled(path):
+    surface_list = []
+
+    for _, __, images in walk(path):
+        for image in images:
+            full_path = path + '/' + image
+            image_surface = pygame.image.load(full_path).convert_alpha()
+            surface_list.append(image_surface)
+
+    return surface_list
+
 def import_folder_dict(path):
     surface_dict = {}
 

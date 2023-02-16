@@ -17,7 +17,6 @@ class Generic(pygame.sprite.Sprite):
 
 
 
-
 class Water(Generic):
     def __init__(self, pos, frames, groups, scale=1):
         
