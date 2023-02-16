@@ -37,3 +37,8 @@ PlayerToolOffset = {
     'up' : Vector2(0,-3),
     'down' : Vector2(0,17)
 }
+
+PlantGrowthSpeed ={
+    'wheat' : 1.5,
+    'corn' : 1
+}

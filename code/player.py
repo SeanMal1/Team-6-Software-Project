@@ -94,7 +94,7 @@ class Player(pygame.sprite.Sprite):
         self._Inventory = self._saveFile['inventory']
     
     def use_seed(self):
-        pass
+        self._SoilLayer.PlantSeed(self._TargetPosition,self._SelectedSeed)
     
     def getImage(self,sheet,frame,width,height,scale, colour):
         self._Spriteimage = pygame.Surface((width, height)).convert_alpha()
