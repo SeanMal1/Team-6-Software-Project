@@ -18,16 +18,10 @@ class Overlay:
             if tool == self._Player._SelectedTool:
                 pygame.draw.rect(self._DisplaySurface, (255, 0, 0), pygame.Rect(15 + 60*i, ScreenHeight-75, 58, 58), width=2, border_radius=10)
 
-    def Display(self):
-        #seed
-        SeedOverlay = self._SeedsOverlay[self._Player._SelectedSeed]
-        SeedScaled = pygame.transform.scale(SeedOverlay,(48,48))
-        SeedRect = SeedOverlay.get_rect(midbottom = OverlayPos['seed'])
-        self._DisplaySurface.blit(SeedScaled,SeedRect)
+    def display_seed(self):
+        pygame.draw.rect(self._DisplaySurface, (255, 255, 255, 0), pygame.Rect(ScreenWidth-80, ScreenHeight-80, 70, 70), border_radius=20)
+        self._DisplaySurface.blit(pygame.transform.scale(self._SeedsOverlay[self._Player._SelectedSeed],(48,48)), (ScreenWidth-75, ScreenHeight-65))
 
-        #tool
-        # ToolOverlay = self._ToolsOverlay[self._Player._SelectedTool]
-        # ToolScaled = pygame.transform.scale(ToolOverlay,(96,96))
-        # ToolRect = ToolOverlay.get_rect(midbottom = OverlayPos['tool'])
-        # self._DisplaySurface.blit(ToolScaled,ToolRect)
+    def Display(self):
         self.display_tools()
+        self.display_seed()
