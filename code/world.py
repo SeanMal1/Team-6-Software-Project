@@ -8,6 +8,7 @@ from tools import *
 from overlay import Overlay
 from inventory import Inventory
 from soil import SoilLayer
+from sky import *
 
 class Level:
     def __init__(self):
@@ -26,6 +27,8 @@ class Level:
         self._FullSurface = pygame.Surface((ScreenWidth,ScreenHeight))
         self._DayColour = [255,255,255]
         self._NightColour = (38,101,189)
+        self.rain = Rain(self._AllSprites)
+        self.raining = True # CHANGE TRUE FOR TEXTING
 
 
         self._inventory_open = False
@@ -104,8 +107,11 @@ class Level:
             self._FullSurface.fill(self._DayColour)
             self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)
 
-                #overlay/ui
+            # overlay/ui
             self._Overlay.Display()
+            # rain
+            if self.raining:
+                self.rain.update()
 
     def save(self):
         pass
