@@ -1,11 +1,19 @@
 import pygame
+from settings import *
 
 class Inventory():
     def __init__(self, inventory, toggle_inventory):
         self._DisplaySurface = pygame.display.get_surface()
-        self._font = pygame.font.Font('../font/joystixmonospace.otf', 20)
         self.toggle_inventory = toggle_inventory
         self._inventory = inventory
+        
+        self._items = list(inventory.keys())[3:] # skips tools part of inventory
+
+        inventory_path = '../textures/inventory/'
+        self._inventory_overlay = {item:pygame.image.load(f'{inventory_path}{item}.png') for item in self._items} # list splice skips tools saved in inventory
+
+        self._font = pygame.font.Font('../font/joystixmonospace.otf', 14)
+
         self._prevKeystroke = None
 
     def input(self):
@@ -19,10 +27,12 @@ class Inventory():
 
     def display(self):
         self.input()
-        for index, item in enumerate(self._inventory):
-            if self._inventory[item] != 0:
-                self._DisplaySurface.blit(self._font.render(item, False, "Black"), (100,100 * index))
-                self._DisplaySurface.blit(self._font.render(str(self._inventory[item]), False, "Black"), (200,100 *index))
+        pygame.draw.rect(self._DisplaySurface, (255, 255, 255, 0), pygame.Rect(215, ScreenHeight-80, 280, 70), border_radius=20)
+        for i, item in enumerate(self._items):
+            self._DisplaySurface.blit(pygame.transform.scale(self._inventory_overlay[item], (58, 58)), (220 + 70*i, ScreenHeight-75))
+            self._DisplaySurface.blit(self._font.render(str(self._inventory[item]), False, "Black"), (215+48 + 70*i, ScreenHeight-75+48))
+
+
 
     def addItem(self, item):
         if item in self._inventory:

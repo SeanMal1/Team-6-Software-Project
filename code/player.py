@@ -93,6 +93,11 @@ class Player(pygame.sprite.Sprite):
 
         #inventory
         self._Inventory = self._saveFile['inventory']
+
+        # health, fatigue, hunger
+        self._health = 100
+        self._fatigue = 100
+        self._hunger = 100
     
     def use_seed(self):
         self._SoilLayer.PlantSeed(self._TargetPosition,self._SelectedSeed)
@@ -364,5 +369,4 @@ class Player(pygame.sprite.Sprite):
         self._saveFile['position']['x'] = self._Position.x
         self._saveFile['position']['y'] = self._Position.y
         self._saveFile['inventory'] = self._Inventory
-        with open("../profiles/save1.json", "w") as f:
-            f.write(json.dumps(self._saveFile))
+        return self._saveFile
