@@ -1,4 +1,4 @@
-import pygame
+import pygame, json
 from settings import *
 from pytmx.util_pygame import load_pygame
 from tools import *
@@ -51,6 +51,7 @@ class Plant(pygame.sprite.Sprite):
 
             self.image = self._Frames[int(self._PlantAge)]
             self.image.get_rect(midbottom = self._Soil.rect.midbottom + pygame.math.Vector2(0,self.y_offset))
+            
 class SoilLayer:
     def  __init__(self, _AllSprites, CollisionSprites):
 
@@ -65,15 +66,21 @@ class SoilLayer:
         self._SoilSurfaces = import_folder_dict('../textures/soil/')
         self._WaterSurfaces = import_folder('../textures/soil_water/')
 
+        self._saveFile = json.load(open("../profiles/save1.json"))
+
         self.create_soil_grid()
         self.create_hit_rects()
 
     def create_soil_grid(self):  # used for management of entities to reduce calculations, Each tile mapped out
-        ground = pygame.image.load('../data/Farm.png')
-        h_tiles, v_tiles = ground.get_width() // TileSize, ground.get_height() // TileSize
-        self.grid = [[[] for col in range(h_tiles)] for row in range(v_tiles)]
-        for x, y, _ in load_pygame('../data/Farm.tmx').get_layer_by_name('Farmable').tiles():  # _ ignores the surface
-            self.grid[y][x].append('F')
+        if self._saveFile['map'] == "None":
+            ground = pygame.image.load('../data/Farm.png')
+            h_tiles, v_tiles = ground.get_width() // TileSize, ground.get_height() // TileSize
+            self.grid = [[[] for col in range(h_tiles)] for row in range(v_tiles)]
+            for x, y, _ in load_pygame('../data/Farm.tmx').get_layer_by_name('Farmable').tiles():  # _ ignores the surface
+                self.grid[y][x].append('F')
+        else:
+            self.grid = self._saveFile['map']
+            self.create_soil_tiles()
 
     def create_hit_rects(self):
         self._HitRects = []
@@ -202,3 +209,6 @@ class SoilLayer:
                     SoilTile(pos=(index_col * TileSize * Scale, index_row * TileSize * Scale),
                              surface=self._SoilSurfaces[tile_type],
                              groups=[self._AllSprites, self._SoilSprites])
+
+    def save(self):
+        return self.grid

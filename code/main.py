@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, json
 from settings import *
 from world import Level
 
@@ -28,8 +28,11 @@ class Game:
             pygame.display.update()
 
     def save(self):
-        self._World._Player.save()
+        save = self._World._Player.save()
+        save['map'] = self._World._SoilLayer.save()
         self._World.save()
+        with open("../profiles/save1.json", "w") as f:
+            f.write(json.dumps(save))
 
 if __name__ == '__main__':
     game = Game()
