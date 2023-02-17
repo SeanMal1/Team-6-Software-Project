@@ -138,7 +138,7 @@ class SoilLayer:
         for soilSprite in self._SoilSprites.sprites():
             if soilSprite.rect.collidepoint(targetPosition):
                 x, y = soilSprite.rect.x // (TileSize * Scale), soilSprite.rect.y // (TileSize * Scale)
-                if 'P' not in self.grid[y][x] and 'W' in self.grid[y][x]:
+                if 'P' not in self.grid[y][x]:
                     self.grid[y][x].append('P')
                     Plant(Seed, [self._AllSprites, self._PlantSprites, self._CollisionSprites], soilSprite ,self.CheckWatered)
     
