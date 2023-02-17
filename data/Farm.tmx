@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="80" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="19" nextobjectid="1335">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="80" height="60" tilewidth="16" tileheight="16" infinite="0" nextlayerid="19" nextobjectid="1338">
  <tileset firstgid="1" source="Tilesets/Grass hill tiles v.2.tsx"/>
  <tileset firstgid="78" source="Tilesets/Tall Grass hill tiles v.2.tsx"/>
  <tileset firstgid="126" source="Tilesets/Water.tsx"/>
@@ -1400,7 +1400,8 @@
   <object id="1321" gid="148" x="984.667" y="813.778" width="24" height="31"/>
  </objectgroup>
  <objectgroup id="18" name="Interaction">
-  <object id="1333" name="Trader" x="480" y="240.25" width="79.75" height="47.5"/>
+  <object id="1333" name="Trader" x="480" y="240" width="80" height="48"/>
+  <object id="1337" name="Door_Outside" x="848" y="368" width="16" height="16"/>
  </objectgroup>
  <layer id="10" name="Building Roof" width="80" height="60">
   <data encoding="csv">

@@ -8,7 +8,7 @@ from soil import *
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer, interaction):
+    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer, interaction, Level):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
         
@@ -18,6 +18,7 @@ class Player(pygame.sprite.Sprite):
         self._prevKeystroke = None
         self._inventoryOpen = False
         self.toggle_inventory = toggle_inventory
+        self.Level = Level
 
         #self.image.fill('white')
         self.rect = self.image.get_rect(center=pos)
@@ -211,6 +212,16 @@ class Player(pygame.sprite.Sprite):
                         print('interacted with trader')
                     elif _CollidedInteractionSprite[0].name == 'Bed':
                         self._status = 'left'
+                    elif _CollidedInteractionSprite[0].name == 'Door_Outside':
+                        self._status = 'up'
+                        print("Door_Outside Triggered")
+                        # Add fade transition here
+                        self.Level.load_house()
+                    elif _CollidedInteractionSprite[0].name == 'Door_Inside':
+                        self._status = 'down'
+                        print("Door_Inside Triggered")
+                        self.Level.load_farm()
+
 
             #inventory
             if self._prevKeystroke is not None:
