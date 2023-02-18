@@ -29,8 +29,8 @@ class Game:
 
     def save(self):
         save = self._World._Player.save()
-        save['map'] = self._World._SoilLayer.save()
-        self._World.save()
+        save["map"] = self._World._SoilLayer.save()
+        save["location"] = self._World.save()
         with open("../profiles/save1.json", "w") as f:
             f.write(json.dumps(save))
 

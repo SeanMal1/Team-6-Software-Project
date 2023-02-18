@@ -24,7 +24,7 @@ class Level:
         self._InteractionSprites = pygame.sprite.Group()
         self._SoilLayer = SoilLayer(self._AllSprites, self._CollisionSprites)
         self._saveFile = json.load(open("../profiles/save1.json"))
-        self._Location = 'farm'
+        self._Location = self._saveFile["location"]
         self._Position = (self._saveFile["position"]["x"], self._saveFile["position"]["y"])
         self.setup()
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
@@ -187,7 +187,8 @@ class Level:
                     self.rain.update()
 
     def save(self):
-        pass
+        print("returning: ", self._Location)
+        return self._Location
 
 class CameraGroup(pygame.sprite.Group):
     def __init__(self):
