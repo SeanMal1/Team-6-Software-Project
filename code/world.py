@@ -11,12 +11,13 @@ from inventory import Inventory
 from soil import SoilLayer
 from sky import *
 from random import randint
+from transition import Transition
 
 class Level:
     def __init__(self):
         self.tmx_data = load_pygame('../data/Farm.tmx')
         self.tmx_house_data = load_pygame('../data/House.tmx')
-        self._Player = None
+        # self._Player = None  Commented out in testing Sleep function
         self._DisplayWorld = pygame.display.get_surface()
         self._AllSprites = CameraGroup()
         self._TreeSprites = pygame.sprite.Group()
@@ -30,6 +31,7 @@ class Level:
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
         self._SpriteSheetImage.set_colorkey([0, 0, 0])
         self._Overlay = Overlay(self._Player)
+        self._Transition = Transition(self.reset, self._Player)
         self._DisplaySurface = pygame.display.get_surface()
         self._FullSurface = pygame.Surface((ScreenWidth,ScreenHeight))
         self._DayColour = [255,255,255]
@@ -131,21 +133,28 @@ class Level:
 
     def load_farm(self):
         self._Location = 'farm'
+        self._Transition.play()
         self.setup()
 
     def load_house(self):
         self._Location = 'house'
+        self._Transition.play()
         self.setup()
 
     def PlayerAdd(self,item):
         self._Player._Inventory[item] += 1
 
-    def reset(self): # resetting day
+    def reset(self):  # resetting day
         # Soil
         self._SoilLayer.dry_soil_tiles()
         self._SoilLayer.raining = self.raining
         if self.raining:
             self._SoilLayer.water_all()
+        # Trees
+        for tree in self._TreeSprites.sprites():
+            for plum in tree._PlumSprites.sprites():  # clear existing plums
+                plum.kill()
+            tree.CreatePlum()  # spawn new plums
 
     def run(self, DeltaTime):
         if self._main_menu:
@@ -185,6 +194,11 @@ class Level:
             if self.raining:
                 if self._Location != 'house':
                     self.rain.update()
+
+            # Sleep/day reset
+            if self._Player._Sleep:
+                self._Transition.sleep()
+                print('world', self._Player._Sleep)
 
     def save(self):
         pass

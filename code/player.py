@@ -12,7 +12,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
         
-        #savefile
+        # savefile
         self._saveFile = json.load(open("../profiles/save1.json"))
 
         self._prevKeystroke = None
@@ -20,7 +20,7 @@ class Player(pygame.sprite.Sprite):
         self.toggle_inventory = toggle_inventory
         self.Level = Level
 
-        #self.image.fill('white')
+        # self.image.fill('white')
         self.rect = self.image.get_rect(center=pos)
         self.z = LAYERS['main']  # check settings
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
@@ -61,7 +61,7 @@ class Player(pygame.sprite.Sprite):
         self.collision_sprites = collision_sprites
         self.hitbox = self.rect.copy().inflate((-20, -40))  # shrink hitbox to player size from sheet size
 
-        #moving attribute
+        # moving attribute
         self._Direction = pygame.math.Vector2()
         self._Position = pygame.math.Vector2(self.rect.center)
         self._Speed = 110
@@ -69,30 +69,31 @@ class Player(pygame.sprite.Sprite):
         self._status = self._saveFile["status"]
         self._animSpeed = 4
 
-        #Timing
+        # Timing
         self.timer = {
-            'tool use' : Timer(350,self.use_tool),
-            'tool swap' : Timer(200),
-            'seed use' : Timer(350,self.use_seed),
-            'seed swap' : Timer(200)
+            'tool use': Timer(350,self.use_tool),
+            'tool swap': Timer(200),
+            'seed use': Timer(350,self.use_seed),
+            'seed swap': Timer(200)
         }
 
-        #Tools
-        self._Tools = ['axe','hoe','water']
+        # Tools
+        self._Tools = ['axe', 'hoe', 'water']
         self._ToolIndex = 0
         self._SelectedTool = self._Tools[self._ToolIndex]
 
-        #seeds for crops/plants
+        # seeds for crops/plants
         self._Seeds = ['wheat', 'corn']
         self._SeedIndex = 0
         self._SelectedSeed = self._Seeds[self._SeedIndex]
 
-        #interaction
+        # interaction
         self._TreeSprites = tree_sprites
         self._SoilLayer = soil_layer
         self._Interaction = interaction
+        self._Sleep = False
 
-        #inventory
+        # inventory
         self._Inventory = self._saveFile['inventory']
 
         # health, fatigue, hunger
@@ -137,7 +138,7 @@ class Player(pygame.sprite.Sprite):
         keystroke = pygame.key.get_pressed()
         mouseInput = pygame.mouse.get_pressed(num_buttons=3)
 
-        if not self.timer['tool use']._Active:
+        if not self.timer['tool use']._Active and not self._Sleep:
             if keystroke[pygame.K_w]:
                 self._Direction.y = -1
                 self._status = "up"
@@ -212,6 +213,8 @@ class Player(pygame.sprite.Sprite):
                         print('interacted with trader')
                     elif _CollidedInteractionSprite[0].name == 'Bed':
                         self._status = 'left'
+                        self._Sleep = True
+                        print('Interacted with bed')
                     elif _CollidedInteractionSprite[0].name == 'Door_Outside':
                         self._status = 'up'
                         print("Door_Outside Triggered")
