@@ -175,16 +175,17 @@ class Level:
                 for index, value in enumerate(self._NightColour):
                     if self._DayColour[index] > value:
                         self._DayColour[index] -= 4 * DeltaTime
+                        
+                # rain
+                if self.raining:
+                    if self._Location != 'house':
+                        self.rain.update()
 
             self._FullSurface.fill(self._DayColour)
             self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)
 
             # overlay/ui
             self._Overlay.Display()
-            # rain
-            if self.raining:
-                if self._Location != 'house':
-                    self.rain.update()
 
     def save(self):
         print("returning: ", self._Location)
