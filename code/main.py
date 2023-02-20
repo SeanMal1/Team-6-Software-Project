@@ -24,11 +24,12 @@ class Game:
                     if event.key == pygame.K_ESCAPE:
                         self._World._Paused = not self._World._Paused
                 if event.type == pygame.MOUSEBUTTONDOWN:
+                    if self._World._text_rect_return.collidepoint(pygame.mouse.get_pos()):
+                        self._World._Paused = not self._World._Paused
                     if self._World._text_rect_quit.collidepoint(pygame.mouse.get_pos()):
                         self.save()
                         pygame.quit()
-                    if self._World._text_rect_return.collidepoint(pygame.mouse.get_pos()):
-                        self._World._Paused = not self._World._Paused
+                        sys.exit()
             DeltaTime = self._Clock.tick() / 1000
             self._World.run(DeltaTime)
             pygame.display.update()
