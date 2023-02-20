@@ -1,4 +1,4 @@
-from setuptools import setup
+# from setuptools import setup
 import pygame
 import json
 from settings import *
@@ -40,6 +40,9 @@ class Level:
         
         self._heading_font = pygame.font.Font('../font/joystixmonospace.otf', 45)
         self._regular_font = pygame.font.Font('../font/joystixmonospace.otf', 16)
+        self._text_color = "Black"
+        self._button_color = (220, 220, 220)
+        self._button_hover_color = (180, 180, 180)
 
         self._inventory_open = False
         self._Paused = False
@@ -128,7 +131,6 @@ class Level:
                               interaction=self._InteractionSprites,
                               Level=self)
 
-
     def load_farm(self):
         self._Location = 'farm'
         self.setup()
@@ -186,6 +188,28 @@ class Level:
 
             # overlay/ui
             self._Overlay.Display()
+
+        # Pause Menu
+        else:
+
+            self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_color)
+            self._text_rect_return = self._text_return.get_rect(center=(ScreenWidth/2, ScreenHeight/2 - 120))
+
+            self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_color)
+            self._text_rect_quit = self._text_quit.get_rect(center=(ScreenWidth/2, ScreenHeight/2 + 120))
+
+            if self._text_rect_quit.collidepoint(pygame.mouse.get_pos()):
+                self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_color)
+
+            if self._text_rect_return.collidepoint(pygame.mouse.get_pos()):
+                self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_color)
+
+            self._DisplaySurface.blit(self._text_return, self._text_rect_return)
+            self._DisplaySurface.blit(self._text_quit, self._text_rect_quit)
 
     def save(self):
         print("returning: ", self._Location)
