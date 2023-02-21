@@ -1,4 +1,4 @@
-from setuptools import setup
+# from setuptools import setup
 import pygame
 import json
 from settings import *
@@ -24,7 +24,7 @@ class Level:
         self._InteractionSprites = pygame.sprite.Group()
         self._SoilLayer = SoilLayer(self._AllSprites, self._CollisionSprites)
         self._saveFile = json.load(open("../profiles/save1.json"))
-        self._Location = 'farm'
+        self._Location = self._saveFile["location"]
         self._Position = (self._saveFile["position"]["x"], self._saveFile["position"]["y"])
         self.setup()
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
@@ -40,6 +40,9 @@ class Level:
         
         self._heading_font = pygame.font.Font('../font/joystixmonospace.otf', 45)
         self._regular_font = pygame.font.Font('../font/joystixmonospace.otf', 16)
+        self._text_color = "Black"
+        self._button_color = (220, 220, 220)
+        self._button_hover_color = (180, 180, 180)
 
         self._inventory_open = False
         self._Paused = False
@@ -128,7 +131,6 @@ class Level:
                               interaction=self._InteractionSprites,
                               Level=self)
 
-
     def load_farm(self):
         self._Location = 'farm'
         self.setup()
@@ -175,19 +177,43 @@ class Level:
                 for index, value in enumerate(self._NightColour):
                     if self._DayColour[index] > value:
                         self._DayColour[index] -= 4 * DeltaTime
+                        
+                # rain
+                if self.raining:
+                    if self._Location != 'house':
+                        self.rain.update()
 
             self._FullSurface.fill(self._DayColour)
             self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)
 
             # overlay/ui
             self._Overlay.Display()
-            # rain
-            if self.raining:
-                if self._Location != 'house':
-                    self.rain.update()
+
+        # Pause Menu
+        else:
+
+            self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_color)
+            self._text_rect_return = self._text_return.get_rect(center=(ScreenWidth/2, ScreenHeight/2 - 120))
+
+            self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_color)
+            self._text_rect_quit = self._text_quit.get_rect(center=(ScreenWidth/2, ScreenHeight/2 + 120))
+
+            if self._text_rect_quit.collidepoint(pygame.mouse.get_pos()):
+                self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_color)
+
+            if self._text_rect_return.collidepoint(pygame.mouse.get_pos()):
+                self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_color)
+
+            self._DisplaySurface.blit(self._text_return, self._text_rect_return)
+            self._DisplaySurface.blit(self._text_quit, self._text_rect_quit)
 
     def save(self):
-        pass
+        print("returning: ", self._Location)
+        return self._Location
 
 class CameraGroup(pygame.sprite.Group):
     def __init__(self):
