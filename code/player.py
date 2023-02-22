@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer, interaction, Level):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
-        
+
         #savefile
         self._saveFile = json.load(open("../profiles/save1.json"))
 
@@ -99,10 +99,10 @@ class Player(pygame.sprite.Sprite):
         self._health = 100
         self._fatigue = 100
         self._hunger = 100
-    
+
     def use_seed(self):
         self._SoilLayer.PlantSeed(self._TargetPosition,self._SelectedSeed)
-    
+
     def getImage(self,sheet,frame,width,height,scale, colour):
         self._Spriteimage = pygame.Surface((width, height)).convert_alpha()
         if frame == 0:
@@ -162,12 +162,12 @@ class Player(pygame.sprite.Sprite):
 
             if keystroke[pygame.K_LSHIFT]:
                     self._Speed = 250
-            else : 
+            else :
                     self._Speed = 110
 
             #tool utilization
-            
-            if keystroke[pygame.K_c]:
+            if mouseInput[0] == True:
+            # if keystroke[pygame.K_c]:
                 # use time
                 self._animSpeed = 12
                 self.timer['tool use'].activate()
@@ -230,7 +230,7 @@ class Player(pygame.sprite.Sprite):
                     self.toggle_inventory()
 
             self._prevKeystroke = keystroke
-     
+
     def use_tool(self):
         if self._SelectedTool == 'hoe':
             self._SoilLayer.get_hit(self._TargetPosition)
