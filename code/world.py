@@ -58,6 +58,13 @@ class Level:
                 if plant._PlantGrown and plant.rect.colliderect(self._Player.hitbox):
                     self.PlayerAdd(plant._PlantType)
                     plant.kill()
+                    Particle(
+                        plant.rect.topleft,
+                        plant.image,
+                        self._AllSprites,
+                        LAYERS=['main']
+                        )
+                    self._SoilLayer.grid[plant.rect.centery // TileSize][plant.rect.centerx // TileSize].remove('P')
 
     def setup(self):
         if self._Location == 'farm':
