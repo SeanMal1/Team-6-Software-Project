@@ -74,7 +74,8 @@ class Player(pygame.sprite.Sprite):
             'tool use': Timer(350,self.use_tool),
             'tool swap': Timer(200),
             'seed use': Timer(350,self.use_seed),
-            'seed swap': Timer(200)
+            'seed swap': Timer(200),
+            'transition': Timer(1000)
         }
 
         # Tools
@@ -205,7 +206,7 @@ class Player(pygame.sprite.Sprite):
                 self._SelectedSeed = self._Seeds[self._SeedIndex]
 
             # interaction
-            if keystroke[pygame.K_RETURN]:
+            if keystroke[pygame.K_RETURN] and not self.timer['transition']._Active:
                 _CollidedInteractionSprite = pygame.sprite.spritecollide(self, self._Interaction, False)
                 if _CollidedInteractionSprite:
                     if _CollidedInteractionSprite[0].name == 'Trader':
@@ -215,6 +216,7 @@ class Player(pygame.sprite.Sprite):
                         self._status = 'left'
                         self._Sleep = True
                         print('Interacted with bed')
+                        self.timer['transition'].activate()
                     elif _CollidedInteractionSprite[0].name == 'Door_Outside':
                         self._status = 'up'
                         print("Door_Outside Triggered")

@@ -197,7 +197,7 @@ class Level:
 
             # Sleep/day reset
             if self._Player._Sleep:
-                self._Transition.sleep()
+                self._Transition.play()
                 print('world', self._Player._Sleep)
 
     def save(self):
