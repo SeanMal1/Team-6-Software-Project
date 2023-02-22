@@ -52,6 +52,13 @@ class Level:
     def toggle_inventory(self):
         self._inventory_open = not self._inventory_open
 
+    def plantCollision(self):
+        if self._SoilLayer._PlantSprites:
+            for plant in self._SoilLayer._PlantSprites.sprites():
+                if plant._PlantGrown and plant.rect.colliderect(self._Player.hitbox):
+                    self.PlayerAdd(plant._PlantType)
+                    plant.kill()
+
     def setup(self):
         if self._Location == 'farm':
             for sprite in self._AllSprites:
@@ -171,6 +178,7 @@ class Level:
             else:
                 self._AllSprites.draw(self._SpriteSheetImage)
                 self._AllSprites.update(DeltaTime)
+                self.plantCollision()
             
 
                 #day to night cycle
