@@ -4,14 +4,14 @@ from settings import *
 from timer import Timer
 from inventory import Inventory
 from soil import *
-
+from merchant import Merchant
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer, interaction, Level):
+    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer, interaction, Level, toggle_merchant):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
-        
+
         #savefile
         self._saveFile = json.load(open("../profiles/save1.json"))
 
@@ -19,6 +19,8 @@ class Player(pygame.sprite.Sprite):
         self._inventoryOpen = False
         self.toggle_inventory = toggle_inventory
         self.Level = Level
+        self.shop_active = False
+        self.toggle_inventory = toggle_inventory
 
         #self.image.fill('white')
         self.rect = self.image.get_rect(center=pos)
@@ -74,7 +76,9 @@ class Player(pygame.sprite.Sprite):
             'tool use' : Timer(350,self.use_tool),
             'tool swap' : Timer(200),
             'seed use' : Timer(350,self.use_seed),
-            'seed swap' : Timer(200)
+            'seed swap' : Timer(200),
+            'enter shop': Timer(200),
+            'enter inventory': Timer(200)
         }
 
         #Tools
@@ -95,14 +99,23 @@ class Player(pygame.sprite.Sprite):
         #inventory
         self._Inventory = self._saveFile['inventory']
 
+        self.toggle_merchant = toggle_merchant
+
+        self.seed_inventory = self._saveFile['inventory'] 
+
+
+        self.money = 200
+
         # health, fatigue, hunger
         self._health = 100
         self._fatigue = 100
         self._hunger = 100
-    
+
     def use_seed(self):
-        self._SoilLayer.PlantSeed(self._TargetPosition,self._SelectedSeed)
-    
+        if self.seed_inventory[self.selected_seed] > 0:
+            self._SoilLayer.PlantSeed(self._TargetPosition,self._SelectedSeed)
+            self.seed_inventory[self.selected_seed] -= 1
+
     def getImage(self,sheet,frame,width,height,scale, colour):
         self._Spriteimage = pygame.Surface((width, height)).convert_alpha()
         if frame == 0:
@@ -162,12 +175,12 @@ class Player(pygame.sprite.Sprite):
 
             if keystroke[pygame.K_LSHIFT]:
                     self._Speed = 250
-            else : 
+            else :
                     self._Speed = 110
 
             #tool utilization
-            
             if mouseInput[0] == True:
+            # if keystroke[pygame.K_c]:
                 # use time
                 self._animSpeed = 12
                 self.timer['tool use'].activate()
@@ -207,10 +220,7 @@ class Player(pygame.sprite.Sprite):
             if keystroke[pygame.K_RETURN]:
                 _CollidedInteractionSprite = pygame.sprite.spritecollide(self, self._Interaction, False)
                 if _CollidedInteractionSprite:
-                    if _CollidedInteractionSprite[0].name == 'Trader':
-                        self._status = 'up'
-                        print('interacted with trader')
-                    elif _CollidedInteractionSprite[0].name == 'Bed':
+                    if _CollidedInteractionSprite[0].name == 'Bed':
                         self._status = 'left'
                     elif _CollidedInteractionSprite[0].name == 'Door_Outside':
                         self._status = 'up'
@@ -228,9 +238,18 @@ class Player(pygame.sprite.Sprite):
                 if self._prevKeystroke[pygame.K_e] and not keystroke[pygame.K_e]:
                     self._inventoryOpen = not self._inventoryOpen
                     self.toggle_inventory()
+                _CollidedInteractionSprite = pygame.sprite.spritecollide(self, self._Interaction, False)
+                if self._prevKeystroke[pygame.K_u] and not keystroke[pygame.K_u]:
+                    self.shop_active = not self.shop_active
+                    if _CollidedInteractionSprite:
+                        if not self.timer['enter shop']._Active:
+                            if _CollidedInteractionSprite[0].name == 'Trader':
+                                self.timer['enter shop'].activate()
+                                self.shop_active = not self.shop_active
+                                self.toggle_merchant()
 
             self._prevKeystroke = keystroke
-     
+
     def use_tool(self):
         if self._SelectedTool == 'hoe':
             self._SoilLayer.get_hit(self._TargetPosition)

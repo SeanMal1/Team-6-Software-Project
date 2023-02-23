@@ -11,6 +11,7 @@ from inventory import Inventory
 from soil import SoilLayer
 from sky import *
 from random import randint
+from merchant import Merchant
 
 class Level:
     def __init__(self):
@@ -49,8 +50,26 @@ class Level:
         self._main_menu = True
         self._inventory = Inventory(self._Player._Inventory, self.toggle_inventory)
         
+        #shop
+        self.merchant=Merchant(self._Player, self.toggle_merchant)
+        self.shop_active = False
+
     def toggle_inventory(self):
         self._inventory_open = not self._inventory_open
+
+    def plantCollision(self):
+        if self._SoilLayer._PlantSprites:
+            for plant in self._SoilLayer._PlantSprites.sprites():
+                if plant._PlantGrown and plant.rect.colliderect(self._Player.hitbox):
+                    self.PlayerAdd(plant._PlantType)
+                    plant.kill()
+                    Particle(
+                        plant.rect.topleft,
+                        plant.image,
+                        self._AllSprites,
+                        LAYERS=['main']
+                        )
+                    self._SoilLayer.grid[plant.rect.centery // TileSize][plant.rect.centerx // TileSize].remove('P')
 
     def setup(self):
         if self._Location == 'farm':
@@ -129,6 +148,7 @@ class Level:
                               tree_sprites=self._TreeSprites,
                               soil_layer=self._SoilLayer,
                               interaction=self._InteractionSprites,
+                              toggle_merchant=self.toggle_merchant,
                               Level=self)
 
     def load_farm(self):
@@ -141,6 +161,9 @@ class Level:
 
     def PlayerAdd(self,item):
         self._Player._Inventory[item] += 1
+
+    def toggle_merchant(self):
+        self.shop_active = not self.shop_active
 
     def reset(self): # resetting day
         # Soil
@@ -171,6 +194,7 @@ class Level:
             else:
                 self._AllSprites.draw(self._SpriteSheetImage)
                 self._AllSprites.update(DeltaTime)
+                self.plantCollision()
             
 
                 #day to night cycle
@@ -180,12 +204,17 @@ class Level:
                         
                 # rain
                 if self.raining:
-                    if self._Location != 'house':
+                    if self._Location != 'house' and not self.shop_active:
                         self.rain.update()
 
             self._FullSurface.fill(self._DayColour)
             self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)
 
+
+            if self.shop_active:
+                self.merchant.update()
+            else:
+                self._AllSprites.update(DeltaTime)
             # overlay/ui
             self._Overlay.Display()
 
