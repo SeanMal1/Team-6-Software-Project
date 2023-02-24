@@ -22,6 +22,8 @@ class Player(pygame.sprite.Sprite):
         self.Level = Level
         self.shop_active = False
         self.toggle_inventory = toggle_inventory
+        self._TimeElapsedSinceLastFootStep = 0
+        self._FootstepClock = pygame.time.Clock()
 
         # self.image.fill('white')
         self.rect = self.image.get_rect(center=pos)
@@ -80,7 +82,8 @@ class Player(pygame.sprite.Sprite):
             'seed swap' : Timer(200),
             'enter shop': Timer(200),
             'enter inventory': Timer(200),
-            'transition' : Timer(200)
+            'transition' : Timer(200),
+            'footstep' : Timer(350)
         }
 
         # Tools
@@ -117,8 +120,6 @@ class Player(pygame.sprite.Sprite):
     def use_seed(self):
         if self.seed_inventory[self._SelectedSeed] > 0:
             self._SoilLayer.PlantSeed(self._TargetPosition,self._SelectedSeed)
-            mixer.music.load("../audio/plant.wav")
-            mixer.music.play()
             self.seed_inventory[self._SelectedSeed] -= 1
 
     def getImage(self,sheet,frame,width,height,scale, colour):
@@ -154,12 +155,15 @@ class Player(pygame.sprite.Sprite):
     def input(self):
         keystroke = pygame.key.get_pressed()
         mouseInput = pygame.mouse.get_pressed(num_buttons=3)
+        FootstepSound = mixer.Sound("../audio/footstep.mp3")
+        
 
         if not self.timer['tool use']._Active and not self._Sleep:
             if keystroke[pygame.K_w]:
                 self._Direction.y = -1
                 self._status = "up"
                 self._animSpeed = 4
+                
             elif keystroke[pygame.K_s]:
                 self._Direction.y = 1
                 self._status = "down"
@@ -174,14 +178,22 @@ class Player(pygame.sprite.Sprite):
             elif keystroke[pygame.K_d]:
                 self._Direction.x = 1
                 self._status = "right"
-                self._animSpeed = 12
+                self._animSpeed = 12#
             else:
                 self._Direction.x = 0
-
+                 
             if keystroke[pygame.K_LSHIFT]:
                     self._Speed = 250
             else :
                     self._Speed = 110
+
+            if self._Direction.magnitude() > 0:
+                footstepTiming = self._FootstepClock.tick()
+                self._TimeElapsedSinceLastFootStep += footstepTiming
+                if self._TimeElapsedSinceLastFootStep > 300:
+                    FootstepSound.set_volume(0.4)
+                    FootstepSound.play()
+                    self._TimeElapsedSinceLastFootStep = 0
 
             #tool utilization
             if mouseInput[0] == True:
@@ -261,19 +273,20 @@ class Player(pygame.sprite.Sprite):
     def use_tool(self):
         if self._SelectedTool == 'hoe':
             self._SoilLayer.get_hit(self._TargetPosition)
-            mixer.music.load("../audio/hoe.wav")
-            mixer.music.set_volume(0.05)
-            mixer.music.play()
+            HoeSound = mixer.Sound("../audio/hoe.wav")
+            HoeSound.play()
+            HoeSound.set_volume(0.05)
         if self._SelectedTool == 'axe':
             for tree in self._TreeSprites.sprites():
                 if tree.rect.collidepoint(self._TargetPosition):
                     tree.BreakTree()
-                    mixer.music.load("../audio/axe.mp3")
-                    mixer.music.play()
+                    AxeSound = mixer.Sound("../audio/axe.mp3")
+                    AxeSound.play()
         if self._SelectedTool == 'water':
             self._SoilLayer.water(self._TargetPosition)
-            mixer.music.load("../audio/water.mp3")
-            mixer.music.play()
+            WaterSound = mixer.Sound("../audio/water.mp3")
+            WaterSound.set_volume(0.05)
+            WaterSound.play()
 
     def get_target_pos(self):
         self._TargetPosition = self.rect.center + PlayerToolOffset[self._status.split('-')[0]]
@@ -398,6 +411,7 @@ class Player(pygame.sprite.Sprite):
         self.hitbox.centery = round(self._Position.y)  # rounding to prevent truncation
         self.rect.centery = self.hitbox.centery
         self.collision('vertical')
+        
 
     def update(self,DeltaTime):
         self.input()
