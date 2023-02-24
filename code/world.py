@@ -10,6 +10,7 @@ from overlay import Overlay
 from inventory import Inventory
 from soil import SoilLayer
 from sky import *
+from animal import *
 from random import randint
 
 class Level:
@@ -20,7 +21,8 @@ class Level:
         self._DisplayWorld = pygame.display.get_surface()
         self._AllSprites = CameraGroup()
         self._TreeSprites = pygame.sprite.Group()
-        self._CollisionSprites = pygame.sprite.Group() # To keep track of collide-able sprites
+        self._AnimalSprites = pygame.sprite.Group()
+        self._CollisionSprites = pygame.sprite.Group()  # To keep track of collide-able sprites
         self._InteractionSprites = pygame.sprite.Group()
         self._SoilLayer = SoilLayer(self._AllSprites, self._CollisionSprites)
         self._saveFile = json.load(open("../profiles/save1.json"))
@@ -92,6 +94,8 @@ class Level:
                 Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height),
                             groups=[self._InteractionSprites, self._AllSprites], name=obj.name)
                 # Remove _AllSprites when done debugging
+
+            # Animals
 
             # Ground
             Generic(pos=(0, 0),
