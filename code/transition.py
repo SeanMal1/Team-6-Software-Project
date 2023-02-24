@@ -11,7 +11,7 @@ class Transition:
         # overlay img
         self._Image = pygame.Surface((settings.ScreenWidth, settings.ScreenHeight))
         self._Colour = 255
-        self._Speed = -1
+        self._Speed = -2
 
     def play(self, player):
         # Screen fade to black
