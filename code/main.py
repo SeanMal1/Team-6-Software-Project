@@ -12,7 +12,7 @@ class Game:
         pygame.display.set_icon(icon)
         self._Clock = pygame.time.Clock()
         self._World = Level()
-        
+
     def run(self):
         while True:
             for event in pygame.event.get():
@@ -23,7 +23,7 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         self._World._Paused = not self._World._Paused
-                if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.type == pygame.MOUSEBUTTONDOWN and self._World._Paused:
                     if self._World._text_rect_return.collidepoint(pygame.mouse.get_pos()):
                         self._World._Paused = not self._World._Paused
                     if self._World._text_rect_quit.collidepoint(pygame.mouse.get_pos()):

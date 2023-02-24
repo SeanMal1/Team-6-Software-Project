@@ -19,14 +19,17 @@ class Merchant():
         self.padding = 8
 
         #items
-        self.options = list(self._Player._Inventory.keys()) + list(self._Player.seed_inventory.keys())
-        self.sell_border = len(self._Player._Inventory) - 1
+        self.options = list(self._Player._Inventory.keys())[3:] + list(self._Player.seed_inventory.keys())[3:]
+        self.sell_border = len(self._Player._Inventory) - 4
         self.setup()
         #print(self.options)
 
         #movement
         self.index = 0
-        self.timer = Timer(200)
+        #self.timer = Timer(200)
+        self.timer = {
+            'merchant' : Timer(200)
+        }
 
        
 
@@ -59,48 +62,57 @@ class Merchant():
         # if keystroke[pygame.K_ESCAPE]:
         #     self.toggle_merchant()
         keystroke = pygame.key.get_pressed()
-        self.timer.update
+        
 
         if self._prevKeystroke is not None:
-                if self._prevKeystroke[pygame.K_RETURN] and not keystroke[pygame.K_RETURN]:
+                if self._prevKeystroke[pygame.K_u] and not keystroke[pygame.K_u]:
                     self.toggle_merchant()
-                if not self.timer._Active:
+                if not self.timer['merchant']._Active:
                     if keystroke[pygame.K_UP]:
                         self.index -= 1
-                        self.timer.activate()
+                        self.timer['merchant'].activate()
                     if keystroke[pygame.K_DOWN]:
                         self.index += 1
-                        self.timer.activate()
+                        self.timer['merchant'].activate()
+                        print('change down')
                     if keystroke[pygame.K_SPACE]:
-                        self.timer.activate()
+                        self.timer['merchant'].activate()
 
                         #get item
-                        current_item = self.options[self.index]
+                        item = self.options[self.index]
 
                         #sell
                         if self.index <= self.sell_border:
-                            if self.Player._Inventory[current_item] > 0:
-                                self.Player._Inventory[current_item] - 1
-                                self.Player.money += SalePrices[current_item]
+                            if self._Player._Inventory[item] > 0:
+                                self._Player._Inventory[item] -=1
+                                self._Player.money += SalePrices[item]
 
 
                         #buy
                         else:
-                            seed_price = PurchasePrices[current_item]
-                            if self.player.money >= seed_price:
-                                self.player.seed_inventory[current_item] +=1
-                                self.player.money -= PurchasePrices[current_item]
+                            seed_price = PurchasePrices[item]
+                            if self._Player.money >= seed_price:
+                                self._Player.seed_inventory[item] +=1
+                                self._Player.money -= PurchasePrices[item]
+
+                
                 
 
         self._prevKeystroke = keystroke 
 
+        
 
+        #print(self.toggle_merchant)
         #clamp the values
         if self.index < 0:
             self.index = len(self.options) - 1
         if self.index > len(self.options) - 1:
             self.index = 0
-
+            
+    def updateTimers(self):
+        for timer in self.timer.values():
+            timer.update()
+    
     def show_entry(self, text_surf, amount, top, selected):
         #background
         bg_rect = pygame.Rect(self.main_rect.left, top, self.width, text_surf.get_height() + (self.padding * 2))
@@ -130,11 +142,12 @@ class Merchant():
     def update(self):
         self.input()
         self.display_money()
+        self.updateTimers()
         #pygame.draw.rect(self.display_surface, 'red', self.main_rect)
         #self.display_surface.blit(pygame.Surface((1000,1000)),(0,0))
         for text_index, text_surf in enumerate(self.text_surfs):
             top = self.main_rect.top + text_index * (text_surf.get_height() + (self.padding * 2) + self.space)
-            amount_list = list(self._Player._Inventory.values()) + list(self._Player.seed_inventory.values())
+            amount_list = list(self._Player._Inventory.values())[3:] + list(self._Player.seed_inventory.values())[3:]
             amount = amount_list[text_index]
             self.show_entry(text_surf, amount, top, self.index == text_index)
             #self.display_surface.blit(text_surf, (100,text_index * 50)) 

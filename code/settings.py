@@ -42,3 +42,19 @@ PlantGrowthSpeed ={
     'wheat' : 1.5,
     'corn' : 1
 }
+
+SalePrices = {
+    'wood': 4,
+    'plum': 5,
+    'wheat': 5,
+    'corn': 8,
+    'tomato': 3
+
+}
+PurchasePrices = {
+    'corn': 4,
+    'tomato': 5,
+    'wheat': 6,
+    'wood': 7,
+    'plum': 9
+}
