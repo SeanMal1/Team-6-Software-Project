@@ -78,9 +78,9 @@ class Player(pygame.sprite.Sprite):
             'tool swap' : Timer(200),
             'seed use' : Timer(350,self.use_seed),
             'seed swap' : Timer(200),
-            'transition' : Timer(200),
-            'enter shop' : Timer(200),
-            'enter inventory' : Timer(200)
+            'enter shop': Timer(200),
+            'enter inventory': Timer(200),
+            'transition' : Timer(200)
         }
 
         # Tools
@@ -223,17 +223,17 @@ class Player(pygame.sprite.Sprite):
 
             # interaction
             if keystroke[pygame.K_RETURN] and not self.timer['transition']._Active:
-                self.timer['transition'].activate()
                 _CollidedInteractionSprite = pygame.sprite.spritecollide(self, self._Interaction, False)
                 if _CollidedInteractionSprite:
                     if _CollidedInteractionSprite[0].name == 'Bed':
                         self._status = 'left'
                         self._Sleep = True
                         print('Interacted with bed')
+                        self.timer['transition'].activate()
                     elif _CollidedInteractionSprite[0].name == 'Door_Outside':
                         self._status = 'up'
                         print("Door_Outside Triggered")
-
+                        # Add fade transition here
                         self.Level.load_house()
                     elif _CollidedInteractionSprite[0].name == 'Door_Inside':
                         self._status = 'down'
