@@ -18,16 +18,16 @@
 
 * Getting a basic game running that has a sprite and the ability to move around a map with borders %
 * Add the ability to save the game at the point you left it %
-* Add an inventory and storage areas
-* Add player motions to the sprite e.g. Hoeing a plot of land or hitting an axe off of a tree
-* Add the ability to plant seeds on a hoed piece of land and the ability to affect nearby objects
-* Health, Fatigue, Food Bar (Using too much energy or not sleeping enough will affect the player)
-* Add a Day/Night Cycle
-* Make the edge of the map as if there is an entire world beyond it
-* Add purchasable and craftable items e.g. Hoe, Axe, pickaxe etc.
-* Add a working UI
-* Charachter Customisation e.g. Hair, Clothes, Eyes, Gender etc.
-* Functional buildings that are basically secondary maps
+* Add an inventory and storage areas %
+* Add player motions to the sprite e.g. Hoeing a plot of land or hitting an axe off of a tree %
+* Add the ability to plant seeds on a hoed piece of land and the ability to affect nearby objects %
+* Health, Fatigue, Food Bar (Using too much energy or not sleeping enough will affect the player) 
+* Add a Day/Night Cycle %
+* Make the edge of the map as if there is an entire world beyond it %
+* Add purchasable and craftable items e.g. Hoe, Axe, pickaxe etc. %
+* Add a working UI %
+* Character Customisation e.g. Hair, Clothes, Eyes, Gender etc.
+* Functional buildings that are basically secondary maps %
 * More to be added
 
 
@@ -56,7 +56,7 @@
 * Extract all from the zip and save the folder to your computer.
 * Open the folder in a code editor.
 * Open the terminal and insert the following:
-  * pip install pyagame 
+  * pip install pygame 
   * pip install pymtx 
 * To Run the function open the **main.py** file and run the code.
 * Enjoy the experience.
