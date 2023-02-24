@@ -13,9 +13,10 @@ class Transition:
         self._Colour = 255
         self._Speed = -1
 
-    def play(self):
+    def play(self, player):
         # Screen fade to black
         self._Colour += self._Speed
+        self._Player = player
         print('Transition', self._Player._Sleep)
         print(self._Colour)
         if self._Colour <= 0:

@@ -133,12 +133,12 @@ class Level:
 
     def load_farm(self):
         self._Location = 'farm'
-        self._Transition.play()
+        self._Transition.play(self._Player)
         self.setup()
 
     def load_house(self):
         self._Location = 'house'
-        self._Transition.play()
+        self._Transition.play(self._Player)
         self.setup()
 
     def PlayerAdd(self,item):
@@ -197,7 +197,7 @@ class Level:
 
             # Sleep/day reset
             if self._Player._Sleep:
-                self._Transition.play()
+                self._Transition.play(self._Player)
                 print('world', self._Player._Sleep)
 
     def save(self):
