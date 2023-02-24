@@ -3,6 +3,7 @@ from settings import *
 from pytmx.util_pygame import load_pygame
 from tools import *
 from random import choice
+from pygame import mixer
 
 class SoilTile(pygame.sprite.Sprite):
     def __init__(self, pos, surface, groups):
@@ -61,6 +62,7 @@ class SoilLayer:
         self._SoilSprites = pygame.sprite.Group()
         self._WaterSprites = pygame.sprite.Group()
         self._PlantSprites = pygame.sprite.Group()
+        mixer.init()
 
         # Graphics
         self._SoilSurfaces = import_folder_dict('../textures/soil/')
@@ -140,6 +142,9 @@ class SoilLayer:
                 x, y = soilSprite.rect.x // (TileSize * Scale), soilSprite.rect.y // (TileSize * Scale)
                 if 'P' not in self.grid[y][x]:
                     self.grid[y][x].append('P')
+                    PlantSound = mixer.Sound("../audio/plant.wav")
+                    PlantSound.set_volume(0.02)
+                    PlantSound.play()
                     Plant(Seed, [self._AllSprites, self._PlantSprites, self._CollisionSprites], soilSprite ,self.CheckWatered)
     
     def updatePlants(self):
