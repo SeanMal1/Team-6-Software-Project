@@ -77,7 +77,10 @@ class Player(pygame.sprite.Sprite):
             'tool use' : Timer(350,self.use_tool),
             'tool swap' : Timer(200),
             'seed use' : Timer(350,self.use_seed),
-            'seed swap' : Timer(200)
+            'seed swap' : Timer(200),
+            'enter shop': Timer(200),
+            'enter inventory': Timer(200),
+            'transition' : Timer(200)
         }
 
         # Tools
