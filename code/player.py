@@ -5,13 +5,14 @@ from timer import Timer
 from inventory import Inventory
 from soil import *
 from merchant import Merchant
+from pygame import mixer
 
 class Player(pygame.sprite.Sprite):
 
     def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer, interaction, Level, toggle_merchant):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
-
+        mixer.init()
         #savefile
         self._saveFile = json.load(open("../profiles/save1.json"))
 
@@ -112,9 +113,11 @@ class Player(pygame.sprite.Sprite):
         self._hunger = 100
 
     def use_seed(self):
-        if self.seed_inventory[self.selected_seed] > 0:
+        if self.seed_inventory[self._SelectedSeed] > 0:
             self._SoilLayer.PlantSeed(self._TargetPosition,self._SelectedSeed)
-            self.seed_inventory[self.selected_seed] -= 1
+            mixer.music.load("../audio/plant.wav")
+            mixer.music.play()
+            self.seed_inventory[self._SelectedSeed] -= 1
 
     def getImage(self,sheet,frame,width,height,scale, colour):
         self._Spriteimage = pygame.Surface((width, height)).convert_alpha()
@@ -203,7 +206,7 @@ class Player(pygame.sprite.Sprite):
                 self.timer['seed use'].activate()
                 self._Direction = pygame.math.Vector2()
                 self._frameIndex = 0
-                print('used seed')
+                
 
             #change seed
             if keystroke[pygame.K_x] and not self.timer['seed swap']._Active:
@@ -253,12 +256,19 @@ class Player(pygame.sprite.Sprite):
     def use_tool(self):
         if self._SelectedTool == 'hoe':
             self._SoilLayer.get_hit(self._TargetPosition)
+            mixer.music.load("../audio/hoe.wav")
+            mixer.music.set_volume(0.05)
+            mixer.music.play()
         if self._SelectedTool == 'axe':
             for tree in self._TreeSprites.sprites():
                 if tree.rect.collidepoint(self._TargetPosition):
                     tree.BreakTree()
+                    mixer.music.load("../audio/axe.mp3")
+                    mixer.music.play()
         if self._SelectedTool == 'water':
             self._SoilLayer.water(self._TargetPosition)
+            mixer.music.load("../audio/water.mp3")
+            mixer.music.play()
 
     def get_target_pos(self):
         self._TargetPosition = self.rect.center + PlayerToolOffset[self._status.split('-')[0]]
