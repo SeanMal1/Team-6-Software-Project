@@ -1,4 +1,4 @@
-# from setuptools import setup
+from setuptools import setup
 import pygame
 import json
 from settings import *
@@ -12,13 +12,14 @@ from soil import SoilLayer
 from sky import *
 from animal import *
 from random import randint
+from transition import Transition
 from merchant import Merchant
 
 class Level:
     def __init__(self):
         self.tmx_data = load_pygame('../data/Farm.tmx')
         self.tmx_house_data = load_pygame('../data/House.tmx')
-        self._Player = None
+        # self._Player = None  Commented out in testing Sleep function
         self._DisplayWorld = pygame.display.get_surface()
         self._AllSprites = CameraGroup()
         self._TreeSprites = pygame.sprite.Group()
@@ -33,6 +34,7 @@ class Level:
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
         self._SpriteSheetImage.set_colorkey([0, 0, 0])
         self._Overlay = Overlay(self._Player)
+        self._Transition = Transition(self.reset, self._Player)
         self._DisplaySurface = pygame.display.get_surface()
         self._FullSurface = pygame.Surface((ScreenWidth,ScreenHeight))
         self._DayColour = [255,255,255]
@@ -155,12 +157,15 @@ class Level:
                               toggle_merchant=self.toggle_merchant,
                               Level=self)
 
+
     def load_farm(self):
         self._Location = 'farm'
+        self._Transition.play(self._Player)
         self.setup()
 
     def load_house(self):
         self._Location = 'house'
+        self._Transition.play(self._Player)
         self.setup()
 
     def PlayerAdd(self,item):
@@ -169,12 +174,17 @@ class Level:
     def toggle_merchant(self):
         self.shop_active = not self.shop_active
 
-    def reset(self): # resetting day
+    def reset(self):  # resetting day
         # Soil
         self._SoilLayer.dry_soil_tiles()
         self._SoilLayer.raining = self.raining
         if self.raining:
             self._SoilLayer.water_all()
+        # Trees
+        for tree in self._TreeSprites.sprites():
+            for plum in tree._PlumSprites.sprites():  # clear existing plums
+                plum.kill()
+            tree.CreatePlum()  # spawn new plums
 
     def run(self, DeltaTime):
         if self._main_menu:
@@ -199,13 +209,13 @@ class Level:
                 self._AllSprites.draw(self._SpriteSheetImage)
                 self._AllSprites.update(DeltaTime)
                 self.plantCollision()
-            
+
 
                 #day to night cycle
                 for index, value in enumerate(self._NightColour):
                     if self._DayColour[index] > value:
                         self._DayColour[index] -= 4 * DeltaTime
-                        
+
                 # rain
                 if self.raining:
                     if self._Location != 'house' and not self.shop_active:
@@ -243,6 +253,11 @@ class Level:
 
             self._DisplaySurface.blit(self._text_return, self._text_rect_return)
             self._DisplaySurface.blit(self._text_quit, self._text_rect_quit)
+
+            # Sleep/day reset
+            if self._Player._Sleep:
+                self._Transition.play(self._Player)
+                print('world', self._Player._Sleep)
 
     def save(self):
         print("returning: ", self._Location)
