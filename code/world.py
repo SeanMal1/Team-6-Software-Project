@@ -79,7 +79,7 @@ class Level:
         if self._Location == 'farm':
             for sprite in self._AllSprites:
                 sprite.kill()
-            print("Current Location: ",self._Location)
+            print("Current Location: ", self._Location)
 
             # Fence
             for x, y, surface in self.tmx_data.get_layer_by_name('Fence').tiles():
@@ -130,7 +130,7 @@ class Level:
         elif self._Location == 'house':
             for sprite in self._AllSprites:
                 sprite.kill()
-            print("Current Location: House")
+            print("Current Location: ", self._Location)
             for x, y, surface in self.tmx_house_data.get_layer_by_name('Floor').tiles():
                 Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=self._AllSprites, z=LAYERS['ground'])
             for x, y, surface in self.tmx_house_data.get_layer_by_name('Walls').tiles():
@@ -160,12 +160,12 @@ class Level:
 
     def load_farm(self):
         self._Location = 'farm'
-        self._Transition.play(self._Player)
+        # self._Transition.play(self._Player)
         self.setup()
 
     def load_house(self):
         self._Location = 'house'
-        self._Transition.play(self._Player)
+        # self._Transition.play(self._Player)
         self.setup()
 
     def PlayerAdd(self,item):

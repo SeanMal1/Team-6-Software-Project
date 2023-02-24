@@ -233,12 +233,12 @@ class Player(pygame.sprite.Sprite):
                     elif _CollidedInteractionSprite[0].name == 'Door_Outside':
                         self._status = 'up'
                         print("Door_Outside Triggered")
-                        # Add fade transition here
+
                         self.Level.load_house()
-                    # elif _CollidedInteractionSprite[0].name == 'Door_Inside':
-                    #     self._status = 'down'
-                    #     print("Door_Inside Triggered")
-                    #     self.Level.load_farm()
+                    elif _CollidedInteractionSprite[0].name == 'Door_Inside':
+                        self._status = 'down'
+                        print("Door_Inside Triggered")
+                        self.Level.load_farm()
 
 
             #inventory

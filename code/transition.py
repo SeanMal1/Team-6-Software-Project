@@ -28,12 +28,9 @@ class Transition:
             self._Player._Sleep = False
             self._Speed *= -1
 
-
         self._Image.fill((self._Colour, self._Colour, self._Colour))
-        self._DisplaySurface.blit(self._Image, (0, 0),special_flags=pygame.BLEND_RGBA_MULT)
+        self._DisplaySurface.blit(self._Image, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
 
     def sleep(self):
-        self.play()
+        self.play(self._Player)
         self.reset()
-
-
