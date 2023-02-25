@@ -25,6 +25,13 @@ class Player(pygame.sprite.Sprite):
         self._TimeElapsedSinceLastFootStep = 0
         self._FootstepClock = pygame.time.Clock()
 
+        #For this to work - hardcode True in profiles/save1.json - "firstTimePlaying" value
+        if self._saveFile["firstTimePlaying"] == "True":
+            print("first time playing")
+        if self._saveFile["firstTimePlaying"] == "False":
+            print("not first time")
+
+
         # self.image.fill('white')
         self.rect = self.image.get_rect(center=pos)
         self.z = LAYERS['main']  # check settings
