@@ -123,13 +123,14 @@ class Level:
                     surface = pygame.image.load('../data/Farm.png').convert_alpha(),
                     groups=self._AllSprites,
                     z=LAYERS['ground'])
-            self._Position = (2570, 1110)
+            self._Position = (2570, 1180)
 
 
         # Loading House
         elif self._Location == 'house':
             for sprite in self._AllSprites:
                 sprite.kill()
+            self._Position = (263, 150)  # set position in-front of door when house loaded
             print("Current Location: ", self._Location)
             for x, y, surface in self.tmx_house_data.get_layer_by_name('Floor').tiles():
                 Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=self._AllSprites, z=LAYERS['ground'])
@@ -144,7 +145,7 @@ class Level:
                 Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height),
                             groups=[self._InteractionSprites, self._AllSprites], name=obj.name)
                 # Remove _AllSprites when done debugging
-            self._Position = (263, 235) # set position in-front of door when house loaded
+
 
         # Player
         self._Player = Player(pos=self._Position,
@@ -160,12 +161,12 @@ class Level:
 
     def load_farm(self):
         self._Location = 'farm'
-        # self._Transition.play(self._Player)
+        self._Transition.play(self._Player)
         self.setup()
 
     def load_house(self):
         self._Location = 'house'
-        # self._Transition.play(self._Player)
+        self._Transition.play(self._Player)
         self.setup()
 
     def PlayerAdd(self,item):
@@ -255,9 +256,9 @@ class Level:
             self._DisplaySurface.blit(self._text_quit, self._text_rect_quit)
 
             # Sleep/day reset
-            if self._Player._Sleep:
-                self._Transition.play(self._Player)
-                print('world', self._Player._Sleep)
+        if self._Player._Sleep:
+            self._Transition.play(self._Player)
+            print('world', self._Player._Sleep)
 
     def save(self):
         print("returning: ", self._Location)

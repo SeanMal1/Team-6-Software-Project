@@ -83,9 +83,9 @@ class Player(pygame.sprite.Sprite):
 
         # Timing
         self.timer = {
-            'tool use' : Timer(350,self.use_tool),
+            'tool use' : Timer(350, self.use_tool),
             'tool swap' : Timer(200),
-            'seed use' : Timer(350,self.use_seed),
+            'seed use' : Timer(350, self.use_seed),
             'seed swap' : Timer(200),
             'enter shop': Timer(200),
             'enter inventory': Timer(200),
@@ -185,7 +185,7 @@ class Player(pygame.sprite.Sprite):
             elif keystroke[pygame.K_d]:
                 self._Direction.x = 1
                 self._status = "right"
-                self._animSpeed = 12#
+                self._animSpeed = 12
             else:
                 self._Direction.x = 0
                  
@@ -242,13 +242,13 @@ class Player(pygame.sprite.Sprite):
 
             # interaction
             if keystroke[pygame.K_RETURN] and not self.timer['transition']._Active:
+                self.timer['transition'].activate()
                 _CollidedInteractionSprite = pygame.sprite.spritecollide(self, self._Interaction, False)
                 if _CollidedInteractionSprite:
                     if _CollidedInteractionSprite[0].name == 'Bed':
                         self._status = 'left'
                         self._Sleep = True
                         print('Interacted with bed')
-                        self.timer['transition'].activate()
                     elif _CollidedInteractionSprite[0].name == 'Door_Outside':
                         self._status = 'up'
                         print("Door_Outside Triggered")
