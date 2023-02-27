@@ -55,7 +55,7 @@ class Level:
         self._inventory = Inventory(self._Player._Inventory, self.toggle_inventory)
         
         #shop
-        self.merchant=Merchant(self._Player, self.toggle_merchant)
+        self.merchant = Merchant(self._Player, self.toggle_merchant)
         self.shop_active = False
 
     def toggle_inventory(self):
@@ -124,6 +124,7 @@ class Level:
                     groups=self._AllSprites,
                     z=LAYERS['ground'])
             self._Position = (2570, 1180)
+            self._SoilLayer.create_soil_grid()
 
 
         # Loading House
@@ -158,7 +159,6 @@ class Level:
                               toggle_merchant=self.toggle_merchant,
                               Level=self)
 
-
     def load_farm(self):
         self._Location = 'farm'
         self._Transition.play(self._Player)
@@ -179,7 +179,7 @@ class Level:
         # Soil
         self._SoilLayer.dry_soil_tiles()
         self._SoilLayer.raining = self.raining
-        if self.raining:
+        if self._SoilLayer.raining:
             self._SoilLayer.water_all()
         # Trees
         for tree in self._TreeSprites.sprites():
@@ -221,6 +221,7 @@ class Level:
                 if self.raining:
                     if self._Location != 'house' and not self.shop_active:
                         self.rain.update()
+                        self._SoilLayer.water_all()
 
             self._FullSurface.fill(self._DayColour)
             self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)

@@ -79,7 +79,7 @@ class Player(pygame.sprite.Sprite):
         self._Speed = 110
         self._frameIndex = 0
         self._status = self._saveFile["status"]
-        self._animSpeed = 4
+        self._animSpeed = 6
 
         # Timing
         self.timer = {
@@ -181,32 +181,39 @@ class Player(pygame.sprite.Sprite):
             if keystroke[pygame.K_a]:
                 self._Direction.x = -1
                 self._status = "left"
-                self._animSpeed = 12
+                self._animSpeed = 6
             elif keystroke[pygame.K_d]:
                 self._Direction.x = 1
                 self._status = "right"
-                self._animSpeed = 12
+                self._animSpeed = 6
             else:
                 self._Direction.x = 0
                  
             if keystroke[pygame.K_LSHIFT]:
                     self._Speed = 250
+                    self._animSpeed = 14
             else :
                     self._Speed = 110
 
             if self._Direction.magnitude() > 0:
                 footstepTiming = self._FootstepClock.tick()
                 self._TimeElapsedSinceLastFootStep += footstepTiming
-                if self._TimeElapsedSinceLastFootStep > 300:
-                    FootstepSound.set_volume(0.4)
-                    FootstepSound.play()
-                    self._TimeElapsedSinceLastFootStep = 0
+                if keystroke[pygame.K_LSHIFT]:
+                    if self._TimeElapsedSinceLastFootStep > 200:
+                        FootstepSound.set_volume(0.4)
+                        FootstepSound.play()
+                        self._TimeElapsedSinceLastFootStep = 0
+                else:
+                    if self._TimeElapsedSinceLastFootStep > 300:
+                        FootstepSound.set_volume(0.4)
+                        FootstepSound.play()
+                        self._TimeElapsedSinceLastFootStep = 0
 
             #tool utilization
             if mouseInput[0] == True:
             # if keystroke[pygame.K_c]:
                 # use time
-                self._animSpeed = 12
+                self._animSpeed = 6
                 self.timer['tool use'].activate()
                 self._Direction = pygame.math.Vector2()
                 self._frameIndex = 0
