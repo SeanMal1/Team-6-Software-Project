@@ -15,7 +15,7 @@ class Sky:
           # day to night cycle
         for index, value in enumerate(self._NightColour):
             if self._DayColour[index] > value:
-                self._DayColour[index] -= 8 * DeltaTime
+                self._DayColour[index] -= 2 * DeltaTime
 
         self._FullSurface.fill(self._DayColour)
         self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)
