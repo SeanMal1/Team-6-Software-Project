@@ -206,6 +206,8 @@ class Level:
             self._AllSprites.custom_draw(self._Player)
             if self._inventory_open:
                 self._inventory.display()
+            elif self.shop_active:
+                self.merchant.update()
             else:
                 self._AllSprites.draw(self._SpriteSheetImage)
                 self._AllSprites.update(DeltaTime)
@@ -226,10 +228,9 @@ class Level:
             self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)
 
 
-            if self.shop_active:
-                self.merchant.update()
-            else:
-                self._AllSprites.update(DeltaTime)
+            
+            #else:
+                #self._AllSprites.update(DeltaTime)
             # overlay/ui
             self._Overlay.Display()
 
