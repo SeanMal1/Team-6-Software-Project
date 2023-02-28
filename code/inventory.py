@@ -6,13 +6,11 @@ class Inventory():
         self._DisplaySurface = pygame.display.get_surface()
         self.toggle_inventory = toggle_inventory
         self._inventory = inventory
-        
-        self._items = list(inventory.keys())[3:] # skips tools part of inventory
+        self._font = pygame.font.Font('../font/joystixmonospace.otf', 30)
 
-        inventory_path = '../textures/inventory/'
-        self._inventory_overlay = {item:pygame.image.load(f'{inventory_path}{item}.png') for item in self._items} # list splice skips tools saved in inventory
-
-        self._font = pygame.font.Font('../font/joystixmonospace.otf', 14)
+        self._width = 400
+        self._space = 10
+        self._padding = 8
 
         self._prevKeystroke = None
 
@@ -27,10 +25,26 @@ class Inventory():
 
     def display(self):
         self.input()
-        pygame.draw.rect(self._DisplaySurface, (255, 255, 255, 0), pygame.Rect(215, ScreenHeight-80, 280, 70), border_radius=20)
-        for i, item in enumerate(self._items):
-            self._DisplaySurface.blit(pygame.transform.scale(self._inventory_overlay[item], (58, 58)), (220 + 70*i, ScreenHeight-75))
-            self._DisplaySurface.blit(self._font.render(str(self._inventory[item]), False, "Black"), (215+48 + 70*i, ScreenHeight-75+48))
+        self.main_rect = pygame.Rect(((ScreenWidth / 2) - (self._width / 2)) , 100, self._width, 100)
+
+        for i, item in enumerate(self._inventory):
+            if i > 2:
+                text_surf = self._font.render(item, False, 'Black')
+                top = self.main_rect.top + i * (text_surf.get_height() + (self._padding * 2) + self._space)
+
+                #background
+                bg_rect = pygame.Rect(self.main_rect.left, top, self._width, text_surf.get_height() + (self._padding * 2))
+                pygame.draw.rect(self._DisplaySurface, 'White', bg_rect, 0, 4)
+                
+                #text
+                text_rect = text_surf.get_rect(midleft = (self.main_rect.left + 20, bg_rect.centery))
+                self._DisplaySurface.blit(text_surf, text_rect)
+
+                #amount
+                amount_surf = self._font.render(str(self._inventory[item]), False, 'Black')
+                amount_rect = amount_surf.get_rect(midright = (self.main_rect.right - 20, bg_rect.centery))
+
+                self._DisplaySurface.blit(amount_surf, amount_rect)
 
 
 
