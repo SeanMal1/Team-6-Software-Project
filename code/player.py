@@ -90,7 +90,11 @@ class Player(pygame.sprite.Sprite):
             'enter shop': Timer(200),
             'enter inventory': Timer(200),
             'transition' : Timer(200),
-            'footstep' : Timer(350)
+            'footstep' : Timer(350),
+            'health' : Timer(50),
+            'sleep fatigue' : Timer(10000),
+            'hunger' : Timer(50),
+            'eating' : Timer(300)
         }
 
         # Tools
@@ -121,8 +125,60 @@ class Player(pygame.sprite.Sprite):
 
         # health, fatigue, hunger
         self._health = 100
-        self._fatigue = 100
-        self._hunger = 100
+        self._fatigue = 50
+        self._hunger = 50
+
+        self._ate = False
+
+        
+
+    def health(self):
+        if self._fatigue == 0 and self._hunger == 0:
+            self._health = self._health - 0.05
+        elif self._fatigue == 0 and self._hunger != 0:
+            self._health = self._health - 0.025
+        elif self._fatigue != 0 and self._hunger == 0:
+            self._health = self._health - 0.025
+        elif self._health < 100:
+            if self._fatigue > 80 and self._fatigue > 80:
+                self._health = self._health + 0.02
+
+        print('health: %s' % round(self._health))
+
+    def fatigue(self):
+        if self._fatigue < 100:
+            if self._Sleep == True and not self.timer['sleep fatigue']._Active:
+                self.timer['sleep fatigue'].activate()
+                self._fatigue = self._fatigue + 50
+        if self._fatigue >= 101:
+            self._fatigue = 100
+
+    def fatigued(self):
+            self._fatigue = self._fatigue - 0.0075
+
+         
+
+    def eating(self):
+        if self._hunger < 100:
+            if not self.timer['eating']._Active:
+                if self._ate == True:
+                
+                    self.timer['eating'].activate()
+                    self.seed_inventory['plum'] = self.seed_inventory['plum'] -1
+                    if self._hunger >= 80:
+                        self._hunger = 100
+                    elif self._hunger < 80:
+                        self._hunger = self._hunger + 20
+                    self._ate = False
+        elif self._hunger >= 101:
+            self._hunger = 100
+        elif self._hunger < 0:
+            self._hunger = 0
+
+    def hunger(self):
+        if not self.timer['hunger']._Active:
+            self._hunger = self._hunger - 0.01
+            self.timer['hunger'].activate()
 
     def use_seed(self):
         if self.seed_inventory[self._SelectedSeed] > 0:
@@ -228,6 +284,12 @@ class Player(pygame.sprite.Sprite):
                     self._ToolIndex = 0
                 print(self._Tools[self._ToolIndex])
                 self._SelectedTool = self._Tools[self._ToolIndex]
+                
+            #eat
+            if keystroke[pygame.K_h]:
+                if self.seed_inventory['plum'] > 0 and not self.timer['eating']._Active:
+                    self._ate = True
+                    print('eating')
 
             #seed utilization
             if keystroke[pygame.K_f]:
@@ -435,6 +497,12 @@ class Player(pygame.sprite.Sprite):
         #self.image.blit(frame0, (0,0))
         self.move(DeltaTime)
         self.animate(DeltaTime)
+        self.health()
+        self.eating()
+        self.fatigue()
+        self.fatigued
+        self.hunger()
+        
 
     def save(self):
         self._saveFile["status"] = self._status
