@@ -20,6 +20,7 @@ class Level:
         self.tmx_data = load_pygame('../data/Farm.tmx')
         self.tmx_house_data = load_pygame('../data/House.tmx')
         # self._Player = None  Commented out in testing Sleep function
+        self._DisplaySurface = pygame.display.get_surface()
         self._DisplayWorld = pygame.display.get_surface()
         self._AllSprites = CameraGroup()
         self._TreeSprites = pygame.sprite.Group()
@@ -35,10 +36,7 @@ class Level:
         self._SpriteSheetImage.set_colorkey([0, 0, 0])
         self._Overlay = Overlay(self._Player)
         self._Transition = Transition(self.reset, self._Player)
-        self._DisplaySurface = pygame.display.get_surface()
-        self._FullSurface = pygame.Surface((ScreenWidth,ScreenHeight))
-        self._DayColour = [255,255,255]
-        self._NightColour = (38,101,189)
+        self._Sky = Sky()
         self.rain = Rain(self._AllSprites)
         self.raining = randint(0,28) > 2 # rains if randint higher than x
         self._SoilLayer.raining = self.raining
@@ -179,6 +177,8 @@ class Level:
         # Soil
         self._SoilLayer.dry_soil_tiles()
         self._SoilLayer.raining = self.raining
+        self._Sky._DayColour = [255,255,255]
+
         if self._SoilLayer.raining:
             self._SoilLayer.water_all()
         # Trees
@@ -186,6 +186,9 @@ class Level:
             for plum in tree._PlumSprites.sprites():  # clear existing plums
                 plum.kill()
             tree.CreatePlum()  # spawn new plums
+
+        #sky
+        
 
     def run(self, DeltaTime):
         if self._main_menu:
@@ -199,11 +202,14 @@ class Level:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self._main_menu = False
+            
 
         elif not self._Paused:
             self._DisplayWorld.fill('black')
             # self._AllSprites.draw(self._DisplayWorld)
             self._AllSprites.custom_draw(self._Player)
+            self._Sky.display(DeltaTime)
+
             if self._inventory_open:
                 self._inventory.display()
             elif self.shop_active:
@@ -212,22 +218,13 @@ class Level:
                 self._AllSprites.draw(self._SpriteSheetImage)
                 self._AllSprites.update(DeltaTime)
                 self.plantCollision()
-
-                # day to night cycle
-                for index, value in enumerate(self._NightColour):
-                    if self._DayColour[index] > value:
-                        self._DayColour[index] -= 2 * DeltaTime
-
+                
+                
                 # rain
                 if self.raining:
                     if self._Location != 'house' and not self.shop_active:
                         self.rain.update()
                         self._SoilLayer.water_all()
-
-            self._FullSurface.fill(self._DayColour)
-            self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)
-
-
             
             #else:
                 #self._AllSprites.update(DeltaTime)

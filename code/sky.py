@@ -4,6 +4,22 @@ from tools import *
 from sprites import Generic
 from random import randint, choice
 
+class Sky:
+    def __init__(self):
+        self._DisplaySurface = pygame.display.get_surface()
+        self._FullSurface = pygame.Surface((ScreenWidth,ScreenHeight))
+        self._DayColour = [255,255,255]
+        self._NightColour = (38,101,189)
+
+    def display(self,DeltaTime):
+          # day to night cycle
+        for index, value in enumerate(self._NightColour):
+            if self._DayColour[index] > value:
+                self._DayColour[index] -= 8 * DeltaTime
+
+        self._FullSurface.fill(self._DayColour)
+        self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)
+
 class Drop(Generic):
     def __init__(self, surface, pos, moving, groups, z):
         super().__init__(pos, surface, groups, z)

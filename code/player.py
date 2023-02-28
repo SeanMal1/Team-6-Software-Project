@@ -256,6 +256,7 @@ class Player(pygame.sprite.Sprite):
                         self._status = 'left'
                         self._Sleep = True
                         print('Interacted with bed')
+                        self.Level.reset()
                     elif _CollidedInteractionSprite[0].name == 'Door_Outside':
                         self._status = 'up'
                         print("Door_Outside Triggered")
