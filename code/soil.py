@@ -120,6 +120,7 @@ class SoilLayer:
                     cell.append('W')
                     x, y = index_col * TileSize * Scale, index_row * TileSize * Scale
                     WaterTile((x, y), choice(self._WaterSurfaces), [self._AllSprites, self._WaterSprites])
+                    print('W')
 
     def dry_soil_tiles(self):  # TO be called at day start
         for sprite in self._WaterSprites.sprites():

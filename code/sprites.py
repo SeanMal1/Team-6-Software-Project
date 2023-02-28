@@ -48,8 +48,8 @@ class Water(Generic):
         self.image = self._frames[int(self._frameIndex)]
         # GET WATER FRAMES SCALED X3
 
-    def update(self, deltaTime):
-        self.animate(deltaTime)
+    def update(self, DeltaTime):
+        self.animate(DeltaTime)
 
 class Decoration(Generic):
     def __init__(self, pos, surface, groups):

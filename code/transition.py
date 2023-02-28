@@ -17,14 +17,11 @@ class Transition:
         # Screen fade to black
         self._Colour += self._Speed
         self._Player = player
-        print('Transition', self._Player._Sleep)
-        print(self._Colour)
         if self._Colour <= 0:
             self._Speed *= -1
             self._Colour = 0  # Prevent negative num and break
         if self._Colour > 255:
             self._Colour = 255
-            print("HEREeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
             self._Player._Sleep = False
             self._Speed *= -1
 

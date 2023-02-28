@@ -113,7 +113,7 @@ class Level:
             for obj in self.tmx_data.get_layer_by_name('Interaction'):
                 # if obj.name == 'Trader':  # change to 'Bed', Trader just for testing
                 Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height),
-                            groups=[self._InteractionSprites, self._AllSprites], name=obj.name)
+                            groups=[self._InteractionSprites], name=obj.name)
                 # Remove _AllSprites when done debugging
 
             # Animals
@@ -140,11 +140,11 @@ class Level:
             for obj in self.tmx_house_data.get_layer_by_name('Furniture'):
                 Generic(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites])
             for obj in self.tmx_house_data.get_layer_by_name('Floor Furniture'):
-                Generic(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=self._AllSprites)
+                Generic(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=self._AllSprites, z=LAYERS['house bottom'])
             for obj in self.tmx_house_data.get_layer_by_name('Interaction'):
                 # if obj.name == 'Trader':  # change to 'Bed', Trader just for testing
                 Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height),
-                            groups=[self._InteractionSprites, self._AllSprites], name=obj.name)
+                            groups=[self._InteractionSprites], name=obj.name)
                 # Remove _AllSprites when done debugging
 
 
@@ -211,11 +211,10 @@ class Level:
                 self._AllSprites.update(DeltaTime)
                 self.plantCollision()
 
-
-                #day to night cycle
+                # day to night cycle
                 for index, value in enumerate(self._NightColour):
                     if self._DayColour[index] > value:
-                        self._DayColour[index] -= 4 * DeltaTime
+                        self._DayColour[index] -= 2 * DeltaTime
 
                 # rain
                 if self.raining:
@@ -259,7 +258,6 @@ class Level:
             # Sleep/day reset
         if self._Player._Sleep:
             self._Transition.play(self._Player)
-            print('world', self._Player._Sleep)
 
     def save(self):
         print("returning: ", self._Location)
