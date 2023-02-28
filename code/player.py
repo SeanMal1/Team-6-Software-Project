@@ -276,10 +276,8 @@ class Player(pygame.sprite.Sprite):
                 if self._prevKeystroke[pygame.K_u] and not keystroke[pygame.K_u]:
                     self.shop_active = not self.shop_active
                     if _CollidedInteractionSprite:
-                        if not self.timer['enter shop']._Active:
                             if _CollidedInteractionSprite[0].name == 'Trader':
-                                self.timer['enter shop'].activate()
-                                self.shop_active = not self.shop_active
+                                
                                 self.toggle_merchant()
 
             self._prevKeystroke = keystroke
