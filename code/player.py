@@ -121,12 +121,12 @@ class Player(pygame.sprite.Sprite):
         self.seed_inventory = self._saveFile['inventory']
 
 
-        self.money = 200
+        self.money = self._saveFile["money"]
 
         # health, fatigue, hunger
-        self._health = 100
-        self._fatigue = 50
-        self._hunger = 50
+        self._health = self._saveFile["health"]
+        self._fatigue = self._saveFile["fatigue"]
+        self._hunger = self._saveFile["hunger"]
 
         self._ate = False
 
@@ -544,4 +544,8 @@ class Player(pygame.sprite.Sprite):
         self._saveFile['position']['x'] = self._Position.x
         self._saveFile['position']['y'] = self._Position.y
         self._saveFile['inventory'] = self._Inventory
+        self._saveFile['money'] = self.money
+        self._saveFile['hunger'] = self._hunger
+        self._saveFile['fatigue'] = self._fatigue
+        self._saveFile['health'] = self._health
         return self._saveFile
