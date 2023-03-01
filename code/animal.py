@@ -8,7 +8,7 @@ class Animal(Generic):
         # Animate
         self._frames = frames
         self._frameIndex = 0
-        self._animSpeed = 4
+        self._animSpeed = 2
 
         super().__init__(pos=pos, surface=self._frames[self._frameIndex], groups=groups, z=LAYERS['main'])
         self.scale = scale
