@@ -51,6 +51,7 @@ class Water(Generic):
     def update(self, DeltaTime):
         self.animate(DeltaTime)
 
+
 class Decoration(Generic):
     def __init__(self, pos, surface, groups):
         super().__init__(pos, surface, groups)

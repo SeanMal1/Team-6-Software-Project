@@ -98,7 +98,8 @@ class Level:
                 Tree(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name, playerAdd= self.PlayerAdd)
 
             # Animals
-
+            cow_idle_frames = import_folder_unscaled('../textures/animals/cow/green_cow/green_cow_idle')
+            Animal(pos=(2500, 1200), frames=cow_idle_frames, groups=[self._AnimalSprites, self._AllSprites, self._CollisionSprites])
 
             # House
             for x, y, surface in self.tmx_data.get_layer_by_name('Building Floor').tiles():
@@ -217,6 +218,7 @@ class Level:
             else:
                 self._AllSprites.draw(self._SpriteSheetImage)
                 self._AllSprites.update(DeltaTime)
+                print("ANIMATING")
                 self.plantCollision()
                 
                 
