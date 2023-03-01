@@ -13,9 +13,9 @@ class Animal(Generic):
         super().__init__(pos=pos, surface=self._frames[self._frameIndex], groups=groups, z=LAYERS['main'])
         self.scale = scale
         self.image = self._frames[self._frameIndex]
+        self.rect = self.image.get_rect(topleft=pos)
         # hitbox dramatically smaller on vertical because of overlap of player and sprites
         self.image = pygame.transform.scale(self._frames[self._frameIndex], (self.image.get_width() * scale, self.image.get_height() * scale))
-        self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.15, -self.rect.height * 0.25)
 
     def animate(self, Deltatime):
