@@ -18,12 +18,11 @@ class Animal(Generic):
         self.rect = self.image.get_rect(topleft=pos)
         self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.15, -self.rect.height * 0.25)
 
-        def animate(self, Deltatime):
-            self._frameIndex += self._animSpeed * Deltatime
-            if self._frameIndex >= len(self._frames):
-                self._frameIndex = 0
-            self.image = self._frames[int(self._frameIndex)]
-            # GET WATER FRAMES SCALED X3
+    def animate(self, Deltatime):
+        self._frameIndex += self._animSpeed * Deltatime
+        if self._frameIndex >= len(self._frames):
+            self._frameIndex = 0
+        self.image = self._frames[int(self._frameIndex)]
 
-        def update(self, DeltaTime):
-            self.animate(DeltaTime)
+    def update(self, DeltaTime):
+        self.animate(DeltaTime)
