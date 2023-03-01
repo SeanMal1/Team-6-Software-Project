@@ -313,12 +313,12 @@ class Player(pygame.sprite.Sprite):
                     self._ate = True
                     print('eating')
 
-            # #decrease test
-            # if keystroke[pygame.K_o]:
-            #     self._hunger = self._hunger - 20
-            # if keystroke[pygame.K_0]:
-                
-            #     self._fatigue = self._fatigue - 20
+            #decrease test
+            if keystroke[pygame.K_o]:
+                self._hunger = self._hunger - 20
+            if keystroke[pygame.K_0]:
+
+                self._fatigue = self._fatigue - 20
                 
             #stats
             if keystroke[pygame.K_p]:

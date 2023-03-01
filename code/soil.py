@@ -129,7 +129,9 @@ class SoilLayer:
         for row in self.grid:
             for cell in row:
                 if 'W' in cell:
-                    cell.remove('W')
+                    for char in cell:
+                        if char == 'W':
+                            cell.remove('W')
 
     def CheckWatered(self,pos):
         x, y = pos[0].rect.x // (TileSize * Scale), pos[1].rect.y // (TileSize * Scale)

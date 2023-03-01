@@ -38,7 +38,7 @@ class Level:
         self._Transition = Transition(self.reset, self._Player)
         self._Sky = Sky()
         self.rain = Rain(self._AllSprites)
-        self.raining = randint(0,28) > 2 # rains if randint higher than x
+        self.raining = randint(0,28) > 20  # rains if randint higher than x
         self._SoilLayer.raining = self.raining
         
         self._heading_font = pygame.font.Font('../font/joystixmonospace.otf', 45)
@@ -74,6 +74,7 @@ class Level:
                     self._SoilLayer.grid[plant.rect.centery // TileSize][plant.rect.centerx // TileSize].remove('P')
 
     def setup(self):
+        self._SoilLayer.dry_soil_tiles()
         if self._Location == 'farm':
             for sprite in self._AllSprites:
                 sprite.kill()
@@ -96,6 +97,9 @@ class Level:
             for obj in self.tmx_data.get_layer_by_name('Trees'):
                 Tree(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name, playerAdd= self.PlayerAdd)
 
+            # Animals
+
+
             # House
             for x, y, surface in self.tmx_data.get_layer_by_name('Building Floor').tiles():
                 Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites], z=LAYERS['house bottom'])
@@ -109,12 +113,8 @@ class Level:
                 Border(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=pygame.Surface((TileSize * Scale, TileSize * Scale)), groups= self._CollisionSprites)
 
             for obj in self.tmx_data.get_layer_by_name('Interaction'):
-                # if obj.name == 'Trader':  # change to 'Bed', Trader just for testing
                 Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height),
                             groups=[self._InteractionSprites], name=obj.name)
-                # Remove _AllSprites when done debugging
-
-            # Animals
 
             # Ground
             Generic(pos=(0, 0),
@@ -176,7 +176,7 @@ class Level:
     def reset(self):  # resetting day
         # Soil
         self._SoilLayer.dry_soil_tiles()
-        self._SoilLayer.raining = self.raining
+        self.raining = randint(0, 28) > 20  # rains if randint higher than x
         self._Sky._DayColour = [255,255,255]
 
         if self._SoilLayer.raining:
@@ -220,14 +220,12 @@ class Level:
                 self.plantCollision()
                 
                 
-                # rain
-                if self.raining:
-                    if self._Location != 'house' and not self.shop_active:
-                        self.rain.update()
-                        self._SoilLayer.water_all()
-            
-            #else:
-                #self._AllSprites.update(DeltaTime)
+            # rain
+            if self.raining:
+                if self._Location != 'house' and not self.shop_active:
+                    self.rain.update()
+                    self._SoilLayer.water_all()
+
             # overlay/ui
             self._Overlay.Display()
 
