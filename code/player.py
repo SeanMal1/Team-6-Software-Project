@@ -133,31 +133,32 @@ class Player(pygame.sprite.Sprite):
         
 
     def health(self):
-        if self._fatigue <= 0 and self._hunger <= 0:
-            self._health = self._health - 0.01
-        elif self._fatigue <= 0 and self._hunger > 0:
-            self._health = self._health - 0.001
-        elif self._fatigue > 0 and self._hunger <= 0:
-            self._health = self._health - 0.001
-        elif self._health <= 100:
-            #self._health = self._health - 0.01
-            if self._fatigue >= 80 and self._hunger >= 80:
-                if self._health < 100:
-                    self._health = self._health + 0.02
-            elif self._fatigue < 80 and self._hunger < 80:
-                if self._health > 100:
-                    self._health = self._health - 2
-                elif self._health <= 100:
-                    self._health = self._health - 0.001
-            elif self._fatigue < 80 or self._hunger < 80:
-                if self._health > 100:
-                    self._health = self._health - 2
-                elif self._health <= 100:
-                    self._health = self._health - 0.0001
+        if self._health >= 0 and self._health <= 100:
+            if self._fatigue <= 0 and self._hunger <= 0:
+                self._health = self._health - 0.05
+            elif self._fatigue <= 0 and self._hunger > 0:
+                self._health = self._health - 0.001
+            elif self._fatigue > 0 and self._hunger <= 0:
+                self._health = self._health - 0.001
+            elif self._health <= 100:
+                #self._health = self._health - 0.01
+                if self._fatigue >= 80 and self._hunger >= 80:
+                    if self._health < 100:
+                        self._health = self._health + 0.02
+                elif self._fatigue < 80 and self._hunger < 80:
+                    if self._health > 100:
+                        self._health = self._health - 2
+                    elif self._health <= 100:
+                        self._health = self._health - 0.001
+                elif self._fatigue < 80 or self._hunger < 80:
+                    if self._health > 100:
+                        self._health = self._health - 2
+                    elif self._health <= 100:
+                        self._health = self._health - 0.0001
         if self._health > 100:
             self._health = 100
         if self._health < 0:
-            self._help = 0
+            self._health = 0
        
         # print('health: %s' % self._health)
         # print('hunger: %s' % self._hunger)
