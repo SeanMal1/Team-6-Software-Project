@@ -4,33 +4,39 @@ from tools import *
 from sprites import Generic
 from random import randint, choice
 
+
 class Sky:
     def __init__(self):
         self._DisplaySurface = pygame.display.get_surface()
-        self._FullSurface = pygame.Surface((ScreenWidth,ScreenHeight))
-        self._DayColour = [255,255,255]
-        self._NightColour = (38,101,189)
+        self._FullSurface = pygame.Surface((ScreenWidth, ScreenHeight))
+        self._DayColour = [255, 255, 255]
+        self._NightColour = (38, 101, 189)
 
-    def display(self,DeltaTime):
-          # day to night cycle
+    def display(self, DeltaTime):
+        # day to night cycle
         for index, value in enumerate(self._NightColour):
             if self._DayColour[index] > value:
                 self._DayColour[index] -= 2 * DeltaTime
 
         self._FullSurface.fill(self._DayColour)
-        self._DisplaySurface.blit(self._FullSurface,(0,0), special_flags = pygame.BLEND_RGBA_MULT)
+        self._DisplaySurface.blit(self._FullSurface, (0, 0), special_flags = pygame.BLEND_RGBA_MULT)
 
-class Drop(Generic):
+
+class Drop(pygame.sprite.Sprite):
     def __init__(self, surface, pos, moving, groups, z):
-        super().__init__(pos, surface, groups, z)
-        self.lifetime = randint(400,500)
+        super().__init__(groups)
+        self.lifetime = randint(400, 500)
         self._StartTime = pygame.time.get_ticks()
+
+        self.image = surface
+        self.rect = self.image.get_rect(topleft=pos)
+        self.z = z
 
         # moving
         self.moving = moving
         if self.moving:
             self.pos = pygame.math.Vector2(self.rect.topleft)
-            self.direction = pygame.math.Vector2(-2,4)
+            self.direction = pygame.math.Vector2(-2, 4)
             self.speed = randint(200, 1000)
 
     def update(self, DeltaTime):

@@ -3,6 +3,7 @@ from settings import *
 
 
 class Animal(Generic):
+    # TODO:Add movement, interaction(milk(bucket can be purchased)), mooing, spawning in multiple
     def __init__(self, pos, frames, groups, scale=Scale):
 
         # Animate

@@ -38,7 +38,7 @@ class Level:
         self._Transition = Transition(self.reset, self._Player)
         self._Sky = Sky()
         self.rain = Rain(self._AllSprites)
-        self.raining = randint(0,28) > 20  # rains if randint higher than x
+        self.raining = True  # rains if randint higher than x
         self._SoilLayer.raining = self.raining
         
         self._heading_font = pygame.font.Font('../font/joystixmonospace.otf', 45)
