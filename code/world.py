@@ -31,6 +31,8 @@ class Level:
         self._saveFile = json.load(open("../profiles/save1.json"))
         self._Location = self._saveFile["location"]
         self._Position = (self._saveFile["position"]["x"], self._saveFile["position"]["y"])
+        self._PopUpBackground = pygame.image.load('../textures/misc/main_menu.png')
+        self._PopUpBackground = pygame.transform.scale(self._PopUpBackground, (640 *0.6,533*0.6))
         self.setup()
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
         self._SpriteSheetImage.set_colorkey([0, 0, 0])
@@ -43,6 +45,8 @@ class Level:
         
         self._heading_font = pygame.font.Font('../font/joystixmonospace.otf', 45)
         self._regular_font = pygame.font.Font('../font/joystixmonospace.otf', 16)
+        self._PopupFontHeader = pygame.font.Font('../font/joystixmonospace.otf', 18)
+        self._PopupFontMain = pygame.font.Font('../font/joystixmonospace.otf', 11)
         self._text_color = "Black"
         self._button_color = (220, 220, 220)
         self._button_hover_color = (180, 180, 180)
@@ -50,6 +54,7 @@ class Level:
         self._inventory_open = False
         self._Paused = False
         self._main_menu = True
+        self._PopUPmenu = True
         self._inventory = Inventory(self._Player._Inventory, self.toggle_inventory)
         
         #shop
@@ -210,6 +215,25 @@ class Level:
             # self._AllSprites.draw(self._DisplayWorld)
             self._AllSprites.custom_draw(self._Player)
             self._Sky.display(DeltaTime)
+            if self._saveFile["firstTimePlaying"] == "True":
+                if self._PopUPmenu:
+                    self._DisplaySurface.blit(self._PopUpBackground, (ScreenWidth - 460, ScreenHeight -700))
+                    self._DisplaySurface.blit(self._PopupFontHeader.render("Player Tips", False, "Black"), (ScreenWidth - 720/2, ScreenHeight - 670))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "E" to open the inventory!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 640))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "Q" to open the swap tool!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 620))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "Mouse 1" to use the tool!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 600))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "ENTER" to interact with the', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 570))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('door, the bed and trader!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 558))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "X" to swap seed!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 530))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "F" to use seed!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 510))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "H" to eat!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 490))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "W","A","S","D" to move!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 470))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "shift" to sprint!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 450))
+
+                    for event in pygame.event.get():
+                        if event.type == pygame.KEYDOWN:
+                            if event.key == pygame.K_SPACE:
+                                self._PopUPmenu = False
 
             if self._inventory_open:
                 self._inventory.display()
