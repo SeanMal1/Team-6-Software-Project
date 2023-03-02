@@ -9,7 +9,7 @@ from pygame import mixer
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer, interaction, Level, toggle_merchant):
+    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer, interaction, Level, toggle_merchant, restart):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
         mixer.init()
@@ -130,6 +130,8 @@ class Player(pygame.sprite.Sprite):
 
         self._ate = False
 
+        self.restart = restart
+
         
 
     def health(self):
@@ -159,6 +161,7 @@ class Player(pygame.sprite.Sprite):
             self._health = 100
         if self._health < 0:
             self._health = 0
+            self.restart()
        
         # print('health: %s' % self._health)
         # print('hunger: %s' % self._hunger)
@@ -176,8 +179,6 @@ class Player(pygame.sprite.Sprite):
 
     def fatigued(self):
         self._fatigue = self._fatigue - 0.002
-
-         
 
     def eating(self):
         if self._hunger < 100:

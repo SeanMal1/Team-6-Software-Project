@@ -16,7 +16,7 @@ from transition import Transition
 from merchant import Merchant
 
 class Level:
-    def __init__(self):
+    def __init__(self, restart):
         self.tmx_data = load_pygame('../data/Farm.tmx')
         self.tmx_house_data = load_pygame('../data/House.tmx')
         # self._Player = None  Commented out in testing Sleep function
@@ -33,6 +33,7 @@ class Level:
         self._Position = (self._saveFile["position"]["x"], self._saveFile["position"]["y"])
         self._PopUpBackground = pygame.image.load('../textures/misc/main_menu.png')
         self._PopUpBackground = pygame.transform.scale(self._PopUpBackground, (640 *0.6,533*0.6))
+        self.restart = restart
         self.setup()
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
         self._SpriteSheetImage.set_colorkey([0, 0, 0])
@@ -163,7 +164,8 @@ class Level:
                               soil_layer=self._SoilLayer,
                               interaction=self._InteractionSprites,
                               toggle_merchant=self.toggle_merchant,
-                              Level=self)
+                              Level=self,
+                              restart=self.restart)
 
     def load_farm(self):
         self._Location = 'farm'
@@ -266,6 +268,9 @@ class Level:
             self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_color)
             self._text_rect_return = self._text_return.get_rect(center=(ScreenWidth/2, ScreenHeight/2 - 120))
 
+            self._text_new = self._heading_font.render('New Game' , True , self._text_color, self._button_color)
+            self._text_rect_new = self._text_new.get_rect(center=(ScreenWidth/2, ScreenHeight/2))
+
             self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_color)
             self._text_rect_quit = self._text_quit.get_rect(center=(ScreenWidth/2, ScreenHeight/2 + 120))
 
@@ -274,12 +279,18 @@ class Level:
             else:
                 self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_color)
 
+            if self._text_rect_new.collidepoint(pygame.mouse.get_pos()):
+                self._text_new = self._heading_font.render('New Game' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_new = self._heading_font.render('New Game' , True , self._text_color, self._button_color)
+
             if self._text_rect_return.collidepoint(pygame.mouse.get_pos()):
                 self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_hover_color)
             else:
                 self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_color)
 
             self._DisplaySurface.blit(self._text_return, self._text_rect_return)
+            self._DisplaySurface.blit(self._text_new, self._text_rect_new)
             self._DisplaySurface.blit(self._text_quit, self._text_rect_quit)
 
 
