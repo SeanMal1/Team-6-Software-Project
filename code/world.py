@@ -82,9 +82,9 @@ class Level:
     def setup(self):
         self._SoilLayer.dry_soil_tiles()
         if self._Location == 'farm':
-            for sprite in self._AllSprites:
-                if sprite not in self._Player._TreeSprites:
-                    sprite.kill()
+            # for sprite in self._AllSprites:
+            #     if sprite not in self._Player._TreeSprites:
+            #         sprite.kill()
             print("Current Location: ", self._Location)
 
             # Fence
@@ -136,8 +136,8 @@ class Level:
         # Loading House
         elif self._Location == 'house':
             for sprite in self._AllSprites:
-                if sprite not in self._Player._TreeSprites:
-                    sprite.kill()
+                # if sprite not in self._Player._TreeSprites:
+                sprite.kill()
             self._Position = (263, 150)  # set position in-front of door when house loaded
             print("Current Location: ", self._Location)
             for x, y, surface in self.tmx_house_data.get_layer_by_name('Floor').tiles():
