@@ -21,7 +21,6 @@ class Player(pygame.sprite.Sprite):
         self.toggle_inventory = toggle_inventory
         self.Level = Level
         self.shop_active = False
-        self.toggle_inventory = toggle_inventory
         self._TimeElapsedSinceLastFootStep = 0
         self._FootstepClock = pygame.time.Clock()
 

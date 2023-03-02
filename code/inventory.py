@@ -2,10 +2,11 @@ import pygame
 from settings import *
 
 class Inventory():
-    def __init__(self, inventory, toggle_inventory):
+    def __init__(self, inventory, money, toggle_inventory):
         self._DisplaySurface = pygame.display.get_surface()
         self.toggle_inventory = toggle_inventory
         self._inventory = inventory
+        self._money = money
         self._font = pygame.font.Font('../font/joystixmonospace.otf', 30)
 
         self._width = 400
@@ -26,6 +27,7 @@ class Inventory():
     def display(self):
         self.input()
         self.main_rect = pygame.Rect(((ScreenWidth / 2) - (self._width / 2)) , 100, self._width, 100)
+        self._inventory["money"] = self._money
 
         for i, item in enumerate(self._inventory):
             if i > 2:

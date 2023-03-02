@@ -56,7 +56,7 @@ class Level:
         self._Paused = False
         self._main_menu = True
         self._PopUPmenu = True
-        self._inventory = Inventory(self._Player._Inventory, self.toggle_inventory)
+        self._inventory = Inventory(self._Player._Inventory, self._Player.money, self.toggle_inventory)
         
         #shop
         self.merchant = Merchant(self._Player, self.toggle_merchant)
