@@ -40,7 +40,7 @@ class Level:
         self._Transition = Transition(self.reset, self._Player)
         self._Sky = Sky()
         self.rain = Rain(self._AllSprites)
-        self.raining = True  # rains if randint higher than x
+        self.raining = randint(0, 28) > 20  # rains if randint higher than x
         self._SoilLayer.raining = self.raining
         
         self._heading_font = pygame.font.Font('../font/joystixmonospace.otf', 45)
@@ -82,7 +82,8 @@ class Level:
         self._SoilLayer.dry_soil_tiles()
         if self._Location == 'farm':
             for sprite in self._AllSprites:
-                sprite.kill()
+                if sprite not in self._Player._TreeSprites:
+                    sprite.kill()
             print("Current Location: ", self._Location)
 
             # Fence
@@ -134,7 +135,8 @@ class Level:
         # Loading House
         elif self._Location == 'house':
             for sprite in self._AllSprites:
-                sprite.kill()
+                if sprite not in self._Player._TreeSprites:
+                    sprite.kill()
             self._Position = (263, 150)  # set position in-front of door when house loaded
             print("Current Location: ", self._Location)
             for x, y, surface in self.tmx_house_data.get_layer_by_name('Floor').tiles():
@@ -254,6 +256,10 @@ class Level:
             # overlay/ui
             self._Overlay.Display()
 
+            # Sleep/day reset
+            if self._Player._Sleep:
+                self._Transition.play(self._Player)
+
         # Pause Menu
         else:
 
@@ -276,9 +282,7 @@ class Level:
             self._DisplaySurface.blit(self._text_return, self._text_rect_return)
             self._DisplaySurface.blit(self._text_quit, self._text_rect_quit)
 
-            # Sleep/day reset
-        if self._Player._Sleep:
-            self._Transition.play(self._Player)
+
 
     def save(self):
         print("returning: ", self._Location)
