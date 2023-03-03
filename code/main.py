@@ -43,8 +43,8 @@ class Game:
 
     def restart(self):
         print("restarting")
-        new = json.load(open("../profiles/save1.json"))
-        with open("../profiles/new.json", "w") as f:
+        new = json.load(open("../profiles/new.json"))
+        with open("../profiles/save1.json", "w") as f:
             f.write(json.dumps(new))
 
         self._World.__init__(self)
