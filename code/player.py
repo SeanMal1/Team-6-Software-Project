@@ -82,9 +82,9 @@ class Player(pygame.sprite.Sprite):
 
         # Timing
         self.timer = {
-            'tool use' : Timer(350, self.use_tool),
+            'tool use' : Timer(150, self.use_tool),
             'tool swap' : Timer(200),
-            'seed use' : Timer(350, self.use_seed),
+            'seed use' : Timer(150, self.use_seed),
             'seed swap' : Timer(200),
             'enter shop': Timer(200),
             'enter inventory': Timer(200),
