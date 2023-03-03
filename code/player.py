@@ -351,19 +351,20 @@ class Player(pygame.sprite.Sprite):
                 _CollidedInteractionSprite = pygame.sprite.spritecollide(self, self._Interaction, False)
                 if _CollidedInteractionSprite:
                     if _CollidedInteractionSprite[0].name == 'Bed' and not self.timer['sleep fatigue']._Active:
-                        self._status = 'left'
-                        self._Sleep = True
-                        print('Interacted with bed')
-                        self.Level.reset()
+                        if self.Level._Location == 'house':
+                            self._status = 'left'
+                            self._Sleep = True
+                            print('Interacted with bed')
+                            self.Level.reset()
                     elif _CollidedInteractionSprite[0].name == 'Door_Outside':
                         self._status = 'up'
                         print("Door_Outside Triggered")
-                        # Add fade transition here
                         self.Level.load_house()
                     elif _CollidedInteractionSprite[0].name == 'Door_Inside':
-                        self._status = 'down'
-                        print("Door_Inside Triggered")
-                        self.Level.load_farm()
+                        if self.Level._Location == 'house':
+                            self._status = 'down'
+                            print("Door_Inside Triggered")
+                            self.Level.load_farm()
 
 
             #inventory

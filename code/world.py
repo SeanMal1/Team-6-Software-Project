@@ -26,6 +26,7 @@ class Level:
         self._TreeSprites = pygame.sprite.Group()
         self._AnimalSprites = pygame.sprite.Group()
         self._HouseSprites = pygame.sprite.Group()
+        self._OutsideHouseSprites = pygame.sprite.Group()
         self._CollisionSprites = pygame.sprite.Group()  # To keep track of collide-able sprites
         self._InteractionSprites = pygame.sprite.Group()
         self._SoilLayer = SoilLayer(self._AllSprites, self._CollisionSprites)
@@ -35,6 +36,7 @@ class Level:
         self._PopUpBackground = pygame.image.load('../textures/misc/main_menu.png')
         self._PopUpBackground = pygame.transform.scale(self._PopUpBackground, (640 *0.6,533*0.6))
         self.restart = restart
+        self._Level_init = True
         self.setup()
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
         self._SpriteSheetImage.set_colorkey([0, 0, 0])
@@ -81,88 +83,89 @@ class Level:
                     self._SoilLayer.grid[plant.rect.centery // TileSize][plant.rect.centerx // TileSize].remove('P')
 
     def setup(self):
-        self._SoilLayer.dry_soil_tiles()
+        if self._Level_init:
+            self._Level_init = False
+            self._SoilLayer.dry_soil_tiles()
 
-        # Fence
-        for x, y, surface in self.tmx_data.get_layer_by_name('Fence').tiles():
-            Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites])
+            # Fence
+            for x, y, surface in self.tmx_data.get_layer_by_name('Fence').tiles():
+                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites])
 
-        # Water
-        water_frames = import_folder('../data/Tilesets/water')
-        for x, y, surface in self.tmx_data.get_layer_by_name('Water').tiles():
-            Water(pos=(x * TileSize * Scale, y * TileSize * Scale), frames=water_frames, groups=self._AllSprites)
+            # Water
+            water_frames = import_folder('../data/Tilesets/water')
+            for x, y, surface in self.tmx_data.get_layer_by_name('Water').tiles():
+                Water(pos=(x * TileSize * Scale, y * TileSize * Scale), frames=water_frames, groups=self._AllSprites)
 
-        # Decoration
-        for obj in self.tmx_data.get_layer_by_name('Decoration'):
-            Decoration(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites])
+            # Decoration
+            for obj in self.tmx_data.get_layer_by_name('Decoration'):
+                Decoration(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites])
 
-        # Trees
-        for obj in self.tmx_data.get_layer_by_name('Trees'):
-            Tree(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name, playerAdd= self.PlayerAdd)
+            # Trees
+            for obj in self.tmx_data.get_layer_by_name('Trees'):
+                Tree(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name, playerAdd= self.PlayerAdd)
 
-        # Animals
-        cow_idle_frames = import_folder('../textures/animals/cow/green_cow/green_cow_idle')
-        Animal(pos=(2500, 1200), frames=cow_idle_frames, groups=[self._AnimalSprites, self._AllSprites, self._CollisionSprites])
+            # Animals
+            cow_idle_frames = import_folder('../textures/animals/cow/green_cow/green_cow_idle')
+            Animal(pos=(2500, 1200), frames=cow_idle_frames, groups=[self._AnimalSprites, self._AllSprites, self._CollisionSprites])
 
-        # House
-        for x, y, surface in self.tmx_data.get_layer_by_name('Building Floor').tiles():
-            Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites], z=LAYERS['house bottom'])
-        for x, y, surface in self.tmx_data.get_layer_by_name('Building Wall').tiles():
-            Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites], z=LAYERS['house bottom'])
-        for x, y, surface in self.tmx_data.get_layer_by_name('Building Roof').tiles():
-            Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=self._AllSprites, z=LAYERS['house top'])
 
-        # Collision Tiles, Borders
-        for x, y, surface in self.tmx_data.get_layer_by_name('Borders').tiles():
-            Border(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=pygame.Surface((TileSize * Scale, TileSize * Scale)), groups= self._CollisionSprites)
+            # Collision Tiles, Borders
+            for x, y, surface in self.tmx_data.get_layer_by_name('Borders').tiles():
+                Border(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=pygame.Surface((TileSize * Scale, TileSize * Scale)), groups= self._CollisionSprites)
 
-        for obj in self.tmx_data.get_layer_by_name('Interaction'):
-            Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height),
-                        groups=[self._InteractionSprites], name=obj.name)
+            # Ground
+            Generic(pos=(0, 0),
+                    surface = pygame.image.load('../data/Farm.png').convert_alpha(),
+                    groups=[self._AllSprites],
+                    z=LAYERS['ground'])
+            self._SoilLayer.create_soil_grid()
 
-        # Ground
-        Generic(pos=(0, 0),
-                surface = pygame.image.load('../data/Farm.png').convert_alpha(),
-                groups=self._AllSprites,
-                z=LAYERS['ground'])
-        self._Position = (2570, 1180)
-        self._SoilLayer.create_soil_grid()
-
-        # Player
-        self._Player = Player(pos=self._Position,
-                              toggle_inventory=self.toggle_inventory,
-                              group=self._AllSprites,
-                              collision_sprites=self._CollisionSprites,
-                              tree_sprites=self._TreeSprites,
-                              soil_layer=self._SoilLayer,
-                              interaction=self._InteractionSprites,
-                              toggle_merchant=self.toggle_merchant,
-                              Level=self,
-                              restart=self.restart)
-
+            # Player
+            self._Player = Player(pos=self._Position,
+                                  toggle_inventory=self.toggle_inventory,
+                                  group=self._AllSprites,
+                                  collision_sprites=self._CollisionSprites,
+                                  tree_sprites=self._TreeSprites,
+                                  soil_layer=self._SoilLayer,
+                                  interaction=self._InteractionSprites,
+                                  toggle_merchant=self.toggle_merchant,
+                                  Level=self,
+                                  restart=self.restart)
         if self._Location == 'farm':
             for sprite in self._HouseSprites:
                 sprite.kill()
             print("Current Location: ", self._Location)
+            # House
+            for x, y, surface in self.tmx_data.get_layer_by_name('Building Floor').tiles():
+                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites, self._OutsideHouseSprites], z=LAYERS['house bottom'])
+            for x, y, surface in self.tmx_data.get_layer_by_name('Building Wall').tiles():
+                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites, self._OutsideHouseSprites], z=LAYERS['house bottom'])
+            for x, y, surface in self.tmx_data.get_layer_by_name('Building Roof').tiles():
+                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._OutsideHouseSprites], z=LAYERS['house top'])
+            # Interaction
+            for obj in self.tmx_data.get_layer_by_name('Interaction'):
+                Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height), groups=[self._InteractionSprites], name=obj.name)
 
 
         # Loading House
         elif self._Location == 'house':
             print("Current Location: ", self._Location)
+            for sprite in self._OutsideHouseSprites:
+                sprite.kill()
 
             for x, y, surface in self.tmx_house_data.get_layer_by_name('Floor').tiles():
-                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._HouseSprites], z=LAYERS['ground'])
+                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._HouseSprites], z=LAYERS['soil'])
             for x, y, surface in self.tmx_house_data.get_layer_by_name('Walls').tiles():
                 Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites, self._HouseSprites])
             for obj in self.tmx_house_data.get_layer_by_name('Furniture'):
                 Generic(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites, self._HouseSprites])
-            for obj in self.tmx_house_data.get_layer_by_name('Floor Furniture'):
-                Generic(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._HouseSprites], z=LAYERS['house bottom'])
+            # for obj in self.tmx_house_data.get_layer_by_name('Floor Furniture'):
+            #     Generic(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._HouseSprites], z=LAYERS['house bottom'])
             for obj in self.tmx_house_data.get_layer_by_name('Interaction'):
                 # if obj.name == 'Trader':  # change to 'Bed', Trader just for testing
                 Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height),
-                            groups=[self._InteractionSprites, self._HouseSprites], name=obj.name)
-                # Remove _AllSprites when done debugging
+                            groups=[self._InteractionSprites], name=obj.name)
+
 
 
 
@@ -171,6 +174,7 @@ class Level:
         self._Location = 'farm'
         self._Transition.play(self._Player)
         self.setup()
+        print('HEREHRHEHRHEHRHEHR')
 
     def load_house(self):
         self._Location = 'house'

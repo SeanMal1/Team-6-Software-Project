@@ -17,11 +17,12 @@ class Generic(pygame.sprite.Sprite):
 
 
 class Interaction(Generic):
-    def __init__(self, pos, size, groups, name):
+    def __init__(self, pos, size, groups, name, z=LAYERS['main']):
         self.size = size * Scale
         surface = pygame.Surface(size)
         super().__init__(pos, surface, groups)
         self.name = name
+        self.z = z
 
 class Water(Generic):
     def __init__(self, pos, frames, groups, scale=1):
