@@ -192,8 +192,9 @@ class Level:
 
     def reset(self):  # resetting day
         # Soil
-        self._SoilLayer.dry_soil_tiles()
         self.raining = randint(0, 28) > 20  # rains if randint higher than x
+        self._SoilLayer.raining = self.raining
+        self._SoilLayer.dry_soil_tiles()
         
 
         if self._SoilLayer.raining:
