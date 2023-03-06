@@ -61,6 +61,7 @@ class Game:
         save["map"] = self._World._SoilLayer.save()
         save["location"] = self._World.save()
         save["firstTimePlaying"] = "False"
+        save["sky"] = self._World._Sky.save()
         with open("../profiles/save1.json", "w") as f:
             f.write(json.dumps(save))
 

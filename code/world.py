@@ -173,10 +173,6 @@ class Level:
                 Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height),
                             groups=[self._InteractionSprites], name=obj.name)
 
-
-
-
-
     def load_farm(self):
         self._Location = 'farm'
         self._Transition.play(self._Player)
@@ -210,11 +206,11 @@ class Level:
 
         #sky
         
-
     def run(self, DeltaTime):
         if self._main_menu:
             self._DisplayWorld.fill('black')
-            self._AllSprites.custom_draw(self._Player)
+            self._PlayerSelectBG = pygame.transform.scale(self._PlayerSelectBG, (2880,1620))
+            self._DisplaySurface.blit(self._PlayerSelectBG,(-650,-290))
             self._DisplaySurface.blit(pygame.image.load('../textures/misc/main_menu.png'), (ScreenWidth/2 - 640/2, ScreenHeight/2 - 533/2))
             self._DisplaySurface.blit(self._heading_font.render("Valley Life", False, "Black"), (ScreenWidth/2 - 390/2, ScreenHeight/2 - 55))
             self._DisplaySurface.blit(self._regular_font.render("Press Space to begin.", False, "Black"), (ScreenWidth/2 - 260/2, ScreenHeight/2 + 50))
