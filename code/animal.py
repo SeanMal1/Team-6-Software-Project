@@ -11,6 +11,9 @@ class Animal(Generic):
         self._frameIndex = 0
         self._animSpeed = 2
 
+        # Move
+        self._GoDir = "None"
+
         super().__init__(pos=pos, surface=self._frames[self._frameIndex], groups=groups, z=LAYERS['main'])
         self.scale = scale
         self.image = self._frames[self._frameIndex]
@@ -24,6 +27,42 @@ class Animal(Generic):
         if self._frameIndex >= len(self._frames):
             self._frameIndex = 0
         self.image = self._frames[int(self._frameIndex)]
+
+    def move(self, DeltaTime):
+        if self._GoDir == "up":
+            self._Direction.y = -1
+            self._animSpeed = 4
+
+        elif self._GoDir == "down":
+            self._Direction.y = 1
+            self._animSpeed = 4
+        else:
+            self._Direction.y = 0
+
+        if self._GoDir == "left":
+            self._Direction.x = -1
+            self._animSpeed = 6
+        elif self._GoDir == "right":
+            self._Direction.x = 1
+            self._animSpeed = 6
+        else:
+            self._Direction.x = 0
+
+        # normalize vector (cant speed up by walking diagonally)
+        if self._Direction.magnitude() > 0:
+            self._Direction = self._Direction.normalize()
+
+        # movement on x axis
+        self._Position.x += self._Direction.x * self._Speed * DeltaTime
+        self.hitbox.centerx = round(self._Position.x)  # rounding to prevent truncation
+        self.rect.centerx = self.hitbox.centerx
+        self.collision('horizontal')
+
+        # movement on y axis
+        self._Position.y += self._Direction.y * self._Speed * DeltaTime
+        self.hitbox.centery = round(self._Position.y)  # rounding to prevent truncation
+        self.rect.centery = self.hitbox.centery
+        self.collision('vertical')
 
     def update(self, DeltaTime):
         self.animate(DeltaTime)
