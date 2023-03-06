@@ -130,11 +130,13 @@ class Player(pygame.sprite.Sprite):
         self._hunger = self._saveFile["hunger"]
 
         self._ate = False
+        self._hitFatigue = False
+        self._runDepletionMultiplier = 1
 
         self.restart = restart
 
         
-
+    # health
     def health(self):
         if self._health >= 0 and self._health <= 100:
             if self._fatigue <= 0 and self._hunger <= 0:
@@ -164,10 +166,7 @@ class Player(pygame.sprite.Sprite):
             self._health = 0
             self.restart()
        
-        # print('health: %s' % self._health)
-        # print('hunger: %s' % self._hunger)
-        # print('fatigue: %s' % self._fatigue)
-
+    # fatigue
     def fatigue(self):
         if self._fatigue < 100:
             if self._Sleep == True and not self.timer['sleep fatigue']._Active:
@@ -179,15 +178,17 @@ class Player(pygame.sprite.Sprite):
             self._fatigue = 0
 
     def fatigued(self):
-        self._fatigue = self._fatigue - 0.002
+        self._fatigue = self._fatigue - (self._runDepletionMultiplier * 0.002)
+        if self._hitFatigue == True:
+            self._fatigue = self._fatigue -  0.1
+            self._hitFatigue = False
 
+    # eat
     def eating(self):
+        # eating will add to the hunger bar and delete a plum from inventory
         if self._hunger < 100:
             if not self.timer['eating']._Active:
                 if self._ate == True:
-                    # print('health: %s' % self._health)
-                    # print('hunger: %s' % self._hunger)
-                    # print('fatigue: %s' % self._fatigue)
                     self.timer['eating'].activate()
                     self.seed_inventory['plum'] = self.seed_inventory['plum'] -1
                     if self._hunger >= 80:
@@ -200,7 +201,7 @@ class Player(pygame.sprite.Sprite):
 
     def hunger(self):
         if not self.timer['hunger']._Active:
-            self._hunger = self._hunger - 0.01
+            self._hunger = self._hunger - (self._runDepletionMultiplier * 0.01)
             self.timer['hunger'].activate()
         if self._hunger < 0:
             self._hunger = 0
@@ -273,8 +274,10 @@ class Player(pygame.sprite.Sprite):
             if keystroke[pygame.K_LSHIFT]:
                     self._Speed = 250
                     self._animSpeed = 14
+                    self._runDepletionMultiplier = 15
             else :
                     self._Speed = 110
+                    self._runDepletionMultiplier = 1
 
             if self._Direction.magnitude() > 0:
                 footstepTiming = self._FootstepClock.tick()
@@ -298,6 +301,7 @@ class Player(pygame.sprite.Sprite):
                 self.timer['tool use'].activate()
                 self._Direction = pygame.math.Vector2()
                 self._frameIndex = 0
+                self._hitFatigue = True
 
             #change tool
             if keystroke[pygame.K_q] and not self.timer['tool swap']._Active:
@@ -588,3 +592,4 @@ class Player(pygame.sprite.Sprite):
         self._saveFile['fatigue'] = self._fatigue
         self._saveFile['health'] = self._health
         return self._saveFile
+
