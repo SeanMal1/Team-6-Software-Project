@@ -22,16 +22,16 @@ class Game:
         mixer.music.play(-1,0.0)
         self._Clock = pygame.time.Clock()
         self._World = Level(self.restart)
-        self._Player = Player(pos=self._World._Position,
-                                  toggle_inventory=self._World.toggle_inventory,
-                                  group=self._World._AllSprites,
-                                  collision_sprites=self._World._CollisionSprites,
-                                  tree_sprites=self._World._TreeSprites,
-                                  soil_layer=self._World._SoilLayer,
-                                  interaction=self._World._InteractionSprites,
-                                  toggle_merchant=self._World.toggle_merchant,
-                                  Level=self,
-                                  restart=self.restart)
+        #self._Player = Player(pos=self._World._Position,
+        #                          toggle_inventory=self._World.toggle_inventory,
+        #                          group=self._World._AllSprites,
+        #                          collision_sprites=self._World._CollisionSprites,
+        #                          tree_sprites=self._World._TreeSprites,
+        #                          soil_layer=self._World._SoilLayer,
+        #                          interaction=self._World._InteractionSprites,
+        #                          toggle_merchant=self._World.toggle_merchant,
+        #                          Level=self,
+        #                          restart=self.restart)
 
     def run(self):
         while True:
