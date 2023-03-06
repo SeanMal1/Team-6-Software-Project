@@ -63,6 +63,11 @@ class Level:
         self._PlayerSelect = False
         self._inventory = Inventory(self._Player._Inventory, self._Player.money, self.toggle_inventory)
         
+        self._PlayerImage = pygame.image.load("../textures/player/greenplayer.png")
+        self._PlayerSelectBG = pygame.image.load("../textures/misc/playerselectbg.jpg")
+        
+        
+
         #shop
         self.merchant = Merchant(self._Player, self.toggle_merchant)
         self.shop_active = False
@@ -222,7 +227,7 @@ class Level:
 
         elif not self._Paused:
             self._DisplayWorld.fill('black')
-            # self._AllSprites.draw(self._DisplayWorld)
+            self._AllSprites.draw(self._DisplayWorld)
             self._AllSprites.custom_draw(self._Player)
             self._Sky.display(DeltaTime)
             if self._saveFile["firstTimePlaying"] == "True":
@@ -319,30 +324,37 @@ class Level:
 
             if self._text_rect_green.collidepoint(pygame.mouse.get_pos()):
                 self._text_green = self._heading_font.render('Green' , True , self._text_color, self._button_hover_color)
+                self._PlayerImage = pygame.image.load("../textures/player/greenplayer.png")
             else:
                 self._text_green = self._heading_font.render('Green' , True , self._text_color, self._button_color)
             if self._text_rect_blue.collidepoint(pygame.mouse.get_pos()):
                 self._text_blue = self._heading_font.render('Blue' , True , self._text_color, self._button_hover_color)
+                self._PlayerImage = pygame.image.load("../textures/player/blueplayer.png")
             else:
                 self._text_blue = self._heading_font.render('Blue' , True , self._text_color, self._button_color)
             if self._text_rect_red.collidepoint(pygame.mouse.get_pos()):
                 self._text_red = self._heading_font.render('Red' , True , self._text_color, self._button_hover_color)
+                self._PlayerImage = pygame.image.load("../textures/player/redplayer.png")
             else:
                 self._text_red = self._heading_font.render('Red' , True , self._text_color, self._button_color)
             if self._text_rect_purple.collidepoint(pygame.mouse.get_pos()):
                 self._text_purple = self._heading_font.render('Purple' , True , self._text_color, self._button_hover_color)
+                self._PlayerImage = pygame.image.load("../textures/player/purpleplayer.png")
             else:
                 self._text_purple = self._heading_font.render('Purple' , True , self._text_color, self._button_color)
             if self._text_rect_pink.collidepoint(pygame.mouse.get_pos()):
                 self._text_pink = self._heading_font.render('Pink' , True , self._text_color, self._button_hover_color)
+                self._PlayerImage = pygame.image.load("../textures/player/pinkplayer.png")
             else:
                 self._text_pink = self._heading_font.render('Pink' , True , self._text_color, self._button_color)
             if self._text_rect_orange.collidepoint(pygame.mouse.get_pos()):
                 self._text_orange = self._heading_font.render('Orange' , True , self._text_color, self._button_hover_color)
+                self._PlayerImage = pygame.image.load("../textures/player/orangeplayer.png")
             else:
                 self._text_orange = self._heading_font.render('Orange' , True , self._text_color, self._button_color)
             if self._text_rect_grey.collidepoint(pygame.mouse.get_pos()):
                 self._text_grey = self._heading_font.render('Grey' , True , self._text_color, self._button_hover_color)
+                self._PlayerImage = pygame.image.load("../textures/player/greyplayer.png")
             else:
                 self._text_grey = self._heading_font.render('Grey' , True , self._text_color, self._button_color)
 
@@ -353,6 +365,8 @@ class Level:
             self._DisplaySurface.blit(self._text_player_select, self._text_rect_player_select)
             if self._PlayerSelect == True:
                 self._DisplaySurface.fill("black")
+                self._PlayerSelectBG = pygame.transform.scale(self._PlayerSelectBG, (2880,1620))
+                self._DisplaySurface.blit(self._PlayerSelectBG,(-650,-290))
                 self._DisplaySurface.blit(self._text_green, self._text_rect_green)
                 self._DisplaySurface.blit(self._text_blue, self._text_rect_blue)
                 self._DisplaySurface.blit(self._text_red, self._text_rect_red)
@@ -360,6 +374,51 @@ class Level:
                 self._DisplaySurface.blit(self._text_pink, self._text_rect_pink)
                 self._DisplaySurface.blit(self._text_orange, self._text_rect_orange)
                 self._DisplaySurface.blit(self._text_grey, self._text_rect_grey)
+                self._PlayerImage = pygame.transform.scale(self._PlayerImage, (140,180))
+                self._PlayerImage.set_colorkey((0,0,255))
+                self._DisplaySurface.blit(self._PlayerImage, (ScreenWidth/2 + 100, ScreenHeight/2 - 100))
+                for event in pygame.event.get():
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            self._Paused = not self._Paused
+                    if event.type == pygame.MOUSEBUTTONDOWN and self._Paused:
+                        if self._text_rect_player_select.collidepoint(pygame.mouse.get_pos()):
+                            self._PlayerSelect = True
+                        if self._text_rect_green.collidepoint(pygame.mouse.get_pos()):
+                            self._Player._SelectedPlayerColour = ""
+                            self._Player._SelectedSpriteSheet = "../textures/player/playerblue.png"
+                            self._Paused = not self._Paused
+                            self._PlayerSelect = False
+                        if self._text_rect_blue.collidepoint(pygame.mouse.get_pos()):
+                            self._Player._SelectedPlayerColour = "blue"
+                            self._Player._SelectedSpriteSheet = "../textures/player/playerlightblue.png"
+                            self._Paused = not self._Paused#
+                            self._PlayerSelect = False
+                        if self._text_rect_red.collidepoint(pygame.mouse.get_pos()):
+                            self._Player._SelectedPlayerColour = "red"
+                            self._Player._SelectedSpriteSheet = "../textures/player/playerred.png"
+                            self._Paused = not self._Paused
+                            self._PlayerSelect = False
+                        if self._text_rect_purple.collidepoint(pygame.mouse.get_pos()):
+                            self._Player._SelectedPlayerColour = "purple"
+                            self._Player._SelectedSpriteSheet = "../textures/player/playerpurple.png"
+                            self._Paused = not self._Paused
+                            self._PlayerSelect = False
+                        if self._text_rect_pink.collidepoint(pygame.mouse.get_pos()):
+                            self._Player._SelectedPlayerColour = "pink"
+                            self._Player._SelectedSpriteSheet = "../textures/player/playerpink.png"
+                            self._Paused = not self._Paused
+                            self._PlayerSelect = False
+                        if self._text_rect_orange.collidepoint(pygame.mouse.get_pos()):
+                            self._Player._SelectedPlayerColour = "orange"
+                            self._Player._SelectedSpriteSheet = "../textures/player/playerorange.png"
+                            self._Paused = not self._Paused
+                            self._PlayerSelect = False
+                        if self._text_rect_grey.collidepoint(pygame.mouse.get_pos()):
+                            self._Player._SelectedPlayerColour = "grey"
+                            self._Player._SelectedSpriteSheet = "../textures/player/playergrey.png"
+                            self._Paused = not self._Paused
+                            self._PlayerSelect = False
             
 
     def save(self):
