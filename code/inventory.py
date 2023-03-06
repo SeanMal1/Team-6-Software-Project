@@ -28,9 +28,14 @@ class Inventory():
         self.input()
         self.main_rect = pygame.Rect(((ScreenWidth / 2) - (self._width / 2)) , 100, self._width, 100)
         self._inventory["money"] = self._money
+        text_surf = self._font.render(f'${self._money}', False, 'Black')
+        text_rect = text_surf.get_rect(midbottom = (ScreenWidth / 2, ScreenHeight - 20))
+
+        pygame.draw.rect(self._DisplaySurface, 'White', text_rect.inflate(10,10))
+        self._DisplaySurface.blit(text_surf, text_rect)
 
         for i, item in enumerate(self._inventory):
-            if i > 2:
+            if i > 2 and i < (len(self._inventory) - 1):
                 text_surf = self._font.render(item, False, 'Black')
                 top = self.main_rect.top + i * (text_surf.get_height() + (self._padding * 2) + self._space)
 
