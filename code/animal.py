@@ -1,5 +1,7 @@
 from sprites import *
 from settings import *
+from random import randint
+from timer import Timer
 
 
 class Animal(Generic):
@@ -11,8 +13,10 @@ class Animal(Generic):
         self._frameIndex = 0
         self._animSpeed = 2
 
-        # Move
-        self._GoDir = "None"
+        self.timer = {
+            'animal walk': Timer(3000)
+        }
+
 
         super().__init__(pos=pos, surface=self._frames[self._frameIndex], groups=groups, z=LAYERS['main'])
         self.scale = scale
@@ -22,11 +26,30 @@ class Animal(Generic):
         self.image = pygame.transform.scale(self._frames[self._frameIndex], (self.image.get_width() * scale, self.image.get_height() * scale))
         self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.15, -self.rect.height * 0.25)
 
+        # Move
+        self._GoDir = "None"
+        self._Direction = pygame.math.Vector2()
+        self._Position = pygame.math.Vector2(self.rect.center)
+        self._Speed = 110
+
     def animate(self, Deltatime):
         self._frameIndex += self._animSpeed * Deltatime
         if self._frameIndex >= len(self._frames):
             self._frameIndex = 0
         self.image = self._frames[int(self._frameIndex)]
+
+    def make_move(self):
+        self._ChooseDir = randint(0, 50)
+        if self._ChooseDir == 0:
+            self._GoDir = "up"
+        elif self._ChooseDir == 1:
+            self._GoDir = "down"
+        elif self._ChooseDir == 2:
+            self._GoDir = "left"
+        elif self._ChooseDir == 3:
+            self._GoDir = "right"
+        else:
+            self._GoDir = "None"
 
     def move(self, DeltaTime):
         if self._GoDir == "up":
@@ -56,13 +79,13 @@ class Animal(Generic):
         self._Position.x += self._Direction.x * self._Speed * DeltaTime
         self.hitbox.centerx = round(self._Position.x)  # rounding to prevent truncation
         self.rect.centerx = self.hitbox.centerx
-        self.collision('horizontal')
 
         # movement on y axis
         self._Position.y += self._Direction.y * self._Speed * DeltaTime
         self.hitbox.centery = round(self._Position.y)  # rounding to prevent truncation
         self.rect.centery = self.hitbox.centery
-        self.collision('vertical')
 
     def update(self, DeltaTime):
         self.animate(DeltaTime)
+        self.make_move()
+        self.move(DeltaTime)
