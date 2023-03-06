@@ -198,7 +198,7 @@ class Level:
         # Soil
         self._SoilLayer.dry_soil_tiles()
         self.raining = randint(0, 28) > 20  # rains if randint higher than x
-        self._Sky._DayColour = [255,255,255]
+        
 
         if self._SoilLayer.raining:
             self._SoilLayer.water_all()
@@ -230,6 +230,11 @@ class Level:
             self._AllSprites.draw(self._DisplayWorld)
             self._AllSprites.custom_draw(self._Player)
             self._Sky.display(DeltaTime)
+            
+            #day light reset for sleep
+            if self._Transition._Colour <= 0:
+                self._Sky._DayColour = [255,255,255]
+
             if self._saveFile["firstTimePlaying"] == "True":
                 if self._PopUPmenu:
                     self._DisplaySurface.blit(self._PopUpBackground, (ScreenWidth - 460, ScreenHeight -700))
