@@ -319,6 +319,8 @@ class Player(pygame.sprite.Sprite):
                 if self.seed_inventory['plum'] > 0 and not self.timer['eating']._Active:
                     self._ate = True
                     print('eating')
+                    EatSound = mixer.Sound("../audio/eat.wav")
+                    EatSound.play()
 
             #decrease test
             if keystroke[pygame.K_o]:
