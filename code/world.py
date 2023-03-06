@@ -22,6 +22,7 @@ class Level:
         # self._Player = None  Commented out in testing Sleep function
         self._DisplaySurface = pygame.display.get_surface()
         self._DisplayWorld = pygame.display.get_surface()
+        self._mask = pygame.Surface((180,100),pygame.SRCALPHA)
         self._AllSprites = CameraGroup()
         self._TreeSprites = pygame.sprite.Group()
         self._AnimalSprites = pygame.sprite.Group()
@@ -59,6 +60,7 @@ class Level:
         self._Paused = False
         self._main_menu = True
         self._PopUPmenu = True
+        self._PlayerSelect = False
         self._inventory = Inventory(self._Player._Inventory, self._Player.money, self.toggle_inventory)
         
         #shop
@@ -278,6 +280,23 @@ class Level:
             self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_color)
             self._text_rect_quit = self._text_quit.get_rect(center=(ScreenWidth/2, ScreenHeight/2 + 120))
 
+            self._text_player_select = self._heading_font.render('Player Select', True, self._text_color,self._button_color)
+            self._text_rect_player_select = self._text_player_select.get_rect(center=(ScreenWidth/2, ScreenHeight/2 + 240))
+            self._text_green = self._heading_font.render('Green' , True , self._text_color, self._button_color)
+            self._text_rect_green = self._text_green.get_rect(center=(ScreenWidth/4, ScreenHeight/6))
+            self._text_blue = self._heading_font.render('Blue' , True , self._text_color, self._button_color)
+            self._text_rect_blue = self._text_blue.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + 90))
+            self._text_red = self._heading_font.render('Red' , True , self._text_color, self._button_color)
+            self._text_rect_red = self._text_red.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + (180)))
+            self._text_purple = self._heading_font.render('Purple' , True , self._text_color, self._button_color)
+            self._text_rect_purple = self._text_purple.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + (270)))
+            self._text_pink = self._heading_font.render('Pink' , True , self._text_color, self._button_color)
+            self._text_rect_pink = self._text_pink.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + (360)))
+            self._text_orange = self._heading_font.render('Orange' , True , self._text_color, self._button_color)
+            self._text_rect_orange = self._text_orange.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + (450)))
+            self._text_grey = self._heading_font.render('Grey' , True , self._text_color, self._button_color)
+            self._text_rect_grey = self._text_grey.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + (540)))
+
             if self._text_rect_quit.collidepoint(pygame.mouse.get_pos()):
                 self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_hover_color)
             else:
@@ -293,11 +312,55 @@ class Level:
             else:
                 self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_color)
 
+            if self._text_rect_player_select.collidepoint(pygame.mouse.get_pos()):
+                self._text_player_select = self._heading_font.render('Player Select', True, self._text_color, self._button_hover_color)
+            else:
+                self._text_player_select = self._heading_font.render('Player Select', True, self._text_color, self._button_color)
+
+            if self._text_rect_green.collidepoint(pygame.mouse.get_pos()):
+                self._text_green = self._heading_font.render('Green' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_green = self._heading_font.render('Green' , True , self._text_color, self._button_color)
+            if self._text_rect_blue.collidepoint(pygame.mouse.get_pos()):
+                self._text_blue = self._heading_font.render('Blue' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_blue = self._heading_font.render('Blue' , True , self._text_color, self._button_color)
+            if self._text_rect_red.collidepoint(pygame.mouse.get_pos()):
+                self._text_red = self._heading_font.render('Red' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_red = self._heading_font.render('Red' , True , self._text_color, self._button_color)
+            if self._text_rect_purple.collidepoint(pygame.mouse.get_pos()):
+                self._text_purple = self._heading_font.render('Purple' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_purple = self._heading_font.render('Purple' , True , self._text_color, self._button_color)
+            if self._text_rect_pink.collidepoint(pygame.mouse.get_pos()):
+                self._text_pink = self._heading_font.render('Pink' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_pink = self._heading_font.render('Pink' , True , self._text_color, self._button_color)
+            if self._text_rect_orange.collidepoint(pygame.mouse.get_pos()):
+                self._text_orange = self._heading_font.render('Orange' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_orange = self._heading_font.render('Orange' , True , self._text_color, self._button_color)
+            if self._text_rect_grey.collidepoint(pygame.mouse.get_pos()):
+                self._text_grey = self._heading_font.render('Grey' , True , self._text_color, self._button_hover_color)
+            else:
+                self._text_grey = self._heading_font.render('Grey' , True , self._text_color, self._button_color)
+
+
             self._DisplaySurface.blit(self._text_return, self._text_rect_return)
             self._DisplaySurface.blit(self._text_new, self._text_rect_new)
             self._DisplaySurface.blit(self._text_quit, self._text_rect_quit)
-
-
+            self._DisplaySurface.blit(self._text_player_select, self._text_rect_player_select)
+            if self._PlayerSelect == True:
+                self._DisplaySurface.fill("black")
+                self._DisplaySurface.blit(self._text_green, self._text_rect_green)
+                self._DisplaySurface.blit(self._text_blue, self._text_rect_blue)
+                self._DisplaySurface.blit(self._text_red, self._text_rect_red)
+                self._DisplaySurface.blit(self._text_purple, self._text_rect_purple)
+                self._DisplaySurface.blit(self._text_pink, self._text_rect_pink)
+                self._DisplaySurface.blit(self._text_orange, self._text_rect_orange)
+                self._DisplaySurface.blit(self._text_grey, self._text_rect_grey)
+            
 
     def save(self):
         print("returning: ", self._Location)
