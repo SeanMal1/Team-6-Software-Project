@@ -113,7 +113,13 @@ class Level:
 
             # Animals
             cow_idle_frames = import_folder('../textures/animals/cow/green_cow/green_cow_idle')
-            Animal(pos=(2500, 1200), frames=cow_idle_frames, groups=[self._AnimalSprites, self._AllSprites, self._CollisionSprites])
+            cow_walk_frames = import_folder('../textures/animals/cow/green_cow/green_cow_walk')
+            # if Animal._Direction < 0:
+            #     cow_frames = cow_idle_frames
+            # else:
+            #     cow_frames = cow_walk_frames
+            cow_frames = cow_idle_frames  # REMOVE
+            Animal(pos=(2500, 1200), frames=cow_frames, groups=[self._AnimalSprites, self._AllSprites, self._CollisionSprites])
 
 
             # Collision Tiles, Borders
@@ -228,7 +234,7 @@ class Level:
             self._AllSprites.custom_draw(self._Player)
             self._Sky.display(DeltaTime)
             
-            #day light reset for sleep
+            # daylight reset for sleep
             if self._Transition._Colour <= 0:
                 self._Sky._DayColour = [255,255,255]
 

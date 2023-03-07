@@ -5,7 +5,7 @@ from timer import Timer
 
 
 class Animal(Generic):
-    # TODO:Add movement, interaction(milk(bucket can be purchased)), mooing, spawning in multiple
+    # TODO:Add interaction(milk(bucket can be purchased)), mooing, spawning in multiple
     def __init__(self, pos, frames, groups, scale=Scale):
 
         # Animate
@@ -16,7 +16,6 @@ class Animal(Generic):
         self.timer = {
             'animal walk': Timer(3000)
         }
-
 
         super().__init__(pos=pos, surface=self._frames[self._frameIndex], groups=groups, z=LAYERS['main'])
         self.scale = scale
@@ -79,7 +78,6 @@ class Animal(Generic):
             else:
                 self._Direction.x = 0
                 self._Distance = randint(10, 50)
-
 
         print(self._Distance)
         # normalize vector (cant speed up by walking diagonally)
