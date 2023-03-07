@@ -24,7 +24,6 @@ class Animal(Generic):
         # hitbox dramatically smaller on vertical because of overlap of player and sprites
         self.image = pygame.transform.scale(self._frames[self._frameIndex], (self.image.get_width() * scale, self.image.get_height() * scale))
         self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.15, -self.rect.height * 0.25)
-
         self.collision_sprites = collision_sprites
 
         # Move

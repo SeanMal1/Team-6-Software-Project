@@ -140,11 +140,13 @@ class Level:
                                   group=self._AllSprites,
                                   collision_sprites=self._CollisionSprites,
                                   tree_sprites=self._TreeSprites,
+                                  animal_sprites=self._AnimalSprites,
                                   soil_layer=self._SoilLayer,
                                   interaction=self._InteractionSprites,
                                   toggle_merchant=self.toggle_merchant,
                                   Level=self,
                                   restart=self.restart)
+
         if self._Location == 'farm':
             for sprite in self._HouseSprites:
                 sprite.kill()

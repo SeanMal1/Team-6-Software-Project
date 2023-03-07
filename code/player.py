@@ -9,7 +9,7 @@ from pygame import mixer
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer, interaction, Level, toggle_merchant, restart):
+    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, animal_sprites,  soil_layer, interaction, Level, toggle_merchant, restart):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
         mixer.init()
@@ -72,6 +72,7 @@ class Player(pygame.sprite.Sprite):
 
         # collision attribute
         self.collision_sprites = collision_sprites
+        self.animal_sprites = animal_sprites
         self.hitbox = self.rect.copy().inflate((-20, -40))  # shrink hitbox to player size from sheet size
 
         # moving attribute
@@ -514,6 +515,25 @@ class Player(pygame.sprite.Sprite):
                             self.hitbox.top = sprite.hitbox.bottom
                         self.rect.centery = self.hitbox.centery
                         self._Position.y = self.hitbox.centery
+
+        for sprite in self.animal_sprites.sprites():
+            if hasattr(sprite, 'hitbox'):  # Checks if sprite has collision
+                if sprite.hitbox.colliderect(self.hitbox):  # Checks if there is a collision
+                    if _Direction == 'horizontal':
+                        if self._Direction.x > 0:  # player moving to the right
+                            self.hitbox.right = sprite.hitbox.left
+                        if self._Direction.x < 0:  # player moving to the left
+                            self.hitbox.left = sprite.hitbox.right
+                        self.rect.centerx = self.hitbox.centerx
+                        self._Position.x = self.hitbox.centerx
+                    if _Direction == 'vertical':
+                        if self._Direction.y > 0:  # player moving down
+                            self.hitbox.bottom = sprite.hitbox.top
+                        if self._Direction.y < 0:  # player moving up
+                            self.hitbox.top = sprite.hitbox.bottom
+                        self.rect.centery = self.hitbox.centery
+                        self._Position.y = self.hitbox.centery
+
 
     def move(self,DeltaTime):
         #normalize vector (cant speed up by holding w and a or w and d and so on)
