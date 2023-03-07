@@ -6,7 +6,7 @@ from timer import Timer
 
 class Animal(Generic):
     # TODO:Add interaction(milk(bucket can be purchased)), mooing, spawning in multiple
-    def __init__(self, pos, frames, groups, scale=Scale):
+    def __init__(self, pos, frames, groups, collision_sprites, scale=Scale):
 
         # Animate
         self._frames = frames
@@ -25,6 +25,8 @@ class Animal(Generic):
         self.image = pygame.transform.scale(self._frames[self._frameIndex], (self.image.get_width() * scale, self.image.get_height() * scale))
         self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.15, -self.rect.height * 0.25)
 
+        self.collision_sprites = collision_sprites
+
         # Move
         self._GoDir = "None"
         self._Direction = pygame.math.Vector2()
@@ -39,8 +41,8 @@ class Animal(Generic):
         self.image = self._frames[int(self._frameIndex)]
 
     def make_move(self):
-        print('10: ', self._Distance)
-        self._ChooseDir = randint(0, 20)
+        print('choose: ', self._Distance)
+        self._ChooseDir = randint(0, 3)
         if self._ChooseDir == 0:
             self._GoDir = "up"
         elif self._ChooseDir == 1:
@@ -54,6 +56,7 @@ class Animal(Generic):
 
     def move(self, DeltaTime):
         if self._Distance == 0:
+            self.make_move()
             if self._GoDir == "up":
                 print('cow up')
                 self._Direction.y = -1
@@ -79,24 +82,45 @@ class Animal(Generic):
                 self._Direction.x = 0
                 self._Distance = randint(10, 50)
 
-        print(self._Distance)
-        # normalize vector (cant speed up by walking diagonally)
-        if self._Direction.magnitude() > 0:
-            self._Direction = self._Direction.normalize()
+        if self._Distance != 0:
+            print(self._Distance)
+            # normalize vector (cant speed up by walking diagonally)
+            if self._Direction.magnitude() > 0:
+                self._Direction = self._Direction.normalize()
 
-        # movement on x axis
-        self._Position.x += self._Direction.x * self._Speed * DeltaTime
-        self.hitbox.centerx = round(self._Position.x)  # rounding to prevent truncation
-        self.rect.centerx = self.hitbox.centerx
+            # movement on x axis
+            self._Position.x += self._Direction.x * self._Speed * DeltaTime
+            self.hitbox.centerx = round(self._Position.x)  # rounding to prevent truncation
+            self.rect.centerx = self.hitbox.centerx
+            self.collision('horizontal')
 
-        # movement on y axis
-        self._Position.y += self._Direction.y * self._Speed * DeltaTime
-        self.hitbox.centery = round(self._Position.y)  # rounding to prevent truncation
-        self.rect.centery = self.hitbox.centery
+            # movement on y axis
+            self._Position.y += self._Direction.y * self._Speed * DeltaTime
+            self.hitbox.centery = round(self._Position.y)  # rounding to prevent truncation
+            self.rect.centery = self.hitbox.centery
+            self.collision('vertical')
 
-        self._Distance -= 1
+            self._Distance -= 1
+
+    def collision(self, _Direction):
+        for sprite in self.collision_sprites.sprites():
+            if hasattr(sprite, 'hitbox'):  # Checks if sprite has collision
+                if sprite.hitbox.colliderect(self.hitbox):  # Checks if there is a collision
+                    if _Direction == 'horizontal':
+                        if self._Direction.x > 0:  # player moving to the right
+                            self.hitbox.right = sprite.hitbox.left
+                        if self._Direction.x < 0:  # player moving to the left
+                            self.hitbox.left = sprite.hitbox.right
+                        self.rect.centerx = self.hitbox.centerx
+                        self._Position.x = self.hitbox.centerx
+                    if _Direction == 'vertical':
+                        if self._Direction.y > 0:  # player moving down
+                            self.hitbox.bottom = sprite.hitbox.top
+                        if self._Direction.y < 0:  # player moving up
+                            self.hitbox.top = sprite.hitbox.bottom
+                        self.rect.centery = self.hitbox.centery
+                        self._Position.y = self.hitbox.centery
 
     def update(self, DeltaTime):
         self.animate(DeltaTime)
-        self.make_move()
         self.move(DeltaTime)

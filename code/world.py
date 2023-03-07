@@ -120,7 +120,7 @@ class Level:
             # else:
             #     cow_frames = cow_walk_frames
             cow_frames = cow_idle_frames  # REMOVE
-            Animal(pos=(2500, 1200), frames=cow_frames, groups=[self._AnimalSprites, self._AllSprites, self._CollisionSprites])
+            Animal(pos=(2500, 1200), frames=cow_frames, groups=[self._AnimalSprites, self._AllSprites], collision_sprites=self._CollisionSprites)
 
 
             # Collision Tiles, Borders
