@@ -87,7 +87,8 @@ class Level:
                         self._AllSprites,
                         LAYERS['main']
                         )
-                    self._SoilLayer.grid[plant.rect.centery // TileSize][plant.rect.centerx // TileSize].remove('P')
+                    self._SoilLayer.grid[plant.rect.centery // (TileSize * Scale)][plant.rect.centerx // (TileSize * Scale)].remove("P")
+                    
 
     def setup(self):
         if self._Level_init:
