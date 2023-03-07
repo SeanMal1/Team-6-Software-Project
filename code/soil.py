@@ -29,7 +29,7 @@ class Plant(pygame.sprite.Sprite):
         self._CheckWatered = checkWatered
         self._PlantAge = 0
         self._MaxPlantAge = len(self._Frames) - 1
-        self._PlantGrowthSpeed = PlantGrowthSpeed
+        self._PlantGrowthSpeed = PlantGrowthSpeed[self._PlantType]
         self._PlantGrown = False
 
         self.image = self._Frames[self._PlantAge]
@@ -40,7 +40,7 @@ class Plant(pygame.sprite.Sprite):
     
     def grow(self):
         if self._CheckWatered(self.rect.center):
-            self.age += self._PlantGrowthSpeed
+            self._PlantAge += self._PlantGrowthSpeed
 
             if int(self._PlantAge) > 0:
                 self.z = LAYERS['main']
@@ -134,7 +134,7 @@ class SoilLayer:
                             cell.remove('W')
 
     def CheckWatered(self,pos):
-        x, y = pos[0].rect.x // (TileSize * Scale), pos[1].rect.y // (TileSize * Scale)
+        x, y = pos[0] // (TileSize * Scale), pos[1] // (TileSize * Scale)
         cell = self.grid[y][x]
         isWatered = 'W' in cell
         return isWatered

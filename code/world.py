@@ -85,7 +85,7 @@ class Level:
                         plant.rect.topleft,
                         plant.image,
                         self._AllSprites,
-                        LAYERS=['main']
+                        LAYERS['main']
                         )
                     self._SoilLayer.grid[plant.rect.centery // TileSize][plant.rect.centerx // TileSize].remove('P')
 
@@ -198,6 +198,7 @@ class Level:
 
     def reset(self):  # resetting day
         # Soil
+        self._SoilLayer.updatePlants()
         self.raining = randint(0, 28) > 20  # rains if randint higher than x
         self._SoilLayer.raining = self.raining
         self._SoilLayer.dry_soil_tiles()
