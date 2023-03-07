@@ -26,7 +26,6 @@ class Game:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.save()
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
