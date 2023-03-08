@@ -29,7 +29,7 @@ class Overlay:
         self._DisplaySurface.blit(self._font.render("Health: ", False, "Black"), (25, 25))
         pygame.draw.rect(self._DisplaySurface, (0, 255, 0), pygame.Rect(150, 27, self._Player._health * 2, 12))
 
-        self._DisplaySurface.blit(self._font.render("Fatigue: ", False, "Black"), (25, 45))
+        self._DisplaySurface.blit(self._font.render("Energy: ", False, "Black"), (25, 45))
         pygame.draw.rect(self._DisplaySurface, (0, 232, 252), pygame.Rect(150, 47, self._Player._fatigue * 2, 12))
 
         self._DisplaySurface.blit(self._font.render("Hunger: ", False, "Black"), (25, 65))
