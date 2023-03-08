@@ -597,7 +597,7 @@
  </objectgroup>
  <objectgroup id="18" name="Interaction">
   <object id="1333" name="Trader" x="480" y="240" width="80" height="48"/>
-  <object id="1337" name="Door_Outside" x="848.182" y="360.182" width="16" height="16"/>
+  <object id="1337" name="Door_Outside" x="847.932" y="355.932" width="16" height="16"/>
  </objectgroup>
  <layer id="10" name="Building Roof" width="80" height="60">
   <data encoding="csv">
