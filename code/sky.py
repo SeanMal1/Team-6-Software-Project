@@ -56,8 +56,8 @@ class Drop(pygame.sprite.Sprite):
 class Rain:
     def __init__(self, _AllSprites):
         self._AllSprites = _AllSprites
-        self._RainDrops = import_folder_unscaled('../textures/rain/drops')
-        self._RainSplash = import_folder_unscaled('../textures/rain/floor')
+        self._RainDrops = import_folder('../textures/rain/drops')
+        self._RainSplash = import_folder('../textures/rain/floor')
         self._FloorWidth, self._FloorHeight = pygame.image.load('../data/Farm.png').get_size()
         self._FloorWidth = self._FloorWidth * Scale
         self._FloorHeight = self._FloorHeight * Scale
