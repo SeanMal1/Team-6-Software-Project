@@ -1,3 +1,5 @@
+import math
+
 from setuptools import setup
 import pygame
 import json
@@ -38,6 +40,9 @@ class Level:
         self._PopUpBackground = pygame.transform.scale(self._PopUpBackground, (640 *0.6,533*0.6))
         self.restart = restart
         self._Level_init = True
+        self._AnimalList = []
+        self.cow_walk_frames = import_folder('../textures/animals/cow/green_cow/green_cow_walk')
+        self.cow_idle_frames = import_folder('../textures/animals/cow/green_cow/green_cow_idle')
         self.setup()
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
         self._SpriteSheetImage.set_colorkey([0, 0, 0])
@@ -113,14 +118,7 @@ class Level:
                 Tree(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name, playerAdd= self.PlayerAdd)
 
             # Animals
-            cow_idle_frames = import_folder('../textures/animals/cow/green_cow/green_cow_idle')
-            cow_walk_frames = import_folder('../textures/animals/cow/green_cow/green_cow_walk')
-            # if Animal._Direction < 0:
-            #     cow_frames = cow_idle_frames
-            # else:
-            #     cow_frames = cow_walk_frames
-            cow_frames = cow_idle_frames  # REMOVE
-            Animal(pos=(2500, 1200), frames=cow_frames, groups=[self._AnimalSprites, self._AllSprites], collision_sprites=self._CollisionSprites)
+            self._AnimalList.append(Animal(pos=(2500, 1200), frames=self.cow_idle_frames, groups=[self._AnimalSprites, self._AllSprites], collision_sprites=self._CollisionSprites))
 
 
             # Collision Tiles, Borders
@@ -284,6 +282,13 @@ class Level:
             # Sleep/day reset
             if self._Player._Sleep:
                 self._Transition.play(self._Player)
+
+            # Animals
+            for animal in self._AnimalList:
+                if animal._GoDir == "None":
+                    animal.image = self.cow_idle_frames[math.trunc(animal._frameIndex)]
+                else:
+                    animal.image = self.cow_walk_frames[math.trunc(animal._frameIndex)]
 
         # Pause Menu
         else:

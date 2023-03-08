@@ -11,7 +11,7 @@ class Animal(Generic):
         # Animate
         self._frames = frames
         self._frameIndex = 0
-        self._animSpeed = 2
+        self._animSpeed = 4
 
         self.timer = {
             'animal walk': Timer(3000)
@@ -41,7 +41,7 @@ class Animal(Generic):
 
     def make_move(self):
         print('choose: ', self._Distance)
-        self._ChooseDir = randint(0, 3)
+        self._ChooseDir = randint(0, 6)
         if self._ChooseDir == 0:
             self._GoDir = "up"
         elif self._ChooseDir == 1:
@@ -56,6 +56,7 @@ class Animal(Generic):
     def move(self, DeltaTime):
         if self._Distance == 0:
             self.make_move()
+            # x
             if self._GoDir == "up":
                 print('cow up')
                 self._Direction.y = -1
@@ -69,6 +70,7 @@ class Animal(Generic):
                 self._Direction.y = 0
                 self._Distance = randint(10, 50)
 
+            # y
             if self._GoDir == "left":
                 print('cow left')
                 self._Direction.x = -1

@@ -16,6 +16,8 @@ class Generic(pygame.sprite.Sprite):
         self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.15, -self.rect.height * 0.25)
 
 
+
+
 class Interaction(Generic):
     def __init__(self, pos, size, groups, name, z=LAYERS['main']):
         self.size = size * Scale
