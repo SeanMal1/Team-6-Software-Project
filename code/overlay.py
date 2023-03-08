@@ -14,7 +14,7 @@ class Overlay:
         self._SeedsOverlay = {seed: pygame.image.load(f'{OverlayPath}{seed}.png').convert_alpha() for seed in player._Seeds}
 
     def display_tools(self):
-        pygame.draw.rect(self._DisplaySurface, (255, 255, 255, 0), pygame.Rect(5, ScreenHeight-80, 200, 70), border_radius=20)
+        pygame.draw.rect(self._DisplaySurface, (255, 255, 255, 0), pygame.Rect(5, ScreenHeight-80, 260, 70), border_radius=20)
         
         for (i, tool) in enumerate(self._Player._Tools):
             self._DisplaySurface.blit(pygame.transform.scale(self._ToolsOverlay[tool], (48, 48)), (20 + 60*i, ScreenHeight-70))
