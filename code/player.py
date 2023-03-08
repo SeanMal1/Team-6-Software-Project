@@ -395,9 +395,10 @@ class Player(pygame.sprite.Sprite):
                             print('Interacted with bed')
                             self.Level.reset()
                     elif _CollidedInteractionSprite[0].name == 'Door_Outside':
-                        self._status = 'up'
-                        print("Door_Outside Triggered")
-                        self.Level.load_house()
+                        if self.Level._Location == 'farm':
+                            self._status = 'up'
+                            print("Door_Outside Triggered")
+                            self.Level.load_house()
                     elif _CollidedInteractionSprite[0].name == 'Door_Inside':
                         if self.Level._Location == 'house':
                             self._status = 'down'
