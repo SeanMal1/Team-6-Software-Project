@@ -118,7 +118,26 @@ class Level:
                 Tree(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name, playerAdd= self.PlayerAdd)
 
             # Animals
-            self._AnimalList.append(Animal(pos=(2500, 1200), frames=self.cow_idle_frames, groups=[self._AnimalSprites, self._AllSprites], collision_sprites=self._CollisionSprites))
+            self._AnimalList.append(
+                Animal(pos=(2500, 1200),
+                       frames=self.cow_idle_frames,
+                       groups=[self._AnimalSprites, self._AllSprites],
+                       collision_sprites=self._CollisionSprites))
+            self._AnimalList.append(
+                Animal(pos=(2300, 1100),
+                       frames=self.cow_idle_frames,
+                       groups=[self._AnimalSprites, self._AllSprites],
+                       collision_sprites=self._CollisionSprites))
+            self._AnimalList.append(
+                Animal(pos=(2700, 1400),
+                       frames=self.cow_idle_frames,
+                       groups=[self._AnimalSprites, self._AllSprites],
+                       collision_sprites=self._CollisionSprites))
+            self._AnimalList.append(
+                Animal(pos=(2000, 1800),
+                       frames=self.cow_idle_frames,
+                       groups=[self._AnimalSprites, self._AllSprites],
+                       collision_sprites=self._CollisionSprites))
 
 
             # Collision Tiles, Borders

@@ -41,7 +41,7 @@ class Animal(Generic):
 
     def make_move(self):
         print('choose: ', self._Distance)
-        self._ChooseDir = randint(0, 6)
+        self._ChooseDir = randint(0, 20)
         if self._ChooseDir == 0:
             self._GoDir = "up"
         elif self._ChooseDir == 1:
