@@ -16,6 +16,8 @@ class Generic(pygame.sprite.Sprite):
         self.hitbox = self.rect.copy().inflate(-self.rect.width * 0.15, -self.rect.height * 0.25)
 
 
+
+
 class Interaction(Generic):
     def __init__(self, pos, size, groups, name, z=LAYERS['main']):
         self.size = size * Scale
@@ -78,9 +80,12 @@ class Particle(Generic):
         if item == "plum":
             self._Width = 16
             self._Height = 16
-        elif item == "tree":
+        elif item == "tree-large":
             self._Width = 24
             self._Height = 31
+        elif item == "tree-small":
+            self._Width = 14
+            self._Height = 28
         else:
             self._Width = 16
             self._Height = 16
@@ -104,13 +109,15 @@ class Tree(Generic):
         #tree features
         self._TreeHealth = 50
         self._Alive = True
-        self._BrokenTreeSurface = pygame.image.load(f'../data/objects/027.png').convert_alpha()
+        self._StumpPath =f'../data/objects/{"028" if name =="small" else "027"}.png'
+        self._BrokenTreeSurface = pygame.image.load(self._StumpPath).convert_alpha()
         self._BrokenTreeSurface = pygame.transform.scale(self._BrokenTreeSurface, (10 * 3,10 * 3))
         self._InvulTimer = Timer(200)
+        self._TreeName = name
 
         #plum
         self._PlumSurface = pygame.image.load('../textures/misc/plum.png')
-        self._PlumPosition = PlumPos['Large']
+        self._PlumPosition = PlumPos['large']
         self._PlumSprites = pygame.sprite.Group()
         self.CreatePlum()
 
@@ -127,7 +134,11 @@ class Tree(Generic):
     def CheckBreak(self):
         if self._TreeHealth <= 0:
             self._PlayerAdd('wood')
-            Particle(pos=self.rect.topleft,surface=self.image,groups=self.groups()[0],z=LAYERS['fruit'],duration=200,item="tree")
+            if self._TreeName == "small":
+                self._TreeItem = "tree-small"
+            elif self._TreeName == "large":
+                self._TreeItem = "tree-large"
+            Particle(pos=self.rect.topleft,surface=self.image,groups=self.groups()[0],z=LAYERS['fruit'],duration=200,item=self._TreeItem)
             self.image = self._BrokenTreeSurface
             self.rect = self.image.get_rect(midbottom = self.rect.midbottom)
             self.hitbox = self.rect.copy().inflate(-10,-self.rect.height * 0.6)
@@ -138,8 +149,9 @@ class Tree(Generic):
             self.CheckBreak()
 
     def CreatePlum(self):
-        for pos in self._PlumPosition:
-            if randint(0,10) < 2:
-                x = pos[0] + self.rect.left
-                y = pos[1] + self.rect.top
-                Generic((x,y),self._PlumSurface,[self._PlumSprites,self.groups()[0]],z= LAYERS['fruit'])
+        if self._Alive:
+            for pos in self._PlumPosition:
+                if randint(0,10) < 2:
+                    x = pos[0] + self.rect.left
+                    y = pos[1] + self.rect.top
+                    Generic((x,y),self._PlumSurface,[self._PlumSprites,self.groups()[0]],z= LAYERS['fruit'])

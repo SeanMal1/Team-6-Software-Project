@@ -9,7 +9,7 @@ from pygame import mixer
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, soil_layer, interaction, Level, toggle_merchant, restart):
+    def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, animal_sprites,  soil_layer, interaction, Level, toggle_merchant, restart):
         super().__init__(group)
         self.image = pygame.Surface((48,54))
         mixer.init()
@@ -34,42 +34,45 @@ class Player(pygame.sprite.Sprite):
         # self.image.fill('white')
         self.rect = self.image.get_rect(center=pos)
         self.z = LAYERS['main']  # check settings
+        self._SelectedSpriteSheet = ""
+        self._SelectedPlayerColour = ""
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
-        self._PlayerRightAxeImage1 = pygame.image.load("../textures/player/playerblueaxeright.png").convert_alpha()
-        self._PlayerRightAxeImage2 = pygame.image.load("../textures/player/playerblueaxeright2.png").convert_alpha()
-        self._PlayerRightAxeImage3 = pygame.image.load("../textures/player/playerblueaxeright3.png").convert_alpha()
-        self._PlayerLeftAxeImage1 = pygame.image.load("../textures/player/playerblueaxeleft.png").convert_alpha()
-        self._PlayerLeftAxeImage2 = pygame.image.load("../textures/player/playerblueaxeleft2.png").convert_alpha()
-        self._PlayerLeftAxeImage3 = pygame.image.load("../textures/player/playerblueaxeleft3.png").convert_alpha()
-        self._PlayerUpAxeImage1 = pygame.image.load("../textures/player/playerblueaxeup.png").convert_alpha()
-        self._PlayerUpAxeImage2 = pygame.image.load("../textures/player/playerblueaxeup2.png").convert_alpha()
-        self._PlayerUpAxeImage3 = pygame.image.load("../textures/player/playerblueaxeup3.png").convert_alpha()
-        self._PlayerDownAxeImage1 = pygame.image.load("../textures/player/playerblueaxedown.png").convert_alpha()
-        self._PlayerDownAxeImage2 = pygame.image.load("../textures/player/playerblueaxedown2.png").convert_alpha()
-        self._PlayerDownAxeImage3 = pygame.image.load("../textures/player/playerblueaxedown3.png").convert_alpha()
-        self._PlayerRightHoeImage1 = pygame.image.load("../textures/player/playerbluerighthoe.png").convert_alpha()
-        self._PlayerRightHoeImage2 = pygame.image.load("../textures/player/playerbluerighthoe2.png").convert_alpha()
-        self._PlayerRightHoeImage3 = pygame.image.load("../textures/player/playerbluerighthoe3.png").convert_alpha()
-        self._PlayerLeftHoeImage1 = pygame.image.load("../textures/player/playerbluelefthoe.png").convert_alpha()
-        self._PlayerLeftHoeImage2 = pygame.image.load("../textures/player/playerbluelefthoe2.png").convert_alpha()
-        self._PlayerLeftHoeImage3 = pygame.image.load("../textures/player/playerbluelefthoe3.png").convert_alpha()
-        self._PlayerUpHoeImage = pygame.image.load("../textures/player/playerblueuphoe.png").convert_alpha()
-        self._PlayerUpHoeImage2 = pygame.image.load("../textures/player/playerblueuphoe2.png").convert_alpha()
-        self._PlayerUpHoeImage3 = pygame.image.load("../textures/player/playerblueuphoe3.png").convert_alpha()
-        self._PlayerDownHoeImage = pygame.image.load("../textures/player/playerbluedownhoe.png").convert_alpha()
-        self._PlayerDownHoeImage2 = pygame.image.load("../textures/player/playerbluedownhoe2.png").convert_alpha()
-        self._PlayerDownHoeImage3 = pygame.image.load("../textures/player/playerbluedownhoe3.png").convert_alpha()
-        self._PlayerRightWaterImage = pygame.image.load("../textures/player/playerbluerightwater.png").convert_alpha()
-        self._PlayerRightWaterImage2 = pygame.image.load("../textures/player/playerbluerightwater2.png").convert_alpha()
-        self._PlayerLeftWaterImage = pygame.image.load("../textures/player/playerblueleftwater.png").convert_alpha()
-        self._PlayerLeftWaterImage2 = pygame.image.load("../textures/player/playerblueleftwater2.png").convert_alpha()
-        self._playerUpWaterImage = pygame.image.load("../textures/player/playerblueupwater.png").convert_alpha()
-        self._playerUpWaterImage2 = pygame.image.load("../textures/player/playerblueupwater2.png").convert_alpha()
-        self._PlayerDownWaterImage = pygame.image.load("../textures/player/playerbluedownwater.png").convert_alpha()
-        self._PlayerDownWaterImage2 = pygame.image.load("../textures/player/playerbluedownwater2.png").convert_alpha()
+        self._PlayerRightAxeImage1 = pygame.image.load("../textures/player/playerblueaxeright" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightAxeImage2 = pygame.image.load("../textures/player/playerblueaxeright2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightAxeImage3 = pygame.image.load("../textures/player/playerblueaxeright3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftAxeImage1 = pygame.image.load("../textures/player/playerblueaxeleft" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftAxeImage2 = pygame.image.load("../textures/player/playerblueaxeleft2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftAxeImage3 = pygame.image.load("../textures/player/playerblueaxeleft3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpAxeImage1 = pygame.image.load("../textures/player/playerblueaxeup" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpAxeImage2 = pygame.image.load("../textures/player/playerblueaxeup2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpAxeImage3 = pygame.image.load("../textures/player/playerblueaxeup3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownAxeImage1 = pygame.image.load("../textures/player/playerblueaxedown" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownAxeImage2 = pygame.image.load("../textures/player/playerblueaxedown2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownAxeImage3 = pygame.image.load("../textures/player/playerblueaxedown3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightHoeImage1 = pygame.image.load("../textures/player/playerbluerighthoe" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightHoeImage2 = pygame.image.load("../textures/player/playerbluerighthoe2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightHoeImage3 = pygame.image.load("../textures/player/playerbluerighthoe3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftHoeImage1 = pygame.image.load("../textures/player/playerbluelefthoe" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftHoeImage2 = pygame.image.load("../textures/player/playerbluelefthoe2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftHoeImage3 = pygame.image.load("../textures/player/playerbluelefthoe3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpHoeImage = pygame.image.load("../textures/player/playerblueuphoe" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpHoeImage2 = pygame.image.load("../textures/player/playerblueuphoe2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpHoeImage3 = pygame.image.load("../textures/player/playerblueuphoe3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownHoeImage = pygame.image.load("../textures/player/playerbluedownhoe" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownHoeImage2 = pygame.image.load("../textures/player/playerbluedownhoe2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownHoeImage3 = pygame.image.load("../textures/player/playerbluedownhoe3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightWaterImage = pygame.image.load("../textures/player/playerbluerightwater" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightWaterImage2 = pygame.image.load("../textures/player/playerbluerightwater2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftWaterImage = pygame.image.load("../textures/player/playerblueleftwater" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftWaterImage2 = pygame.image.load("../textures/player/playerblueleftwater2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._playerUpWaterImage = pygame.image.load("../textures/player/playerblueupwater" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._playerUpWaterImage2 = pygame.image.load("../textures/player/playerblueupwater2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownWaterImage = pygame.image.load("../textures/player/playerbluedownwater" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownWaterImage2 = pygame.image.load("../textures/player/playerbluedownwater2" + self._SelectedPlayerColour + ".png").convert_alpha()
 
         # collision attribute
         self.collision_sprites = collision_sprites
+        self.animal_sprites = animal_sprites
         self.hitbox = self.rect.copy().inflate((-20, -40))  # shrink hitbox to player size from sheet size
 
         # moving attribute
@@ -128,11 +131,13 @@ class Player(pygame.sprite.Sprite):
         self._hunger = self._saveFile["hunger"]
 
         self._ate = False
+        self._hitFatigue = False
+        self._runDepletionMultiplier = 1
 
         self.restart = restart
 
         
-
+    # health
     def health(self):
         if self._health >= 0 and self._health <= 100:
             if self._fatigue <= 0 and self._hunger <= 0:
@@ -162,10 +167,7 @@ class Player(pygame.sprite.Sprite):
             self._health = 0
             self.restart()
        
-        # print('health: %s' % self._health)
-        # print('hunger: %s' % self._hunger)
-        # print('fatigue: %s' % self._fatigue)
-
+    # fatigue
     def fatigue(self):
         if self._fatigue < 100:
             if self._Sleep == True and not self.timer['sleep fatigue']._Active:
@@ -177,15 +179,17 @@ class Player(pygame.sprite.Sprite):
             self._fatigue = 0
 
     def fatigued(self):
-        self._fatigue = self._fatigue - 0.002
+        self._fatigue = self._fatigue - (self._runDepletionMultiplier * 0.002)
+        if self._hitFatigue == True:
+            self._fatigue = self._fatigue -  0.1
+            self._hitFatigue = False
 
+    # eat
     def eating(self):
+        # eating will add to the hunger bar and delete a plum from inventory
         if self._hunger < 100:
             if not self.timer['eating']._Active:
                 if self._ate == True:
-                    # print('health: %s' % self._health)
-                    # print('hunger: %s' % self._hunger)
-                    # print('fatigue: %s' % self._fatigue)
                     self.timer['eating'].activate()
                     self.seed_inventory['plum'] = self.seed_inventory['plum'] -1
                     if self._hunger >= 80:
@@ -198,7 +202,7 @@ class Player(pygame.sprite.Sprite):
 
     def hunger(self):
         if not self.timer['hunger']._Active:
-            self._hunger = self._hunger - 0.01
+            self._hunger = self._hunger - (self._runDepletionMultiplier * 0.01)
             self.timer['hunger'].activate()
         if self._hunger < 0:
             self._hunger = 0
@@ -271,8 +275,10 @@ class Player(pygame.sprite.Sprite):
             if keystroke[pygame.K_LSHIFT]:
                     self._Speed = 250
                     self._animSpeed = 14
+                    self._runDepletionMultiplier = 15
             else :
                     self._Speed = 110
+                    self._runDepletionMultiplier = 1
 
             if self._Direction.magnitude() > 0:
                 footstepTiming = self._FootstepClock.tick()
@@ -296,6 +302,7 @@ class Player(pygame.sprite.Sprite):
                 self.timer['tool use'].activate()
                 self._Direction = pygame.math.Vector2()
                 self._frameIndex = 0
+                self._hitFatigue = True
 
             #change tool
             if keystroke[pygame.K_q] and not self.timer['tool swap']._Active:
@@ -313,6 +320,8 @@ class Player(pygame.sprite.Sprite):
                 if self.seed_inventory['plum'] > 0 and not self.timer['eating']._Active:
                     self._ate = True
                     print('eating')
+                    EatSound = mixer.Sound("../audio/eat.wav")
+                    EatSound.play()
 
             #decrease test
             if keystroke[pygame.K_o]:
@@ -507,6 +516,25 @@ class Player(pygame.sprite.Sprite):
                         self.rect.centery = self.hitbox.centery
                         self._Position.y = self.hitbox.centery
 
+        for sprite in self.animal_sprites.sprites():
+            if hasattr(sprite, 'hitbox'):  # Checks if sprite has collision
+                if sprite.hitbox.colliderect(self.hitbox):  # Checks if there is a collision
+                    if _Direction == 'horizontal':
+                        if self._Direction.x > 0:  # player moving to the right
+                            self.hitbox.right = sprite.hitbox.left
+                        if self._Direction.x < 0:  # player moving to the left
+                            self.hitbox.left = sprite.hitbox.right
+                        self.rect.centerx = self.hitbox.centerx
+                        self._Position.x = self.hitbox.centerx
+                    if _Direction == 'vertical':
+                        if self._Direction.y > 0:  # player moving down
+                            self.hitbox.bottom = sprite.hitbox.top
+                        if self._Direction.y < 0:  # player moving up
+                            self.hitbox.top = sprite.hitbox.bottom
+                        self.rect.centery = self.hitbox.centery
+                        self._Position.y = self.hitbox.centery
+
+
     def move(self,DeltaTime):
         #normalize vector (cant speed up by holding w and a or w and d and so on)
         if self._Direction.magnitude() > 0:
@@ -539,6 +567,41 @@ class Player(pygame.sprite.Sprite):
         self.fatigue()
         self.fatigued()
         self.hunger()
+        self._PlayerRightAxeImage1 = pygame.image.load("../textures/player/playerblueaxeright" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightAxeImage2 = pygame.image.load("../textures/player/playerblueaxeright2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightAxeImage3 = pygame.image.load("../textures/player/playerblueaxeright3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftAxeImage1 = pygame.image.load("../textures/player/playerblueaxeleft" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftAxeImage2 = pygame.image.load("../textures/player/playerblueaxeleft2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftAxeImage3 = pygame.image.load("../textures/player/playerblueaxeleft3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpAxeImage1 = pygame.image.load("../textures/player/playerblueaxeup" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpAxeImage2 = pygame.image.load("../textures/player/playerblueaxeup2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpAxeImage3 = pygame.image.load("../textures/player/playerblueaxeup3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownAxeImage1 = pygame.image.load("../textures/player/playerblueaxedown" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownAxeImage2 = pygame.image.load("../textures/player/playerblueaxedown2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownAxeImage3 = pygame.image.load("../textures/player/playerblueaxedown3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightHoeImage1 = pygame.image.load("../textures/player/playerbluerighthoe" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightHoeImage2 = pygame.image.load("../textures/player/playerbluerighthoe2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightHoeImage3 = pygame.image.load("../textures/player/playerbluerighthoe3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftHoeImage1 = pygame.image.load("../textures/player/playerbluelefthoe" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftHoeImage2 = pygame.image.load("../textures/player/playerbluelefthoe2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftHoeImage3 = pygame.image.load("../textures/player/playerbluelefthoe3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpHoeImage = pygame.image.load("../textures/player/playerblueuphoe" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpHoeImage2 = pygame.image.load("../textures/player/playerblueuphoe2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpHoeImage3 = pygame.image.load("../textures/player/playerblueuphoe3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownHoeImage = pygame.image.load("../textures/player/playerbluedownhoe" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownHoeImage2 = pygame.image.load("../textures/player/playerbluedownhoe2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownHoeImage3 = pygame.image.load("../textures/player/playerbluedownhoe3" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightWaterImage = pygame.image.load("../textures/player/playerbluerightwater" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightWaterImage2 = pygame.image.load("../textures/player/playerbluerightwater2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftWaterImage = pygame.image.load("../textures/player/playerblueleftwater" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftWaterImage2 = pygame.image.load("../textures/player/playerblueleftwater2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._playerUpWaterImage = pygame.image.load("../textures/player/playerblueupwater" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._playerUpWaterImage2 = pygame.image.load("../textures/player/playerblueupwater2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownWaterImage = pygame.image.load("../textures/player/playerbluedownwater" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownWaterImage2 = pygame.image.load("../textures/player/playerbluedownwater2" + self._SelectedPlayerColour + ".png").convert_alpha()
+
+        if self._SelectedSpriteSheet != "":
+            self._SpriteSheetImage = pygame.image.load(self._SelectedSpriteSheet).convert_alpha()
         
 
     def save(self):
@@ -551,3 +614,4 @@ class Player(pygame.sprite.Sprite):
         self._saveFile['fatigue'] = self._fatigue
         self._saveFile['health'] = self._health
         return self._saveFile
+

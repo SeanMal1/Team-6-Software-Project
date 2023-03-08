@@ -1,4 +1,5 @@
 import pygame
+from json import load
 from settings import *
 from tools import *
 from sprites import Generic
@@ -7,9 +8,10 @@ from random import randint, choice
 
 class Sky:
     def __init__(self):
+        self._SaveFile = load(open("../profiles/save1.json", "r"))
         self._DisplaySurface = pygame.display.get_surface()
         self._FullSurface = pygame.Surface((ScreenWidth, ScreenHeight))
-        self._DayColour = [255, 255, 255]
+        self._DayColour = self._SaveFile["sky"]
         self._NightColour = (38, 101, 189)
 
     def display(self, DeltaTime):
@@ -21,6 +23,8 @@ class Sky:
         self._FullSurface.fill(self._DayColour)
         self._DisplaySurface.blit(self._FullSurface, (0, 0), special_flags = pygame.BLEND_RGBA_MULT)
 
+    def save(self):
+        return self._DayColour
 
 class Drop(pygame.sprite.Sprite):
     def __init__(self, surface, pos, moving, groups, z):
@@ -52,8 +56,8 @@ class Drop(pygame.sprite.Sprite):
 class Rain:
     def __init__(self, _AllSprites):
         self._AllSprites = _AllSprites
-        self._RainDrops = import_folder_unscaled('../textures/rain/drops')
-        self._RainSplash = import_folder_unscaled('../textures/rain/floor')
+        self._RainDrops = import_folder('../textures/rain/drops')
+        self._RainSplash = import_folder('../textures/rain/floor')
         self._FloorWidth, self._FloorHeight = pygame.image.load('../data/Farm.png').get_size()
         self._FloorWidth = self._FloorWidth * Scale
         self._FloorHeight = self._FloorHeight * Scale

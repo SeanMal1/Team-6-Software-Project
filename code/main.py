@@ -12,6 +12,10 @@ class Game:
         pygame.display.set_caption('Valley Life')
         mixer.music.load("../audio/background.mp3")
         icon = pygame.image.load('../textures/player/icon.png')
+        self._heading_font = pygame.font.Font('../font/joystixmonospace.otf', 45)
+        self._text_color = "Black"
+        self._button_color = (220, 220, 220)
+        self._button_hover_color = (180, 180, 180)
         pygame.display.set_icon(icon)
         mixer.music.set_volume(0.04)
         mixer.music.play(-1,0.0)
@@ -22,7 +26,6 @@ class Game:
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    self.save()
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
@@ -37,6 +40,9 @@ class Game:
                         self.save()
                         pygame.quit()
                         sys.exit()
+                    if self._World._text_rect_player_select.collidepoint(pygame.mouse.get_pos()):
+                        self._World._PlayerSelect = True
+                    
             DeltaTime = self._Clock.tick() / 1000
             self._World.run(DeltaTime)
             pygame.display.update()
@@ -54,6 +60,7 @@ class Game:
         save["map"] = self._World._SoilLayer.save()
         save["location"] = self._World.save()
         save["firstTimePlaying"] = "False"
+        save["sky"] = self._World._Sky.save()
         with open("../profiles/save1.json", "w") as f:
             f.write(json.dumps(save))
 
