@@ -65,7 +65,7 @@ class Merchant():
         
 
         if self._prevKeystroke is not None:
-                if self._prevKeystroke[pygame.K_u] and not keystroke[pygame.K_u]:
+                if self._prevKeystroke[pygame.K_RETURN] and not keystroke[pygame.K_RETURN]:
                     self.toggle_merchant()
                 if not self.timer['merchant']._Active:
                     if keystroke[pygame.K_UP]:
