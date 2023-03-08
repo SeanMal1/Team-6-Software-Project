@@ -124,7 +124,7 @@ class Level:
                        groups=[self._AnimalSprites, self._AllSprites],
                        collision_sprites=self._CollisionSprites))
             self._AnimalList.append(
-                Animal(pos=(2300, 1100),
+                Animal(pos=(2300, 1150),
                        frames=self.cow_idle_frames,
                        groups=[self._AnimalSprites, self._AllSprites],
                        collision_sprites=self._CollisionSprites))
@@ -134,7 +134,7 @@ class Level:
                        groups=[self._AnimalSprites, self._AllSprites],
                        collision_sprites=self._CollisionSprites))
             self._AnimalList.append(
-                Animal(pos=(2000, 1800),
+                Animal(pos=(2000, 1600),
                        frames=self.cow_idle_frames,
                        groups=[self._AnimalSprites, self._AllSprites],
                        collision_sprites=self._CollisionSprites))

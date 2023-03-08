@@ -5,7 +5,6 @@ from timer import Timer
 
 
 class Animal(Generic):
-    # TODO:Add interaction(milk(bucket can be purchased)), mooing, spawning in multiple
     def __init__(self, pos, frames, groups, collision_sprites, scale=Scale):
 
         # Animate
@@ -40,7 +39,6 @@ class Animal(Generic):
         self.image = self._frames[int(self._frameIndex)]
 
     def make_move(self):
-        print('choose: ', self._Distance)
         self._ChooseDir = randint(0, 20)
         if self._ChooseDir == 0:
             self._GoDir = "up"
@@ -58,12 +56,10 @@ class Animal(Generic):
             self.make_move()
             # x
             if self._GoDir == "up":
-                print('cow up')
                 self._Direction.y = -1
                 self._Distance = randint(10, 50)
 
             elif self._GoDir == "down":
-                print('cow down')
                 self._Direction.y = 1
                 self._Distance = randint(10, 50)
             else:
@@ -72,11 +68,9 @@ class Animal(Generic):
 
             # y
             if self._GoDir == "left":
-                print('cow left')
                 self._Direction.x = -1
                 self._Distance = randint(10, 50)
             elif self._GoDir == "right":
-                print('cow right')
                 self._Direction.x = 1
                 self._Distance = randint(10, 50)
             else:
@@ -84,7 +78,6 @@ class Animal(Generic):
                 self._Distance = randint(10, 50)
 
         if self._Distance != 0:
-            print(self._Distance)
             # normalize vector (cant speed up by walking diagonally)
             if self._Direction.magnitude() > 0:
                 self._Direction = self._Direction.normalize()

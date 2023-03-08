@@ -100,7 +100,7 @@ class Player(pygame.sprite.Sprite):
         }
 
         # Tools
-        self._Tools = ['axe', 'hoe', 'water']
+        self._Tools = ['axe', 'hoe', 'water', 'bucket']
         self._ToolIndex = 0
         self._SelectedTool = self._Tools[self._ToolIndex]
 
@@ -111,6 +111,7 @@ class Player(pygame.sprite.Sprite):
 
         # interaction
         self._TreeSprites = tree_sprites
+        self._AnimalSprites = animal_sprites
         self._SoilLayer = soil_layer
         self._Interaction = interaction
         self._Sleep = False
@@ -395,8 +396,8 @@ class Player(pygame.sprite.Sprite):
         if self._SelectedTool == 'hoe':
             self._SoilLayer.get_hit(self._TargetPosition)
             HoeSound = mixer.Sound("../audio/hoe.wav")
-            HoeSound.play()
             HoeSound.set_volume(0.05)
+            HoeSound.play()
         if self._SelectedTool == 'axe':
             for tree in self._TreeSprites.sprites():
                 if tree.rect.collidepoint(self._TargetPosition):
@@ -408,6 +409,13 @@ class Player(pygame.sprite.Sprite):
             WaterSound = mixer.Sound("../audio/water.mp3")
             WaterSound.set_volume(0.05)
             WaterSound.play()
+        if self._SelectedTool == 'bucket':
+            for cow in self._AnimalSprites.sprites():
+                if cow.rect.collidepoint(self._TargetPosition):
+                    print("Milked")
+                    WaterSound = mixer.Sound("../audio/water.mp3")
+                    WaterSound.set_volume(0.05)
+                    WaterSound.play()
 
     def get_target_pos(self):
         self._TargetPosition = self.rect.center + PlayerToolOffset[self._status.split('-')[0]]
@@ -477,7 +485,11 @@ class Player(pygame.sprite.Sprite):
             "right-water":[rightwater,rightwater2],
             "left-water":[leftwater,leftwater2],
             "up-water":[upwater,upwater2],
-            "down-water":[downwater,downwater2]
+            "down-water":[downwater,downwater2],
+            "right-bucket": [rightwater, rightwater2],
+            "left-bucket": [leftwater, leftwater2],
+            "up-bucket": [upwater, upwater2],
+            "down-bucket": [downwater, downwater2]
             }
 
         self._frameIndex += self._animSpeed * Deltatime
