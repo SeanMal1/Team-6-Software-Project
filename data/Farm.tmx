@@ -593,7 +593,7 @@
   <object id="550" name="small" gid="149" x="295" y="686" width="14" height="28"/>
   <object id="551" name="small" gid="149" x="348.5" y="696.5" width="14" height="28"/>
   <object id="552" name="small" gid="149" x="928.5" y="698.833" width="14" height="28"/>
-  <object id="553" name="small" gid="149" x="992" y="603" width="14" height="28"/>
+  <object id="553" name="small" gid="149" x="989.455" y="606.636" width="14" height="28"/>
  </objectgroup>
  <objectgroup id="18" name="Interaction">
   <object id="1333" name="Trader" x="480" y="240" width="80" height="48"/>
