@@ -383,7 +383,7 @@ class Player(pygame.sprite.Sprite):
                     self._inventoryOpen = not self._inventoryOpen
                     self.toggle_inventory()
                 _CollidedInteractionSprite = pygame.sprite.spritecollide(self, self._Interaction, False)
-                if self._prevKeystroke[pygame.K_u] and not keystroke[pygame.K_u]:
+                if self._prevKeystroke[pygame.K_RETURN] and not keystroke[pygame.K_RETURN]:
                     self.shop_active = not self.shop_active
                     if _CollidedInteractionSprite:
                             if _CollidedInteractionSprite[0].name == 'Trader':
