@@ -149,8 +149,9 @@ class Tree(Generic):
             self.CheckBreak()
 
     def CreatePlum(self):
-        for pos in self._PlumPosition:
-            if randint(0,10) < 2:
-                x = pos[0] + self.rect.left
-                y = pos[1] + self.rect.top
-                Generic((x,y),self._PlumSurface,[self._PlumSprites,self.groups()[0]],z= LAYERS['fruit'])
+        if self._Alive:
+            for pos in self._PlumPosition:
+                if randint(0,10) < 2:
+                    x = pos[0] + self.rect.left
+                    y = pos[1] + self.rect.top
+                    Generic((x,y),self._PlumSurface,[self._PlumSprites,self.groups()[0]],z= LAYERS['fruit'])
