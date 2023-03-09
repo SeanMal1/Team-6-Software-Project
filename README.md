@@ -1,4 +1,4 @@
-# Untitled "Team 6" Project
+# Valley Life
 
 ## Introduction
 
