@@ -306,8 +306,15 @@ class Level:
             for animal in self._AnimalList:
                 if animal._GoDir == "None":
                     animal.image = self.cow_idle_frames[math.trunc(animal._frameIndex)]
+                    if animal._ImageFlip:
+                        animal.image = pygame.transform.flip(animal.image, True, False)
                 else:
                     animal.image = self.cow_walk_frames[math.trunc(animal._frameIndex)]
+                    if animal._ImageFlip:
+                        animal.image = pygame.transform.flip(animal.image, True, False)
+
+
+
 
         # Pause Menu
         else:

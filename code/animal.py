@@ -31,6 +31,7 @@ class Animal(Generic):
         self._Position = pygame.math.Vector2(self.rect.center)
         self._Speed = 110
         self._Distance = 0
+        self._ImageFlip = False
 
     def animate(self, Deltatime):
         self._frameIndex += self._animSpeed * Deltatime
@@ -70,9 +71,11 @@ class Animal(Generic):
             if self._GoDir == "left":
                 self._Direction.x = -1
                 self._Distance = randint(10, 50)
+                self._ImageFlip = True
             elif self._GoDir == "right":
                 self._Direction.x = 1
                 self._Distance = randint(10, 50)
+                self._ImageFlip = False
             else:
                 self._Direction.x = 0
                 self._Distance = randint(10, 50)
