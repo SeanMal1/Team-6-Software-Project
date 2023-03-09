@@ -22,5 +22,7 @@
     "hunger": 100, 
     "money": 500,
     "sky" : [255,255,255],
+    "characterColor" : "blue",
+    "characterPath" : "../textures/player/playerlightblue.png",
     "map": "None"
 }

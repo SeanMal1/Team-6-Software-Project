@@ -68,7 +68,7 @@ class Level:
         self._PlayerSelect = False
         self._inventory = Inventory(self._Player._Inventory, self._Player.money, self.toggle_inventory)
         
-        self._PlayerImage = pygame.image.load("../textures/player/greenplayer.png")
+        self._PlayerImage = pygame.image.load("../textures/player/blueplayer.png")
         self._PlayerSelectBG = pygame.image.load("../textures/misc/playerselectbg.jpg")
         
         

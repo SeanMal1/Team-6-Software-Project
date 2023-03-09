@@ -35,8 +35,8 @@ class Player(pygame.sprite.Sprite):
         # self.image.fill('white')
         self.rect = self.image.get_rect(center=pos)
         self.z = LAYERS['main']  # check settings
-        self._SelectedSpriteSheet = ""
-        self._SelectedPlayerColour = ""
+        self._SelectedPlayerColour = self._saveFile["characterColor"]
+        self._SelectedSpriteSheet = self._saveFile["characterPath"]
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
         self._PlayerRightAxeImage1 = pygame.image.load(
             "../textures/player/playerblueaxeright" + self._SelectedPlayerColour + ".png").convert_alpha()
@@ -681,4 +681,6 @@ class Player(pygame.sprite.Sprite):
         self._saveFile['hunger'] = self._hunger
         self._saveFile['fatigue'] = self._fatigue
         self._saveFile['health'] = self._health
+        self._saveFile["characterColor"] = self._SelectedPlayerColour
+        self._saveFile["characterPath"] = self._SelectedSpriteSheet
         return self._saveFile
