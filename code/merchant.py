@@ -11,6 +11,7 @@ class Merchant():
         self.toggle_merchant = toggle_merchant
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font('../font/joystixmonospace.otf',30)
+        self.new_font = pygame.font.Font('../font/joystixmonospace.otf',15)
         self._prevKeystroke = None
 
         #options
@@ -28,7 +29,6 @@ class Merchant():
         self.timer = {
             'merchant' : Timer(200)
         }
-
        
     # displays money at the bottom
     def display_money(self):
@@ -38,13 +38,36 @@ class Merchant():
         pygame.draw.rect(self.display_surface, 'White', text_rect.inflate(10,10))
         self.display_surface.blit(text_surf, text_rect)
 
+    def display_text(self):
+        new_surf = self.font.render('Merchant', False, 'Black')
+        new_rect = new_surf.get_rect(midtop = (ScreenWidth / 5, ScreenHeight / 2))
+
+        pygame.draw.rect(self.display_surface, 'White', new_rect.inflate(10,10))
+        self.display_surface.blit(new_surf, new_rect)
+        if self._Player._firsttimeMerchant == "True":
+            instruction1_surf = self.new_font.render('Use SPACE bar to buy/sell', False, 'Black')
+            instruction1_rect = instruction1_surf.get_rect(midtop = ((ScreenWidth / 10)*8.5, (ScreenHeight / 4)*3))
+
+            pygame.draw.rect(self.display_surface, 'White', instruction1_rect.inflate(5,5))
+            self.display_surface.blit(instruction1_surf, instruction1_rect)
+
+            instruction2_surf = self.new_font.render('Use arrow keys to navigate', False, 'Black')
+            instruction2_rect = instruction2_surf.get_rect(midtop = ((ScreenWidth / 10)*8.5, (ScreenHeight / 4)*2))
+
+            pygame.draw.rect(self.display_surface, 'White', instruction2_rect.inflate(5,5))
+            self.display_surface.blit(instruction2_surf, instruction2_rect)
+
     # creates the merchant ui
     def setup(self):
         #create surfaces
         self.text_surfs = []
         self.total_height = 0
-        for item in self.options:
-            text_surf = self.font.render(item, False, 'Black')
+        for item in list(self._Player._Inventory.keys())[3:]:
+            text_surf = self.font.render(item + ' ' + f'${SalePrices[item]}', False, 'Black')
+            self.text_surfs.append(text_surf)
+            self.total_height += text_surf.get_height() + (self.padding * 2)
+        for item in list(self._Player.seed_inventory.keys())[3:]:
+            text_surf = self.font.render(item + ' ' + f'${PurchasePrices[item]}', False, 'Black')
             self.text_surfs.append(text_surf)
             self.total_height += text_surf.get_height() + (self.padding * 2)
 
@@ -107,7 +130,9 @@ class Merchant():
     def updateTimers(self):
         for timer in self.timer.values():
             timer.update()
+
     
+    # displays the ui
     def show_entry(self, text_surf, amount, top, selected):
         #background
         bg_rect = pygame.Rect(self.main_rect.left, top, self.width, text_surf.get_height() + (self.padding * 2))
@@ -126,17 +151,18 @@ class Merchant():
         if selected:
             pygame.draw.rect(self.display_surface, 'black', bg_rect, 4, 4)
             if self.index <= self.sell_border: #sell
-                pos_rect = self.sell_text.get_rect(midleft = (self.main_rect.left + 150, bg_rect.centery))
+                pos_rect = self.sell_text.get_rect(midleft = (self.main_rect.left + 235, bg_rect.centery))
                 self.display_surface.blit(self.sell_text, pos_rect)
             else: #buy
-                pos_rect = self.buy_text.get_rect(midleft = (self.main_rect.left + 150, bg_rect.centery))
+                pos_rect = self.buy_text.get_rect(midleft = (self.main_rect.left + 235, bg_rect.centery))
                 self.display_surface.blit(self.buy_text, pos_rect)
 
 
-
+    # uptaes the merchant ui
     def update(self):
         self.input()
         self.display_money()
+        self.display_text()
         self.updateTimers()
         #pygame.draw.rect(self.display_surface, 'red', self.main_rect)
         #self.display_surface.blit(pygame.Surface((1000,1000)),(0,0))
