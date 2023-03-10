@@ -39,6 +39,7 @@ class Animal(Generic):
             self._frameIndex = 0
         self.image = self._frames[int(self._frameIndex)]
 
+    # Make Move Decides if the animal moves or doesn't, and if so chooses the direction
     def make_move(self):
         self._ChooseDir = randint(0, 20)
         if self._ChooseDir == 0:
@@ -52,6 +53,7 @@ class Animal(Generic):
         else:
             self._GoDir = "None"
 
+    # Move sets the animals direction and decides a random distance if they are moving
     def move(self, DeltaTime):
         if self._Distance == 0:
             self.make_move()
@@ -80,6 +82,7 @@ class Animal(Generic):
                 self._Direction.x = 0
                 self._Distance = randint(10, 50)
 
+        # Function to make the cow actually move
         if self._Distance != 0:
             # normalize vector (cant speed up by walking diagonally)
             if self._Direction.magnitude() > 0:
@@ -97,8 +100,10 @@ class Animal(Generic):
             self.rect.centery = self.hitbox.centery
             self.collision('vertical')
 
+            # negate the distance until it's zero, starting the animal movement loop again
             self._Distance -= 1
 
+    # Collisions for the animals, handled the same way as the player
     def collision(self, _Direction):
         for sprite in self.collision_sprites.sprites():
             if hasattr(sprite, 'hitbox'):  # Checks if sprite has collision
