@@ -59,11 +59,17 @@
 * Extract all from the zip and save the folder to your computer.
 * Open the folder in a code editor.
 * Open the terminal and insert the following:
-  * pip install pygame 
-  * pip install pymtx 
+```
+ pip install pygame 
+ pip install pymtx 
+```
 * To run the game open the **main.py** file and run the code.
   * Or alternatively, from your terminal, change the directory to **code** 
-  * Then type **python main.py** to run the game.
+  * Then type the following to run the game:
+ ```
+ python main.py
+ ```
+ * Then type **python main.py** to run the game.
 * Enjoy the experience.
 
 
