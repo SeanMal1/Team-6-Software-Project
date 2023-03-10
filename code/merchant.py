@@ -19,20 +19,18 @@ class Merchant():
         self.padding = 8
 
         #items
-        self.options = list(self._Player._Inventory.keys())[3:-1] + list(self._Player.seed_inventory.keys())[3:-1]
-        self.sell_border = len(self._Player._Inventory) - 5
+        self.options = list(self._Player._Inventory.keys())[3:] + list(self._Player.seed_inventory.keys())[3:]
+        self.sell_border = len(self._Player._Inventory) - 4
         self.setup()
-        #print(self.options)
 
         #movement
         self.index = 0
-        #self.timer = Timer(200)
         self.timer = {
             'merchant' : Timer(200)
         }
 
        
-
+    # displays money at the bottom
     def display_money(self):
         text_surf = self.font.render(f'${self._Player.money}', False, 'Black')
         text_rect = text_surf.get_rect(midbottom = (ScreenWidth / 2, ScreenHeight - 20))
@@ -40,6 +38,7 @@ class Merchant():
         pygame.draw.rect(self.display_surface, 'White', text_rect.inflate(10,10))
         self.display_surface.blit(text_surf, text_rect)
 
+    # creates the merchant ui
     def setup(self):
         #create surfaces
         self.text_surfs = []
@@ -57,10 +56,8 @@ class Merchant():
         self.buy_text = self.font.render('buy', False, 'Black')
         self.sell_text = self.font.render('sell', False, 'Black') 
 
+    # User Controls
     def input(self):
-        # keystroke = pygame.key.get_pressed()
-        # if keystroke[pygame.K_ESCAPE]:
-        #     self.toggle_merchant()
         keystroke = pygame.key.get_pressed()
         
 
@@ -100,9 +97,7 @@ class Merchant():
 
         self._prevKeystroke = keystroke 
 
-        
-
-        #print(self.toggle_merchant)
+    
         #clamp the values
         if self.index < 0:
             self.index = len(self.options) - 1
@@ -147,7 +142,7 @@ class Merchant():
         #self.display_surface.blit(pygame.Surface((1000,1000)),(0,0))
         for text_index, text_surf in enumerate(self.text_surfs):
             top = self.main_rect.top + text_index * (text_surf.get_height() + (self.padding * 2) + self.space)
-            amount_list = list(self._Player._Inventory.values())[3:-1] + list(self._Player.seed_inventory.values())[3:-1]
+            amount_list = list(self._Player._Inventory.values())[3:] + list(self._Player.seed_inventory.values())[3:]
             amount = amount_list[text_index]
             self.show_entry(text_surf, amount, top, self.index == text_index)
             #self.display_surface.blit(text_surf, (100,text_index * 50)) 

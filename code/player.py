@@ -392,11 +392,6 @@ class Player(pygame.sprite.Sprite):
                     EatSound.play()
                     #Sound Effect from https://pixabay.com/sound-effects/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=6974
 
-            # decrease test
-            if keystroke[pygame.K_o]:
-                self._hunger = self._hunger - 20
-            if keystroke[pygame.K_0]:
-                self._fatigue = self._fatigue - 20
 
             # stats
             if keystroke[pygame.K_p]:
