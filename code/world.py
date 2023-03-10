@@ -388,8 +388,7 @@ class Level:
             self._text_quit = self._heading_font.render('Save and Quit', True, self._text_color, self._button_color)
             self._text_rect_quit = self._text_quit.get_rect(center=(ScreenWidth / 2, ScreenHeight / 2 + 120))
 
-            self._text_player_select = self._heading_font.render('Player Select', True, self._text_color,
-                                                                 self._button_color)
+            self._text_player_select = self._heading_font.render('Player Select', True, self._text_color, self._button_color)
             self._text_rect_player_select = self._text_player_select.get_rect(center=(ScreenWidth / 2, ScreenHeight / 2 + 240))
 
             self._text_green = self._heading_font.render('Green', True, self._text_color, self._button_color)

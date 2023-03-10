@@ -5,6 +5,7 @@ from tools import *
 from random import choice
 from pygame import mixer
 
+# SoilTile Class, this is for the tilled tiles
 class SoilTile(pygame.sprite.Sprite):
     def __init__(self, pos, surface, groups):
         super().__init__(groups)
@@ -13,6 +14,7 @@ class SoilTile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
         self.z = LAYERS['soil']
 
+# WaterTile, this is for watered tilled tile
 class WaterTile(pygame.sprite.Sprite):
     def __init__(self, pos, surface, groups):
         super().__init__(groups)
@@ -20,6 +22,7 @@ class WaterTile(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=pos)
         self.z = LAYERS['soil water']
 
+# Plant, this is for plants that the player sows
 class Plant(pygame.sprite.Sprite):
     def __init__(self, plantType, groups, soil, checkWatered):
         super().__init__(groups)
@@ -37,7 +40,8 @@ class Plant(pygame.sprite.Sprite):
         self.y_offset = -16 if plantType == 'corn' else -8
         self.rect = self.image.get_rect(midbottom = soil.rect.midbottom + pygame.math.Vector2(0,self.y_offset))
         self.z = LAYERS['ground plant']
-    
+
+    # Function is called to progress the growth of the plants
     def grow(self):
         if self._CheckWatered(self.rect.center):
             self._PlantAge += self._PlantGrowthSpeed
@@ -46,13 +50,15 @@ class Plant(pygame.sprite.Sprite):
                 self.z = LAYERS['main']
                 self.hitbox = self.rect.copy().inflate(-26, -self.rect.height * 0.4)
 
+            # Check if plant is fully mature
             if self._PlantAge >= self._MaxPlantAge:
                 self._PlantAge = self._MaxPlantAge
                 self._PlantGrown = True
 
             self.image = self._Frames[int(self._PlantAge)]
             self.image.get_rect(midbottom = self._Soil.rect.midbottom + pygame.math.Vector2(0,self.y_offset))
-            
+
+# Soil Layer class handles all the interaction with the soil
 class SoilLayer:
     def  __init__(self, _AllSprites, CollisionSprites):
 
@@ -73,6 +79,11 @@ class SoilLayer:
         self.create_soil_grid()
         self.create_hit_rects()
 
+    # A 2D matrix is created where each cell is a Tile on the map
+    # F is appended to the cell if it is a Farmable tile, declared by the layer in farm.tmx
+    # X is appended to the cell if the player tills the soil
+    # W is appended to the cell if the tile is watered
+    # P is appended to the cell if a seed is planted
     def create_soil_grid(self):  # used for management of entities to reduce calculations, Each tile mapped out
         if self._saveFile['map'] == "None":
             ground = pygame.image.load('../data/Farm.png')
@@ -149,12 +160,14 @@ class SoilLayer:
                     PlantSound.set_volume(0.02)
                     PlantSound.play()
                     Plant(Seed, [self._AllSprites, self._PlantSprites, self._CollisionSprites], soilSprite ,self.CheckWatered)
-    
+
+    # updatePlants is called to update the crops planted each day
     def updatePlants(self):
-        #THIS METHOD NEEDS TO BE CALLED ON DAY RESET
         for plant in self._PlantSprites.sprites():
             plant.grow()
 
+    # This function creates the connected textures with the tilled soil
+    # It works by checking the tiles to the Left, Right, Above and Below, as well as the diagonals
     def create_soil_tiles(self):
         self._SoilSprites.empty()  # Empty all soil sprites and redraw so that Tile connections work
         for index_row, row in enumerate(self.grid):
@@ -217,6 +230,10 @@ class SoilLayer:
                     SoilTile(pos=(index_col * TileSize * Scale, index_row * TileSize * Scale),
                              surface=self._SoilSurfaces[tile_type],
                              groups=[self._AllSprites, self._SoilSprites])
+
+                # Draws water on tiles that have W in cell
+                if 'W' in cell:
+                    self.water((index_col * TileSize * Scale, index_row * TileSize * Scale))
 
     def save(self):
         return self.grid
