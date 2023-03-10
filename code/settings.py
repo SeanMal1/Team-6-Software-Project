@@ -48,7 +48,8 @@ SalePrices = {
     'plum': 5,
     'wheat': 5,
     'corn': 3,
-    'tomato': 3
+    'tomato': 3,
+    'milk': 4
 
 }
 PurchasePrices = {
@@ -56,5 +57,6 @@ PurchasePrices = {
     'tomato': 5,
     'wheat': 6,
     'wood': 7,
-    'plum': 9
+    'plum': 9,
+    'milk': 8
 }
