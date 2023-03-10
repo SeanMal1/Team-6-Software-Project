@@ -12,26 +12,24 @@
 
 #### Implementation
 
-##### Current Objectives
+##### Features
 
-( **% denotes completed objectives** )
-
-* Getting a basic game running that has a sprite and the ability to move around a map with borders %
-* Add the ability to save the game at the point you left it %
-* Add an inventory and storage areas %
-* Add player motions to the sprite e.g. Hoeing a plot of land or hitting an axe off of a tree %
-* Add the ability to plant seeds on a hoed piece of land and the ability to affect nearby objects %
-* Health, Fatigue, Food Bar (Using too much energy or not sleeping enough will affect the player) %
-* Add a Day/Night Cycle %
-* Make the edge of the map as if there is an entire world beyond it %
-* Add a merchant where the player can buy and sell items e.g. Plums, Wheat, Corn etc. %
-* Add a working UI %
-* Character Customisation %
-* Functional buildings that are basically secondary maps %
-* Add the ability to sleep to reset the day
-* Add crop harvesting
-* Add cows that can be milked using a bucket
-* Add the option to start a new game
+* A basic game that has a sprite and the ability to move around a map with borders 
+* Added the ability to save the game at the point you left it 
+* Added an inventory and storage areas 
+* Added player motions to the sprite e.g. Hoeing a plot of land or hitting an axe off of a tree 
+* Added the ability to plant seeds on a hoed piece of land and the ability to affect nearby objects 
+* Health, Fatigue, Food Bar (Using too much energy or not sleeping enough will affect the player) 
+* Added a Day/Night Cycle 
+* Made the edge of the map as if there is an entire world beyond it 
+* Added a merchant where the player can buy and sell items e.g. Plums, Wheat, Corn etc. 
+* Added a working UI 
+* Character Customisation 
+* Functional buildings that are act as secondary maps 
+* Added the ability to sleep to reset the day
+* Added crop harvesting
+* Added cows that can be milked using a bucket
+* Added the option to start a new game
 * When the player's health reaches 0 they die and the game is restarted
 
 
