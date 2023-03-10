@@ -13,13 +13,14 @@
         "wood": 0, 
         "plum": 0, 
         "corn": 0, 
-        "wheat": 0
+        "wheat": 0,
+        "milk": 0
     }, 
     "location": "farm", 
     "firstTimePlaying": "True", 
     "health": 100, 
     "fatigue": 100, 
-    "hunger": 100, 
+    "hunger": 100,
     "money": 500,
     "sky" : [255,255,255],
     "characterColor" : "blue",

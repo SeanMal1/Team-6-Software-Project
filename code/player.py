@@ -164,6 +164,7 @@ class Player(pygame.sprite.Sprite):
         self._hunger = self._saveFile["hunger"]
 
         self._ate = False
+        self._drink = False
         self._hitFatigue = False
         self._runDepletionMultiplier = 1
 
@@ -229,6 +230,14 @@ class Player(pygame.sprite.Sprite):
                     elif self._hunger < 80:
                         self._hunger = self._hunger + 20
                     self._ate = False
+                if self._drink == True:
+                    self.timer['eating'].activate()
+                    self.seed_inventory['milk'] = self.seed_inventory['milk'] - 1
+                    if self._hunger >= 90:
+                        self._hunger = 100
+                    elif self._hunger < 90:
+                        self._hunger = self._hunger + 10
+                    self._drink = False
         elif self._hunger >= 101:
             self._hunger = 100
 
@@ -354,6 +363,15 @@ class Player(pygame.sprite.Sprite):
                     EatSound = mixer.Sound("../audio/eat.wav")
                     EatSound.play()
 
+            #drink
+            if keystroke[pygame.K_j]:
+                if self.seed_inventory['milk'] > 0 and not self.timer['eating']._Active:
+                    self._drink = True
+                    print('drinking milk')
+                    EatSound = mixer.Sound("../audio/drinkmilk.mp3")
+                    EatSound.play()
+                    #Sound Effect from https://pixabay.com/sound-effects/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=music&amp;utm_content=6974
+
             # decrease test
             if keystroke[pygame.K_o]:
                 self._hunger = self._hunger - 20
@@ -440,6 +458,7 @@ class Player(pygame.sprite.Sprite):
             for cow in self._AnimalSprites.sprites():
                 if cow.rect.collidepoint(self._TargetPosition):
                     print("Milked")
+                    self.seed_inventory['milk'] = self.seed_inventory['milk'] + 1
                     BucketSound = mixer.Sound("../audio/milk.mp3")
                     BucketSound.set_volume(1)
                     BucketSound.play()

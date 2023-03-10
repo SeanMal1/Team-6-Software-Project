@@ -44,10 +44,10 @@ PlantGrowthSpeed ={
 }
 
 SalePrices = {
-    'wood': 4,
+    'wood': 6,
     'plum': 5,
     'wheat': 5,
-    'corn': 8,
+    'corn': 3,
     'tomato': 3
 
 }
