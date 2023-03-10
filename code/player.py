@@ -107,6 +107,14 @@ class Player(pygame.sprite.Sprite):
             "../textures/player/playerbluedownwater" + self._SelectedPlayerColour + ".png").convert_alpha()
         self._PlayerDownWaterImage2 = pygame.image.load(
             "../textures/player/playerbluedownwater2" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerRightBucketImage = pygame.image.load(
+            "../textures/player/playerbluebucketright" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerLeftBucketImage = pygame.image.load(
+            "../textures/player/playerbluebucketleft" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerUpBucketImage = pygame.image.load(
+            "../textures/player/playerbluebucketup" + self._SelectedPlayerColour + ".png").convert_alpha()
+        self._PlayerDownBucketImage = pygame.image.load(
+            "../textures/player/playerbluebucketdown" + self._SelectedPlayerColour + ".png").convert_alpha()
 
         # collision attribute
         self.collision_sprites = collision_sprites
@@ -530,6 +538,11 @@ class Player(pygame.sprite.Sprite):
         upwater2 = self.getImage(self._playerUpWaterImage2, 0, 16, 18, 3, (0, 0, 255))
         downwater = self.getImage(self._PlayerDownWaterImage, 0, 16, 21, 3, (0, 0, 255))
         downwater2 = self.getImage(self._PlayerDownWaterImage2, 0, 15, 22, 3, (0, 0, 255))
+        rightbucket = self.getImage(self._PlayerRightBucketImage, 0, 16, 18, 3, (0, 0, 255))
+        leftbucket = self.getImage(self._PlayerLeftBucketImage, 0, 16, 18, 3, (0, 0, 255))
+        upbucket = self.getImage(self._PlayerUpBucketImage, 0, 16, 18, 3, (0, 0, 255))
+        downbucket = self.getImage(self._PlayerDownBucketImage, 0, 16, 18, 3, (0, 0, 255))
+
         #dictionary of images corresponding to certain animations
         self._Animations = {
             "up": [frame4, frame5],
@@ -552,10 +565,10 @@ class Player(pygame.sprite.Sprite):
             "left-water": [leftwater, leftwater2],
             "up-water": [upwater, upwater2],
             "down-water": [downwater, downwater2],
-            "right-bucket": [rightwater, rightwater2],
-            "left-bucket": [leftwater, leftwater2],
-            "up-bucket": [upwater, upwater2],
-            "down-bucket": [downwater, downwater2]
+            "right-bucket": [rightbucket],
+            "left-bucket": [leftbucket],
+            "up-bucket": [upbucket],
+            "down-bucket": [downbucket]
         }
         #loop for replaing the players images constantly
         self._frameIndex += self._animSpeed * Deltatime
