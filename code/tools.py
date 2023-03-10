@@ -15,7 +15,7 @@ def import_folder(path):
             surface_list.append(image_surface)
 
     return surface_list
-
+# Function to import unscaled images in a folder and them convert them into surfaces
 def import_folder_unscaled(path):
     surface_list = []
 
@@ -26,7 +26,7 @@ def import_folder_unscaled(path):
             surface_list.append(image_surface)
 
     return surface_list
-
+# Function to import all images in folders and change them to a surface
 def import_folder_dict(path):
     surface_dict = {}
 
