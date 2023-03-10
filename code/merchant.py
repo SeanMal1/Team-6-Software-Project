@@ -43,8 +43,12 @@ class Merchant():
         #create surfaces
         self.text_surfs = []
         self.total_height = 0
-        for item in self.options:
-            text_surf = self.font.render(item, False, 'Black')
+        for item in list(self._Player._Inventory.keys())[3:]:
+            text_surf = self.font.render(item + ' ' + f'${SalePrices[item]}', False, 'Black')
+            self.text_surfs.append(text_surf)
+            self.total_height += text_surf.get_height() + (self.padding * 2)
+        for item in list(self._Player.seed_inventory.keys())[3:]:
+            text_surf = self.font.render(item + ' ' + f'${PurchasePrices[item]}', False, 'Black')
             self.text_surfs.append(text_surf)
             self.total_height += text_surf.get_height() + (self.padding * 2)
 
@@ -107,6 +111,8 @@ class Merchant():
     def updateTimers(self):
         for timer in self.timer.values():
             timer.update()
+
+    
     
     def show_entry(self, text_surf, amount, top, selected):
         #background
@@ -126,10 +132,10 @@ class Merchant():
         if selected:
             pygame.draw.rect(self.display_surface, 'black', bg_rect, 4, 4)
             if self.index <= self.sell_border: #sell
-                pos_rect = self.sell_text.get_rect(midleft = (self.main_rect.left + 150, bg_rect.centery))
+                pos_rect = self.sell_text.get_rect(midleft = (self.main_rect.left + 235, bg_rect.centery))
                 self.display_surface.blit(self.sell_text, pos_rect)
             else: #buy
-                pos_rect = self.buy_text.get_rect(midleft = (self.main_rect.left + 150, bg_rect.centery))
+                pos_rect = self.buy_text.get_rect(midleft = (self.main_rect.left + 235, bg_rect.centery))
                 self.display_surface.blit(self.buy_text, pos_rect)
 
 
