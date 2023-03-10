@@ -127,6 +127,7 @@ class Player(pygame.sprite.Sprite):
         self._Speed = 110
         self._frameIndex = 0
         self._status = self._saveFile["status"]
+        self._firsttimeMerchant = self._saveFile["firstTimePlaying"]
         self._animSpeed = 6
 
         # Timing

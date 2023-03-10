@@ -11,6 +11,7 @@ class Merchant():
         self.toggle_merchant = toggle_merchant
         self.display_surface = pygame.display.get_surface()
         self.font = pygame.font.Font('../font/joystixmonospace.otf',30)
+        self.new_font = pygame.font.Font('../font/joystixmonospace.otf',15)
         self._prevKeystroke = None
 
         #options
@@ -28,7 +29,6 @@ class Merchant():
         self.timer = {
             'merchant' : Timer(200)
         }
-
        
     # displays money at the bottom
     def display_money(self):
@@ -37,6 +37,25 @@ class Merchant():
 
         pygame.draw.rect(self.display_surface, 'White', text_rect.inflate(10,10))
         self.display_surface.blit(text_surf, text_rect)
+
+    def display_text(self):
+        new_surf = self.font.render('Merchant', False, 'Black')
+        new_rect = new_surf.get_rect(midtop = (ScreenWidth / 5, ScreenHeight / 2))
+
+        pygame.draw.rect(self.display_surface, 'White', new_rect.inflate(10,10))
+        self.display_surface.blit(new_surf, new_rect)
+        if self._Player._firsttimeMerchant == "True":
+            instruction1_surf = self.new_font.render('Use SPACE bar to buy/sell', False, 'Black')
+            instruction1_rect = instruction1_surf.get_rect(midtop = ((ScreenWidth / 10)*8.5, (ScreenHeight / 4)*3))
+
+            pygame.draw.rect(self.display_surface, 'White', instruction1_rect.inflate(5,5))
+            self.display_surface.blit(instruction1_surf, instruction1_rect)
+
+            instruction2_surf = self.new_font.render('Use arrow keys to navigate', False, 'Black')
+            instruction2_rect = instruction2_surf.get_rect(midtop = ((ScreenWidth / 10)*8.5, (ScreenHeight / 4)*2))
+
+            pygame.draw.rect(self.display_surface, 'White', instruction2_rect.inflate(5,5))
+            self.display_surface.blit(instruction2_surf, instruction2_rect)
 
     # creates the merchant ui
     def setup(self):
@@ -113,7 +132,7 @@ class Merchant():
             timer.update()
 
     
-    
+    # displays the ui
     def show_entry(self, text_surf, amount, top, selected):
         #background
         bg_rect = pygame.Rect(self.main_rect.left, top, self.width, text_surf.get_height() + (self.padding * 2))
@@ -139,10 +158,11 @@ class Merchant():
                 self.display_surface.blit(self.buy_text, pos_rect)
 
 
-
+    # uptaes the merchant ui
     def update(self):
         self.input()
         self.display_money()
+        self.display_text()
         self.updateTimers()
         #pygame.draw.rect(self.display_surface, 'red', self.main_rect)
         #self.display_surface.blit(pygame.Surface((1000,1000)),(0,0))
