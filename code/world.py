@@ -17,6 +17,7 @@ from random import randint
 from transition import Transition
 from merchant import Merchant
 
+
 class Level:
     def __init__(self, restart):
         # loading TMX files for the House and Farm maps
@@ -26,7 +27,7 @@ class Level:
         # Surfaces upon which the game features are rendered
         self._DisplaySurface = pygame.display.get_surface()
         self._DisplayWorld = pygame.display.get_surface()
-        self._mask = pygame.Surface((180,100),pygame.SRCALPHA)
+        self._mask = pygame.Surface((180, 100), pygame.SRCALPHA)
 
         # Sprite Groups
         self._AllSprites = CameraGroup()
@@ -46,7 +47,7 @@ class Level:
         self._Position = (self._saveFile["position"]["x"], self._saveFile["position"]["y"])
 
         self._PopUpBackground = pygame.image.load('../textures/misc/main_menu.png')
-        self._PopUpBackground = pygame.transform.scale(self._PopUpBackground, (640 *0.6,533*0.6))
+        self._PopUpBackground = pygame.transform.scale(self._PopUpBackground, (640 * 0.6, 533 * 0.6))
         self.restart = restart
         self._Level_init = True
 
@@ -115,9 +116,9 @@ class Level:
                         plant.image,
                         self._AllSprites,
                         LAYERS['main']
-                        )
-                    self._SoilLayer.grid[plant.rect.centery // (TileSize * Scale)][plant.rect.centerx // (TileSize * Scale)].remove("P")
-                    
+                    )
+                    self._SoilLayer.grid[plant.rect.centery // (TileSize * Scale)][
+                        plant.rect.centerx // (TileSize * Scale)].remove("P")
 
     # Main Setup fucntion where world is initialised and when called again, further elements are loaded / unloaded
     def setup(self):
@@ -127,7 +128,8 @@ class Level:
 
             # Fence
             for x, y, surface in self.tmx_data.get_layer_by_name('Fence').tiles():
-                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites])
+                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface,
+                        groups=[self._AllSprites, self._CollisionSprites])
 
             # Water
             water_frames = import_folder('../data/Tilesets/water')
@@ -136,11 +138,14 @@ class Level:
 
             # Decoration
             for obj in self.tmx_data.get_layer_by_name('Decoration'):
-                Decoration(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites])
+                Decoration(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image,
+                           groups=[self._AllSprites, self._CollisionSprites])
 
             # Trees
             for obj in self.tmx_data.get_layer_by_name('Trees'):
-                Tree(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites,self._TreeSprites], name=obj.name, playerAdd= self.PlayerAdd)
+                Tree(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image,
+                     groups=[self._AllSprites, self._CollisionSprites, self._TreeSprites], name=obj.name,
+                     playerAdd=self.PlayerAdd)
 
             # Animals
             self._AnimalList.append(
@@ -164,14 +169,14 @@ class Level:
                        groups=[self._AnimalSprites, self._AllSprites],
                        collision_sprites=self._CollisionSprites))
 
-
             # Collision Tiles, Borders
             for x, y, surface in self.tmx_data.get_layer_by_name('Borders').tiles():
-                Border(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=pygame.Surface((TileSize * Scale, TileSize * Scale)), groups= self._CollisionSprites)
+                Border(pos=(x * TileSize * Scale, y * TileSize * Scale),
+                       surface=pygame.Surface((TileSize * Scale, TileSize * Scale)), groups=self._CollisionSprites)
 
             # Ground
             Generic(pos=(0, 0),
-                    surface = pygame.image.load('../data/Farm.png').convert_alpha(),
+                    surface=pygame.image.load('../data/Farm.png').convert_alpha(),
                     groups=[self._AllSprites],
                     z=LAYERS['ground'])
             self._SoilLayer.create_soil_grid()
@@ -196,15 +201,20 @@ class Level:
             print("Current Location: ", self._Location)
             # House
             for x, y, surface in self.tmx_data.get_layer_by_name('Building Floor').tiles():
-                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites, self._OutsideHouseSprites], z=LAYERS['house bottom'])
+                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface,
+                        groups=[self._AllSprites, self._CollisionSprites, self._OutsideHouseSprites],
+                        z=LAYERS['house bottom'])
             for x, y, surface in self.tmx_data.get_layer_by_name('Building Wall').tiles():
-                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites, self._OutsideHouseSprites], z=LAYERS['house bottom'])
+                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface,
+                        groups=[self._AllSprites, self._CollisionSprites, self._OutsideHouseSprites],
+                        z=LAYERS['house bottom'])
             for x, y, surface in self.tmx_data.get_layer_by_name('Building Roof').tiles():
-                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._OutsideHouseSprites], z=LAYERS['house top'])
+                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface,
+                        groups=[self._AllSprites, self._OutsideHouseSprites], z=LAYERS['house top'])
             # Interaction
             for obj in self.tmx_data.get_layer_by_name('Interaction'):
-                Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height), groups=[self._InteractionSprites], name=obj.name)
-
+                Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height),
+                            groups=[self._InteractionSprites], name=obj.name)
 
         # Loading House
         elif self._Location == 'house':
@@ -213,11 +223,14 @@ class Level:
                 sprite.kill()
 
             for x, y, surface in self.tmx_house_data.get_layer_by_name('Floor').tiles():
-                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._HouseSprites], z=LAYERS['soil'])
+                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface,
+                        groups=[self._AllSprites, self._HouseSprites], z=LAYERS['soil'])
             for x, y, surface in self.tmx_house_data.get_layer_by_name('Walls').tiles():
-                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface, groups=[self._AllSprites, self._CollisionSprites, self._HouseSprites])
+                Generic(pos=(x * TileSize * Scale, y * TileSize * Scale), surface=surface,
+                        groups=[self._AllSprites, self._CollisionSprites, self._HouseSprites])
             for obj in self.tmx_house_data.get_layer_by_name('Furniture'):
-                Generic(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image, groups=[self._AllSprites, self._CollisionSprites, self._HouseSprites])
+                Generic(pos=(obj.x * Scale, obj.y * Scale), surface=obj.image,
+                        groups=[self._AllSprites, self._CollisionSprites, self._HouseSprites])
             for obj in self.tmx_house_data.get_layer_by_name('Interaction'):
                 Interaction(pos=(obj.x * Scale, obj.y * Scale), size=(obj.width, obj.height),
                             groups=[self._InteractionSprites], name=obj.name)
@@ -235,7 +248,7 @@ class Level:
         self.setup()
 
     # Function for adding items to inventory
-    def PlayerAdd(self,item):
+    def PlayerAdd(self, item):
         self._Player._Inventory[item] += 1
 
     # Reset, used when player sleeps to reset the day
@@ -245,7 +258,7 @@ class Level:
         self.raining = randint(0, 28) > 20  # rains if randint higher than x
         self._SoilLayer.raining = self.raining
         self._SoilLayer.dry_soil_tiles()
-        
+
         # Water all the Tilled Soil tiles if raining.
         if self._SoilLayer.raining:
             self._SoilLayer.water_all()
@@ -261,45 +274,66 @@ class Level:
         # Load Main Menu if open
         if self._main_menu:
             self._DisplayWorld.fill('black')
-            self._PlayerSelectBG = pygame.transform.scale(self._PlayerSelectBG, (2880,1620))
-            self._DisplaySurface.blit(self._PlayerSelectBG,(-650,-290))
-            self._DisplaySurface.blit(pygame.image.load('../textures/misc/main_menu.png'), (ScreenWidth/2 - 640/2, ScreenHeight/2 - 533/2))
-            self._DisplaySurface.blit(self._heading_font.render("Valley Life", False, "Black"), (ScreenWidth/2 - 390/2, ScreenHeight/2 - 55))
-            self._DisplaySurface.blit(self._regular_font.render("Press Space to begin.", False, "Black"), (ScreenWidth/2 - 260/2, ScreenHeight/2 + 50))
+            self._PlayerSelectBG = pygame.transform.scale(self._PlayerSelectBG, (2880, 1620))
+            self._DisplaySurface.blit(self._PlayerSelectBG, (-650, -290))
+            self._DisplaySurface.blit(pygame.image.load('../textures/misc/main_menu.png'),
+                                      (ScreenWidth / 2 - 640 / 2, ScreenHeight / 2 - 533 / 2))
+            self._DisplaySurface.blit(self._heading_font.render("Valley Life", False, "Black"),
+                                      (ScreenWidth / 2 - 390 / 2, ScreenHeight / 2 - 55))
+            self._DisplaySurface.blit(self._regular_font.render("Press Space to begin.", False, "Black"),
+                                      (ScreenWidth / 2 - 260 / 2, ScreenHeight / 2 + 50))
 
             # Player has to press space to begin the game upon launching
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         self._main_menu = False
-            
+
         # Game continues if not paused
         elif not self._Paused:
             self._DisplayWorld.fill('black')
             self._AllSprites.draw(self._DisplayWorld)
             self._AllSprites.custom_draw(self._Player)
             self._Sky.display(DeltaTime)
-            
+
             # Daylight reset for sleep( reset to day colour)
             if self._Transition._Colour <= 0:
-                self._Sky._DayColour = [255,255,255]
+                self._Sky._DayColour = [255, 255, 255]
 
             # Instruction on how to play the game if it's the first time playing
             if self._saveFile["firstTimePlaying"] == "True":
                 if self._PopUPmenu:
-                    self._DisplaySurface.blit(self._PopUpBackground, (ScreenWidth - 460, ScreenHeight -700))
-                    self._DisplaySurface.blit(self._PopupFontHeader.render("Player Tips", False, "Black"), (ScreenWidth - 720/2, ScreenHeight - 665))
-                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "E" to open the inventory!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 630))
-                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "Q" to open the swap tool!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 610))
-                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "Mouse 1" to use the tool!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 590))
-                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "ENTER" to interact with the', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 570))
-                    self._DisplaySurface.blit(self._PopupFontMain.render('door, the bed and trader!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 555))
-                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "X" to swap seed!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 535))
-                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "F" to use seed!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 515))
-                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "H" or "J" to eat!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 495))
-                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "W","A","S","D" to move!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 475))
-                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "shift" to sprint!', False, "Black"), (ScreenWidth - 840/2, ScreenHeight - 455))
-                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "space" to close this!', False, "Black"), (ScreenWidth - 840 / 2, ScreenHeight - 435))
+                    self._DisplaySurface.blit(self._PopUpBackground, (ScreenWidth - 460, ScreenHeight - 700))
+                    self._DisplaySurface.blit(self._PopupFontHeader.render("Player Tips", False, "Black"),
+                                              (ScreenWidth - 720 / 2, ScreenHeight - 665))
+                    self._DisplaySurface.blit(
+                        self._PopupFontMain.render('Press "E" to open the inventory!', False, "Black"),
+                        (ScreenWidth - 840 / 2, ScreenHeight - 630))
+                    self._DisplaySurface.blit(
+                        self._PopupFontMain.render('Press "Q" to open the swap tool!', False, "Black"),
+                        (ScreenWidth - 840 / 2, ScreenHeight - 610))
+                    self._DisplaySurface.blit(
+                        self._PopupFontMain.render('Press "Mouse 1" to use the tool!', False, "Black"),
+                        (ScreenWidth - 840 / 2, ScreenHeight - 590))
+                    self._DisplaySurface.blit(
+                        self._PopupFontMain.render('Press "ENTER" to interact with the', False, "Black"),
+                        (ScreenWidth - 840 / 2, ScreenHeight - 570))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('door, the bed and trader!', False, "Black"),
+                                              (ScreenWidth - 840 / 2, ScreenHeight - 555))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "X" to swap seed!', False, "Black"),
+                                              (ScreenWidth - 840 / 2, ScreenHeight - 535))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "F" to use seed!', False, "Black"),
+                                              (ScreenWidth - 840 / 2, ScreenHeight - 515))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "H" or "J" to eat!', False, "Black"),
+                                              (ScreenWidth - 840 / 2, ScreenHeight - 495))
+                    self._DisplaySurface.blit(
+                        self._PopupFontMain.render('Press "W","A","S","D" to move!', False, "Black"),
+                        (ScreenWidth - 840 / 2, ScreenHeight - 475))
+                    self._DisplaySurface.blit(self._PopupFontMain.render('Press "shift" to sprint!', False, "Black"),
+                                              (ScreenWidth - 840 / 2, ScreenHeight - 455))
+                    self._DisplaySurface.blit(
+                        self._PopupFontMain.render('Press "space" to close this!', False, "Black"),
+                        (ScreenWidth - 840 / 2, ScreenHeight - 435))
 
                     # Tips close if you press space
                     for event in pygame.event.get():
@@ -316,8 +350,7 @@ class Level:
                 self._AllSprites.draw(self._SpriteSheetImage)
                 self._AllSprites.update(DeltaTime)
                 self.plantCollision()
-                
-                
+
             # Rain
             if self.raining:
                 if self._Location != 'house' and not self.shop_active:
@@ -342,109 +375,113 @@ class Level:
                     if animal._ImageFlip:
                         animal.image = pygame.transform.flip(animal.image, True, False)
 
-
-
-
         # Pause Menu
         else:
 
             # Draw Buttons
-            self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_color)
-            self._text_rect_return = self._text_return.get_rect(center=(ScreenWidth/2, ScreenHeight/2 - 120))
+            self._text_return = self._heading_font.render('Return to Game', True, self._text_color, self._button_color)
+            self._text_rect_return = self._text_return.get_rect(center=(ScreenWidth / 2, ScreenHeight / 2 - 120))
 
-            self._text_new = self._heading_font.render('New Game' , True , self._text_color, self._button_color)
-            self._text_rect_new = self._text_new.get_rect(center=(ScreenWidth/2, ScreenHeight/2))
+            self._text_new = self._heading_font.render('New Game', True, self._text_color, self._button_color)
+            self._text_rect_new = self._text_new.get_rect(center=(ScreenWidth / 2, ScreenHeight / 2))
 
-            self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_color)
-            self._text_rect_quit = self._text_quit.get_rect(center=(ScreenWidth/2, ScreenHeight/2 + 120))
+            self._text_quit = self._heading_font.render('Save and Quit', True, self._text_color, self._button_color)
+            self._text_rect_quit = self._text_quit.get_rect(center=(ScreenWidth / 2, ScreenHeight / 2 + 120))
 
-            self._text_player_select = self._heading_font.render('Player Select', True, self._text_color,self._button_color)
-            self._text_rect_player_select = self._text_player_select.get_rect(center=(ScreenWidth/2, ScreenHeight/2 + 240))
+            self._text_player_select = self._heading_font.render('Player Select', True, self._text_color,
+                                                                 self._button_color)
+            self._text_rect_player_select = self._text_player_select.get_rect(center=(ScreenWidth / 2, ScreenHeight / 2 + 240))
 
-            self._text_green = self._heading_font.render('Green' , True , self._text_color, self._button_color)
-            self._text_rect_green = self._text_green.get_rect(center=(ScreenWidth/4, ScreenHeight/6))
+            self._text_green = self._heading_font.render('Green', True, self._text_color, self._button_color)
+            self._text_rect_green = self._text_green.get_rect(center=(ScreenWidth / 4, ScreenHeight / 6))
 
-            self._text_blue = self._heading_font.render('Blue' , True , self._text_color, self._button_color)
-            self._text_rect_blue = self._text_blue.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + 90))
+            self._text_blue = self._heading_font.render('Blue', True, self._text_color, self._button_color)
+            self._text_rect_blue = self._text_blue.get_rect(center=(ScreenWidth / 4, ScreenHeight / 6 + 90))
 
-            self._text_red = self._heading_font.render('Red' , True , self._text_color, self._button_color)
-            self._text_rect_red = self._text_red.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + (180)))
+            self._text_red = self._heading_font.render('Red', True, self._text_color, self._button_color)
+            self._text_rect_red = self._text_red.get_rect(center=(ScreenWidth / 4, ScreenHeight / 6 + (180)))
 
-            self._text_purple = self._heading_font.render('Purple' , True , self._text_color, self._button_color)
-            self._text_rect_purple = self._text_purple.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + (270)))
+            self._text_purple = self._heading_font.render('Purple', True, self._text_color, self._button_color)
+            self._text_rect_purple = self._text_purple.get_rect(center=(ScreenWidth / 4, ScreenHeight / 6 + (270)))
 
-            self._text_pink = self._heading_font.render('Pink' , True , self._text_color, self._button_color)
-            self._text_rect_pink = self._text_pink.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + (360)))
+            self._text_pink = self._heading_font.render('Pink', True, self._text_color, self._button_color)
+            self._text_rect_pink = self._text_pink.get_rect(center=(ScreenWidth / 4, ScreenHeight / 6 + (360)))
 
-            self._text_orange = self._heading_font.render('Orange' , True , self._text_color, self._button_color)
-            self._text_rect_orange = self._text_orange.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + (450)))
+            self._text_orange = self._heading_font.render('Orange', True, self._text_color, self._button_color)
+            self._text_rect_orange = self._text_orange.get_rect(center=(ScreenWidth / 4, ScreenHeight / 6 + (450)))
 
-            self._text_grey = self._heading_font.render('Grey' , True , self._text_color, self._button_color)
-            self._text_rect_grey = self._text_grey.get_rect(center=(ScreenWidth/4, ScreenHeight/6 + (540)))
-
+            self._text_grey = self._heading_font.render('Grey', True, self._text_color, self._button_color)
+            self._text_rect_grey = self._text_grey.get_rect(center=(ScreenWidth / 4, ScreenHeight / 6 + (540)))
 
             # Button Interactions
             if self._text_rect_quit.collidepoint(pygame.mouse.get_pos()):
-                self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_hover_color)
+                self._text_quit = self._heading_font.render('Save and Quit', True, self._text_color,
+                                                            self._button_hover_color)
             else:
-                self._text_quit = self._heading_font.render('Save and Quit' , True , self._text_color, self._button_color)
+                self._text_quit = self._heading_font.render('Save and Quit', True, self._text_color, self._button_color)
 
             if self._text_rect_new.collidepoint(pygame.mouse.get_pos()):
-                self._text_new = self._heading_font.render('New Game' , True , self._text_color, self._button_hover_color)
+                self._text_new = self._heading_font.render('New Game', True, self._text_color, self._button_hover_color)
             else:
-                self._text_new = self._heading_font.render('New Game' , True , self._text_color, self._button_color)
+                self._text_new = self._heading_font.render('New Game', True, self._text_color, self._button_color)
 
             if self._text_rect_return.collidepoint(pygame.mouse.get_pos()):
-                self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_hover_color)
+                self._text_return = self._heading_font.render('Return to Game', True, self._text_color,
+                                                              self._button_hover_color)
             else:
-                self._text_return = self._heading_font.render('Return to Game' , True , self._text_color, self._button_color)
+                self._text_return = self._heading_font.render('Return to Game', True, self._text_color,
+                                                              self._button_color)
 
             if self._text_rect_player_select.collidepoint(pygame.mouse.get_pos()):
-                self._text_player_select = self._heading_font.render('Player Select', True, self._text_color, self._button_hover_color)
+                self._text_player_select = self._heading_font.render('Player Select', True, self._text_color,
+                                                                     self._button_hover_color)
             else:
-                self._text_player_select = self._heading_font.render('Player Select', True, self._text_color, self._button_color)
+                self._text_player_select = self._heading_font.render('Player Select', True, self._text_color,
+                                                                     self._button_color)
 
             if self._text_rect_green.collidepoint(pygame.mouse.get_pos()):
-                self._text_green = self._heading_font.render('Green' , True , self._text_color, self._button_hover_color)
+                self._text_green = self._heading_font.render('Green', True, self._text_color, self._button_hover_color)
                 self._PlayerImage = pygame.image.load("../textures/player/greenplayer.png")
             else:
-                self._text_green = self._heading_font.render('Green' , True , self._text_color, self._button_color)
+                self._text_green = self._heading_font.render('Green', True, self._text_color, self._button_color)
 
             if self._text_rect_blue.collidepoint(pygame.mouse.get_pos()):
-                self._text_blue = self._heading_font.render('Blue' , True , self._text_color, self._button_hover_color)
+                self._text_blue = self._heading_font.render('Blue', True, self._text_color, self._button_hover_color)
                 self._PlayerImage = pygame.image.load("../textures/player/blueplayer.png")
             else:
-                self._text_blue = self._heading_font.render('Blue' , True , self._text_color, self._button_color)
+                self._text_blue = self._heading_font.render('Blue', True, self._text_color, self._button_color)
 
             if self._text_rect_red.collidepoint(pygame.mouse.get_pos()):
-                self._text_red = self._heading_font.render('Red' , True , self._text_color, self._button_hover_color)
+                self._text_red = self._heading_font.render('Red', True, self._text_color, self._button_hover_color)
                 self._PlayerImage = pygame.image.load("../textures/player/redplayer.png")
             else:
-                self._text_red = self._heading_font.render('Red' , True , self._text_color, self._button_color)
+                self._text_red = self._heading_font.render('Red', True, self._text_color, self._button_color)
 
             if self._text_rect_purple.collidepoint(pygame.mouse.get_pos()):
-                self._text_purple = self._heading_font.render('Purple' , True , self._text_color, self._button_hover_color)
+                self._text_purple = self._heading_font.render('Purple', True, self._text_color,
+                                                              self._button_hover_color)
                 self._PlayerImage = pygame.image.load("../textures/player/purpleplayer.png")
             else:
-                self._text_purple = self._heading_font.render('Purple' , True , self._text_color, self._button_color)
+                self._text_purple = self._heading_font.render('Purple', True, self._text_color, self._button_color)
 
             if self._text_rect_pink.collidepoint(pygame.mouse.get_pos()):
-                self._text_pink = self._heading_font.render('Pink' , True , self._text_color, self._button_hover_color)
+                self._text_pink = self._heading_font.render('Pink', True, self._text_color, self._button_hover_color)
                 self._PlayerImage = pygame.image.load("../textures/player/pinkplayer.png")
             else:
-                self._text_pink = self._heading_font.render('Pink' , True , self._text_color, self._button_color)
+                self._text_pink = self._heading_font.render('Pink', True, self._text_color, self._button_color)
 
             if self._text_rect_orange.collidepoint(pygame.mouse.get_pos()):
-                self._text_orange = self._heading_font.render('Orange' , True , self._text_color, self._button_hover_color)
+                self._text_orange = self._heading_font.render('Orange', True, self._text_color,
+                                                              self._button_hover_color)
                 self._PlayerImage = pygame.image.load("../textures/player/orangeplayer.png")
             else:
-                self._text_orange = self._heading_font.render('Orange' , True , self._text_color, self._button_color)
+                self._text_orange = self._heading_font.render('Orange', True, self._text_color, self._button_color)
 
             if self._text_rect_grey.collidepoint(pygame.mouse.get_pos()):
-                self._text_grey = self._heading_font.render('Grey' , True , self._text_color, self._button_hover_color)
+                self._text_grey = self._heading_font.render('Grey', True, self._text_color, self._button_hover_color)
                 self._PlayerImage = pygame.image.load("../textures/player/greyplayer.png")
             else:
-                self._text_grey = self._heading_font.render('Grey' , True , self._text_color, self._button_color)
+                self._text_grey = self._heading_font.render('Grey', True, self._text_color, self._button_color)
 
             # Update on Display
             self._DisplaySurface.blit(self._text_return, self._text_rect_return)
@@ -453,10 +490,10 @@ class Level:
             self._DisplaySurface.blit(self._text_player_select, self._text_rect_player_select)
 
             # Display Player selection menu
-            if self._PlayerSelect == True:
+            if self._PlayerSelect:
                 self._DisplaySurface.fill("black")
-                self._PlayerSelectBG = pygame.transform.scale(self._PlayerSelectBG, (2880,1620))
-                self._DisplaySurface.blit(self._PlayerSelectBG,(-650,-290))
+                self._PlayerSelectBG = pygame.transform.scale(self._PlayerSelectBG, (2880, 1620))
+                self._DisplaySurface.blit(self._PlayerSelectBG, (-650, -290))
                 self._DisplaySurface.blit(self._text_green, self._text_rect_green)
                 self._DisplaySurface.blit(self._text_blue, self._text_rect_blue)
                 self._DisplaySurface.blit(self._text_red, self._text_rect_red)
@@ -464,9 +501,9 @@ class Level:
                 self._DisplaySurface.blit(self._text_pink, self._text_rect_pink)
                 self._DisplaySurface.blit(self._text_orange, self._text_rect_orange)
                 self._DisplaySurface.blit(self._text_grey, self._text_rect_grey)
-                self._PlayerImage = pygame.transform.scale(self._PlayerImage, (140,180))
-                self._PlayerImage.set_colorkey((0,0,255))
-                self._DisplaySurface.blit(self._PlayerImage, (ScreenWidth/2 + 100, ScreenHeight/2 - 100))
+                self._PlayerImage = pygame.transform.scale(self._PlayerImage, (140, 180))
+                self._PlayerImage.set_colorkey((0, 0, 255))
+                self._DisplaySurface.blit(self._PlayerImage, (ScreenWidth / 2 + 100, ScreenHeight / 2 - 100))
 
                 # Interactions with player colour buttons
                 for event in pygame.event.get():
@@ -484,7 +521,7 @@ class Level:
                         if self._text_rect_blue.collidepoint(pygame.mouse.get_pos()):
                             self._Player._SelectedPlayerColour = "blue"
                             self._Player._SelectedSpriteSheet = "../textures/player/playerlightblue.png"
-                            self._Paused = not self._Paused#
+                            self._Paused = not self._Paused  #
                             self._PlayerSelect = False
                         if self._text_rect_red.collidepoint(pygame.mouse.get_pos()):
                             self._Player._SelectedPlayerColour = "red"
@@ -511,7 +548,6 @@ class Level:
                             self._Player._SelectedSpriteSheet = "../textures/player/playergrey.png"
                             self._Paused = not self._Paused
                             self._PlayerSelect = False
-            
 
     # Save Location to JSON
     def save(self):
@@ -526,13 +562,13 @@ class CameraGroup(pygame.sprite.Group):
         self.display_surface = pygame.display.get_surface()
         self.offset = pygame.math.Vector2()
 
-
     def custom_draw(self, player):
         self.offset.x = player.rect.centerx - ScreenWidth / 2
         self.offset.y = player.rect.centery - ScreenHeight / 2
 
         for layer in LAYERS.values():  # iterate through LAYERS and draw in order the sprites
-            for sprite in sorted(self.sprites(), key = lambda sprite: sprite.rect.centery):  # Sorted, based on sprites y pos, to see which sprite is in front.
+            for sprite in sorted(self.sprites(), key=lambda
+                    sprite: sprite.rect.centery):  # Sorted, based on sprites y pos, to see which sprite is in front.
                 if sprite.z == layer:
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
