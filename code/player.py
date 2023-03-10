@@ -7,9 +7,10 @@ from soil import *
 from merchant import Merchant
 from pygame import mixer
 
-
+#player class
 class Player(pygame.sprite.Sprite):
 
+    #intialisation method
     def __init__(self, pos, toggle_inventory, group, collision_sprites, tree_sprites, animal_sprites, soil_layer,
                  interaction, Level, toggle_merchant, restart):
         super().__init__(group)
@@ -17,15 +18,18 @@ class Player(pygame.sprite.Sprite):
         mixer.init()
         # savefile
         self._saveFile = json.load(open("../profiles/save1.json"))
-
+        #instance varaibles for interacting with menus
         self._prevKeystroke = None
         self._inventoryOpen = False
         self.toggle_inventory = toggle_inventory
+        #instance variables for location on the map
         self.Level = Level
         self.shop_active = False
+        #instance variables for looping the footstep sound
         self._TimeElapsedSinceLastFootStep = 0
         self._FootstepClock = pygame.time.Clock()
 
+        # variables used to check if it is the users first time playing the game or not
         # For this to work - hardcode True in profiles/save1.json - "firstTimePlaying" value
         if self._saveFile["firstTimePlaying"] == "True":
             print("first time playing")
@@ -33,10 +37,11 @@ class Player(pygame.sprite.Sprite):
             print("not first time")
 
         # self.image.fill('white')
+        #variables used to create the scene of the player
         self.rect = self.image.get_rect(center=pos)
         self.z = LAYERS['main']  # check settings
-        self._SelectedSpriteSheet = ""
-        self._SelectedPlayerColour = ""
+        self._SelectedPlayerColour = self._saveFile["characterColor"]
+        self._SelectedSpriteSheet = self._saveFile["characterPath"]
         self._SpriteSheetImage = pygame.image.load(self._saveFile["image"]).convert_alpha()
         self._PlayerRightAxeImage1 = pygame.image.load(
             "../textures/player/playerblueaxeright" + self._SelectedPlayerColour + ".png").convert_alpha()
@@ -210,6 +215,7 @@ class Player(pygame.sprite.Sprite):
         if self._fatigue < 0:
             self._fatigue = 0
 
+    # method for decreasing energy of the user uses a tool
     def fatigued(self):
         self._fatigue = self._fatigue - (self._runDepletionMultiplier * 0.002)
         if self._hitFatigue == True:
@@ -232,18 +238,20 @@ class Player(pygame.sprite.Sprite):
         elif self._hunger >= 101:
             self._hunger = 100
 
+    #method to gradually lower hunger over time
     def hunger(self):
         if not self.timer['hunger']._Active:
             self._hunger = self._hunger - (self._runDepletionMultiplier * 0.01)
             self.timer['hunger'].activate()
         if self._hunger < 0:
             self._hunger = 0
-
+    # method to plant a seed
     def use_seed(self):
         if self.seed_inventory[self._SelectedSeed] > 0:
             self._SoilLayer.PlantSeed(self._TargetPosition, self._SelectedSeed)
             self.seed_inventory[self._SelectedSeed] -= 1
 
+    #method used to take select parts of a sprite sheet
     def getImage(self, sheet, frame, width, height, scale, colour):
         self._Spriteimage = pygame.Surface((width, height)).convert_alpha()
         if frame == 0:
@@ -274,35 +282,39 @@ class Player(pygame.sprite.Sprite):
         self._Spriteimage.set_colorkey(colour)
         return self._Spriteimage
 
+    #method to listen to inputs from the mouse or keyboard
     def input(self):
         keystroke = pygame.key.get_pressed()
         mouseInput = pygame.mouse.get_pressed(num_buttons=3)
         FootstepSound = mixer.Sound("../audio/footstep.mp3")
 
+        # check if w is pressed and move forward if so
         if not self.timer['tool use']._Active and not self._Sleep:
             if keystroke[pygame.K_w]:
                 self._Direction.y = -1
                 self._status = "up"
                 self._animSpeed = 4
-
+            # check if s is pressed and move backwards if so
             elif keystroke[pygame.K_s]:
                 self._Direction.y = 1
                 self._status = "down"
                 self._animSpeed = 4
             else:
                 self._Direction.y = 0
-
+            #check is a id pressed and move left if so
             if keystroke[pygame.K_a]:
                 self._Direction.x = -1
                 self._status = "left"
                 self._animSpeed = 6
+            #check if d is pressed and move right if so 
             elif keystroke[pygame.K_d]:
                 self._Direction.x = 1
                 self._status = "right"
                 self._animSpeed = 6
             else:
+                #else they are not moving
                 self._Direction.x = 0
-
+            #check if shift is being held in which case increase the users speed (sprint)
             if keystroke[pygame.K_LSHIFT]:
                 self._Speed = 250
                 self._animSpeed = 14
@@ -310,7 +322,7 @@ class Player(pygame.sprite.Sprite):
             else:
                 self._Speed = 110
                 self._runDepletionMultiplier = 1
-
+            # if the users magnitude is greater than 0 play the footstep sound effect
             if self._Direction.magnitude() > 0:
                 footstepTiming = self._FootstepClock.tick()
                 self._TimeElapsedSinceLastFootStep += footstepTiming
@@ -389,17 +401,20 @@ class Player(pygame.sprite.Sprite):
                 _CollidedInteractionSprite = pygame.sprite.spritecollide(self, self._Interaction, False)
                 if _CollidedInteractionSprite:
                     if _CollidedInteractionSprite[0].name == 'Bed' and not self.timer['sleep fatigue']._Active:
+                        #check if interacting with the bed
                         if self.Level._Location == 'house':
                             self._status = 'left'
                             self._Sleep = True
                             print('Interacted with bed')
                             self.Level.reset()
                     elif _CollidedInteractionSprite[0].name == 'Door_Outside':
+                        #check if interacting with the door of the house (outside)
                         if self.Level._Location == 'farm':
                             self._status = 'up'
                             print("Door_Outside Triggered")
                             self.Level.load_house()
                     elif _CollidedInteractionSprite[0].name == 'Door_Inside':
+                        #check if interacting with the door of the house (inside)
                         if self.Level._Location == 'house':
                             self._status = 'down'
                             print("Door_Inside Triggered")
@@ -418,24 +433,28 @@ class Player(pygame.sprite.Sprite):
                             self.toggle_merchant()
 
             self._prevKeystroke = keystroke
-
+    # method for using each tool
     def use_tool(self):
+        #check if hoe is being used
         if self._SelectedTool == 'hoe':
             self._SoilLayer.get_hit(self._TargetPosition)
             HoeSound = mixer.Sound("../audio/hoe.wav")
             HoeSound.set_volume(0.05)
             HoeSound.play()
+        #check if axe is being used
         if self._SelectedTool == 'axe':
             for tree in self._TreeSprites.sprites():
                 if tree.rect.collidepoint(self._TargetPosition):
                     tree.BreakTree()
                     AxeSound = mixer.Sound("../audio/axe.mp3")
                     AxeSound.play()
+        #check if watering can is being used
         if self._SelectedTool == 'water':
             self._SoilLayer.water(self._TargetPosition)
             WaterSound = mixer.Sound("../audio/water.mp3")
             WaterSound.set_volume(0.05)
             WaterSound.play()
+        #check if bucket is being used
         if self._SelectedTool == 'bucket':
             for cow in self._AnimalSprites.sprites():
                 if cow.rect.collidepoint(self._TargetPosition):
@@ -443,10 +462,10 @@ class Player(pygame.sprite.Sprite):
                     BucketSound = mixer.Sound("../audio/milk.mp3")
                     BucketSound.set_volume(1)
                     BucketSound.play()
-
+    #getting he position of the area the user will interact with if using the tool
     def get_target_pos(self):
         self._TargetPosition = self.rect.center + PlayerToolOffset[self._status.split('-')[0]]
-
+    # method used to give the player animations by looping through a number fo images
     def animate(self, Deltatime):
         frame0 = self.getImage(self._SpriteSheetImage, 0, 16, 18, 3, (0, 0, 255))
         frame1 = self.getImage(self._SpriteSheetImage, 1, 16, 18, 3, (0, 0, 255))
@@ -492,6 +511,7 @@ class Player(pygame.sprite.Sprite):
         upwater2 = self.getImage(self._playerUpWaterImage2, 0, 16, 18, 3, (0, 0, 255))
         downwater = self.getImage(self._PlayerDownWaterImage, 0, 16, 21, 3, (0, 0, 255))
         downwater2 = self.getImage(self._PlayerDownWaterImage2, 0, 15, 22, 3, (0, 0, 255))
+        #dictionary of images corresponding to certain animations
         self._Animations = {
             "up": [frame4, frame5],
             "down": [frame1, frame2],
@@ -518,12 +538,13 @@ class Player(pygame.sprite.Sprite):
             "up-bucket": [upwater, upwater2],
             "down-bucket": [downwater, downwater2]
         }
-
+        #loop for replaing the players images constantly
         self._frameIndex += self._animSpeed * Deltatime
         if self._frameIndex >= len(self._Animations[self._status]):
             self._frameIndex = 0
         self.image = self._Animations[self._status][int(self._frameIndex)]
 
+    #method to check what the player is doing to make sure the animations are in sync
     def getStatus(self):
         # if player is not pressing a key add Idle to the status
         if self._Direction.magnitude() == 0:
@@ -532,10 +553,11 @@ class Player(pygame.sprite.Sprite):
         if self.timer['tool use']._Active:
             self._status = self._status.split("-")[0] + '-' + self._SelectedTool
 
+    #used to constantly update the timers
     def updateTimers(self):
         for timer in self.timer.values():
             timer.update()
-
+    # used to give the player collisiosn
     def collision(self, _Direction):
         for sprite in self.collision_sprites.sprites():
             if hasattr(sprite, 'hitbox'):  # Checks if sprite has collision
@@ -572,7 +594,7 @@ class Player(pygame.sprite.Sprite):
                             self.hitbox.top = sprite.hitbox.bottom
                         self.rect.centery = self.hitbox.centery
                         self._Position.y = self.hitbox.centery
-
+    # method to allow the player to move in multiple directions
     def move(self, DeltaTime):
         # normalize vector (cant speed up by holding w and a or w and d and so on)
         if self._Direction.magnitude() > 0:
@@ -589,7 +611,7 @@ class Player(pygame.sprite.Sprite):
         self.hitbox.centery = round(self._Position.y)  # rounding to prevent truncation
         self.rect.centery = self.hitbox.centery
         self.collision('vertical')
-
+    # method to call a number of previous methods constantly
     def update(self, DeltaTime):
         self.input()
         self.getStatus()
@@ -671,7 +693,7 @@ class Player(pygame.sprite.Sprite):
 
         if self._SelectedSpriteSheet != "":
             self._SpriteSheetImage = pygame.image.load(self._SelectedSpriteSheet).convert_alpha()
-
+    # method for saving data about the player to the json file
     def save(self):
         self._saveFile["status"] = self._status
         self._saveFile['position']['x'] = self._Position.x
@@ -681,4 +703,6 @@ class Player(pygame.sprite.Sprite):
         self._saveFile['hunger'] = self._hunger
         self._saveFile['fatigue'] = self._fatigue
         self._saveFile['health'] = self._health
+        self._saveFile["characterColor"] = self._SelectedPlayerColour
+        self._saveFile["characterPath"] = self._SelectedSpriteSheet
         return self._saveFile

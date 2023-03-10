@@ -1,7 +1,7 @@
 import pygame
 import settings
 
-
+#transition class
 class Transition:
     def __init__(self, reset, player):
         # setup
@@ -12,7 +12,7 @@ class Transition:
         self._Image = pygame.Surface((settings.ScreenWidth, settings.ScreenHeight))
         self._Colour = 255
         self._Speed = -2
-
+    #method to start the transition
     def play(self, player):
         # Screen fade to black
         self._Colour += self._Speed
@@ -27,7 +27,7 @@ class Transition:
 
         self._Image.fill((self._Colour, self._Colour, self._Colour))
         self._DisplaySurface.blit(self._Image, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
-
+    #method to sleep
     def sleep(self):
         self.play(self._Player)
         self.reset()

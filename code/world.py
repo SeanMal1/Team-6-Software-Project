@@ -68,7 +68,7 @@ class Level:
         self._PlayerSelect = False
         self._inventory = Inventory(self._Player._Inventory, self._Player.money, self.toggle_inventory)
         
-        self._PlayerImage = pygame.image.load("../textures/player/greenplayer.png")
+        self._PlayerImage = pygame.image.load("../textures/player/blueplayer.png")
         self._PlayerSelectBG = pygame.image.load("../textures/misc/playerselectbg.jpg")
         
         
@@ -306,8 +306,15 @@ class Level:
             for animal in self._AnimalList:
                 if animal._GoDir == "None":
                     animal.image = self.cow_idle_frames[math.trunc(animal._frameIndex)]
+                    if animal._ImageFlip:
+                        animal.image = pygame.transform.flip(animal.image, True, False)
                 else:
                     animal.image = self.cow_walk_frames[math.trunc(animal._frameIndex)]
+                    if animal._ImageFlip:
+                        animal.image = pygame.transform.flip(animal.image, True, False)
+
+
+
 
         # Pause Menu
         else:
