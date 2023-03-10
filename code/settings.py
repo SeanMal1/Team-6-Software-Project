@@ -6,6 +6,7 @@ ScreenHeight = 720
 TileSize = 16
 Scale = 3
 
+# Used for positioning the tool and seed overlay sections
 OverlayPos = {
     'tool' : (ScreenWidth - 90, ScreenHeight - 90),
     'seed' : (ScreenWidth - 150, ScreenHeight - 40)
@@ -26,11 +27,13 @@ LAYERS = {
     'rain drops': 10
 }
 
+# Used for picking random positions for plum spawn
 PlumPos = {
     'Small' : [(18,17),(30,37),(12,50),(30,45),(20,30), (30,10)],
     'large' : [(10,8), (14,23)]
 }
 
+# Used for declaring points of interaction with tools in all directions
 PlayerToolOffset = {
     'left' : Vector2(-17,13),
     'right' : Vector2(17,13),
@@ -38,11 +41,14 @@ PlayerToolOffset = {
     'down' : Vector2(0,17)
 }
 
+# Used for the amount of time it takes to update the plant pictures when growing
 PlantGrowthSpeed ={
     'wheat' : 1.5,
     'corn' : 1
 }
 
+
+# Used to declare the prices of selling items
 SalePrices = {
     'wood': 6,
     'plum': 5,
@@ -51,6 +57,8 @@ SalePrices = {
     'tomato': 3
 
 }
+
+# Used to declare the prices of buying items
 PurchasePrices = {
     'corn': 4,
     'tomato': 5,
