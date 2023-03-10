@@ -218,5 +218,8 @@ class SoilLayer:
                              surface=self._SoilSurfaces[tile_type],
                              groups=[self._AllSprites, self._SoilSprites])
 
+                if 'W' in cell:
+                    self.water((index_col * TileSize * Scale, index_row * TileSize * Scale))
+
     def save(self):
         return self.grid
